@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+body,
+p,
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+button,
+table,
+label {
+    font-family: 'Montserrat', sans-serif;
+}
+:focus-visible {
+    outline: -webkit-focus-ring-color auto 0px;
+}
+.trunca-1 {
+    display: -webkit-box; /* para compatibilidad con navegadores basados en WebKit */
+    -webkit-line-clamp: 1; /* número máximo de líneas a mostrar */
+    -webkit-box-orient: vertical; /* orientación del contenido */
+    overflow: hidden; /* oculta el texto que se desborda del contenedor */
+    text-overflow: ellipsis; /* agrega puntos suspensivos al final del texto truncado */
+}
+.trunca-2 {
+    display: -webkit-box; /* para compatibilidad con navegadores basados en WebKit */
+    -webkit-line-clamp: 2; /* número máximo de líneas a mostrar */
+    -webkit-box-orient: vertical; /* orientación del contenido */
+    overflow: hidden; /* oculta el texto que se desborda del contenedor */
+    text-overflow: ellipsis; /* agrega puntos suspensivos al final del texto truncado */
+}
+.trunca-3 {
+    display: -webkit-box; /* para compatibilidad con navegadores basados en WebKit */
+    -webkit-line-clamp: 3; /* número máximo de líneas a mostrar */
+    -webkit-box-orient: vertical; /* orientación del contenido */
+    overflow: hidden; /* oculta el texto que se desborda del contenedor */
+    text-overflow: ellipsis; /* agrega puntos suspensivos al final del texto truncado */
+}
+
+/* Estilos para select2.org */
+.select2-container--default .select2-selection--single {
+    border: none !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100% !important;
+}
+.select2-container .select2-selection--single .select2-selection__rendered {
+    padding-left: 0 !important;
+}
