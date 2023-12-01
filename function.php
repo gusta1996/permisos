@@ -2,7 +2,7 @@
 function urlPermisos($ruta) {
     echo 'http://localhost/permisos/'.$ruta;
  //llamar al evento btnFuncionario   
- echo 'hola';
+ echo 'hola 2';
 }
 
 ?>
