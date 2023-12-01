@@ -5,7 +5,6 @@ require '../models/user_session.php';
 $userSession = new UserSession();
 $user = new User();
 
-
 if ($userSession->userLoggedIn()) {
     // Hay sesión
     $user->setUser($userSession->getCurrentUser());
