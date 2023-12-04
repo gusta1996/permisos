@@ -240,7 +240,7 @@ const appFuncionarios = new (function () {
                     this.errorFuncionario.classList.remove('hidden');
                     data.forEach(item => {
                         this.errorFuncionario.innerHTML += '<p class="font-medium rounded-md mb-4 p-4 bg-red-100">' + item + '</p>';
-                    })
+                    });
                 }
             })
             .catch((error) => console.log(error));
@@ -259,6 +259,7 @@ const appFuncionarios = new (function () {
         var editarTelefono = document.getElementById('editar-telefono-funcionarios');
         var editarDireccion = document.getElementById('editar-direccion-funcionarios');
         var editarEmail = document.getElementById('editar-email-funcionarios');
+        var editarUsername = document.getElementById('editar-username-funcionarios');
         var editarIdRol = document.getElementById('editar-rol-funcionarios');
         var editarEstado = document.getElementById('editar-estado-funcionarios');
         formFuncionario.append('id_funcionario', editarId_funcionario.value);
@@ -268,6 +269,7 @@ const appFuncionarios = new (function () {
         formFuncionario.append('telefono', editarTelefono.value);
         formFuncionario.append('direccion', editarDireccion.value);
         formFuncionario.append('email', editarEmail.value);
+        formFuncionario.append('username', editarUsername.value);
         formFuncionario.append('id_rol', editarIdRol.value);
         formFuncionario.append('estado', editarEstado.value);
         fetch("../controllers/actualizarFuncionarios.php", { method: "POST", body: formFuncionario })
@@ -280,7 +282,9 @@ const appFuncionarios = new (function () {
                 } else {
                     // Mostrar mensaje de error al guardar
                     editarError.classList.remove('hidden');
-                    editarError.innerHTML += `<p class="font-medium rounded-md mb-4 p-4 bg-red-100">${data}</p>`;
+                    data.forEach(item => {
+                        editarError.innerHTML += '<p class="font-medium rounded-md mb-4 p-4 bg-red-100">' + item + '</p>';
+                    });
                 }
             })
             .catch((error) => console.log(error));
@@ -336,6 +340,11 @@ const appFuncionarios = new (function () {
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Email:</label>
                                             <input type="email" id="editar-email-funcionarios" value="${data.email}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                        </div>
+                                        <!-- username -->
+                                        <div class="sm:col-span-2">
+                                            <label class="block text-sm font-medium leading-6 text-gray-900">Usuario:</label>
+                                            <input type="text" id="editar-username-funcionarios" value="${data.nick}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Rol -->
                                         <div class="sm:col-span-2">

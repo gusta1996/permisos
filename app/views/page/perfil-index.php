@@ -20,10 +20,13 @@
                 <img src="<?php echo $user->getImagen(); ?>" class="object-cover w-full h-full" />
             </div>
             <!-- Rol de usuario -->
-            <p class="text-center text-base font-medium leading-7 text-gray-900"><?php echo $user->getRol(); ?></p>
+            <p class="text-center mb-2 text-xl font-normal leading-7 text-gray-900"><?php echo $user->getUserName(); ?></p>
+            <!-- Rol de usuario -->
+            <p class="text-center mb-4 text-base font-bold leading-7 text-gray-900"><?php echo $user->getRol(); ?></p>
             <!-- Editar -->
-            <div class="text-center">
-                <a href="./perfil.php?page=editar" class="text-base font-medium leading-7 text-indigo-500 hover:text-indigo-600">Editar datos</a>
+            <div class="flex flex-col items-center gap-2 pt-4 border-t border-gray-100">
+                <a href="./perfil.php?page=editar" class="text-base font-medium leading-7 text-indigo-500 hover:text-indigo-600">Editar perfil</a>
+                <a href="./perfil.php?page=contrasena" class="text-base font-medium leading-7 text-indigo-500 hover:text-indigo-600">Cambiar contraseña</a>
             </div>
         </div>
 

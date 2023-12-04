@@ -1,15 +1,20 @@
 const app = new (function () {
     this.boxVisualizar = document.getElementById('box-visualizar');
+    this.idFuncionario = document.getElementById('id-funcionario');
+    this.msgError = document.getElementById('error-perfil');
+    // editar perfil
     this.visualizarImagenPerfil = document.getElementById('visualizar-imagen-perfil');
     this.inputImagenPerfil = document.getElementById('imagen-perfil');
-
-    this.idFuncionario = document.getElementById('id-funcionario');
     this.nombresPerfil = document.getElementById('nombres-perfil');
     this.apellidosPerfil = document.getElementById('apellidos-perfil');
     this.cedulaPerfil = document.getElementById('cedula-perfil');
     this.direccionPerfil = document.getElementById('direccion-perfil');
     this.telefonoPerfil = document.getElementById('telefono-perfil');
     this.emailPerfil = document.getElementById('email-perfil');
+    // cambiar contraseña
+    this.actualContrasena = document.getElementById('actual-contrasena');
+    this.nuevaContrasena = document.getElementById('nueva-contrasena');
+    this.confirmarContrasena = document.getElementById('confirmar-contrasena');
 
     this.vistaPreviaImagenPerfil = () => {
         this.inputImagenPerfil.addEventListener('change', function (e) {
@@ -34,7 +39,6 @@ const app = new (function () {
     }
     this.actualizarPerfil = () => {
         // Esconder mensaje de error al guardar cada vez
-        var msgError = document.getElementById('error-perfil');
         msgError.classList.add('hidden');
         msgError.innerHTML = '';
         // Enviar formulario para la consulta
@@ -61,6 +65,33 @@ const app = new (function () {
                     // Mostrar mensaje de error al guardar
                     msgError.classList.remove('hidden');
                     msgError.innerHTML += `<p class="font-medium rounded-md mb-4 p-4 bg-red-100">${data}</p>`;
+                }
+            })
+            .catch((error) => console.log(error));
+    }
+    this.actualizarContrasena = () => {
+        // Esconder mensaje de error al guardar cada vez
+        this.msgError.classList.add('hidden');
+        this.msgError.innerHTML = '';
+        // Enviar formulario para la consulta
+        var formPerfil = new FormData();
+        formPerfil.append('id_funcionario', this.idFuncionario.value);
+        formPerfil.append('actualContrasena', this.actualContrasena.value);
+        formPerfil.append('nuevaContrasena', this.nuevaContrasena.value);
+        formPerfil.append('confirmarContrasena', this.confirmarContrasena.value);
+        fetch("../controllers/actualizarContrasena.php", { method: "POST", body: formPerfil })
+            .then((respuesta) => respuesta.json())
+            .then((data) => {
+                if (data == true) {
+                    // Contraseña actualizada
+                    alert('¡Contraseña actualizada con exito!');
+                    window.location.href = './perfil.php';
+                } else {
+                    // Mostrar mensaje de error al guardar
+                    this.msgError.classList.remove('hidden');
+                    data.forEach(item => {
+                        this.msgError.innerHTML += '<p class="font-medium rounded-md mb-4 p-4 bg-red-100">' + item + '</p>';
+                    });
                 }
             })
             .catch((error) => console.log(error));

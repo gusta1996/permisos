@@ -84,7 +84,8 @@ class Funcionario extends Connection
     public static function selectFuncionarios()
     {
         try {
-            $sql = 'SELECT * FROM funcionario 
+            $sql = 'SELECT id_funcionario, nombres, apellidos
+                    FROM funcionario 
                     ORDER BY apellidos ASC';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
@@ -130,6 +131,18 @@ class Funcionario extends Connection
                 $comprobacion[] = "Ya existe un usuario con la misma cédula ingresada.";
             }
 
+            // Consulta que email no existe
+            $sql = 'SELECT email
+                    FROM funcionario
+                    WHERE email=:email';
+            $compruebaEmail = Connection::getConnection()->prepare($sql);
+            $compruebaEmail->bindParam(':email', $data['email']);
+            $compruebaEmail->execute();
+
+            if ($compruebaEmail->rowCount() > 0) {
+                $comprobacion[] = "Ya existe un usuario con el mismo email ingresado.";
+            }
+
             // Consulta que usuario no existe
             $sql = 'SELECT nick
                     FROM usuario
@@ -169,7 +182,7 @@ class Funcionario extends Connection
                     VALUES (:usuario, :password, :estado, :id_funcionario_fk, :id_rol_fk)';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':usuario', $data['usuario']);
-            $md5pass = md5($data['password']);
+            $md5pass = md5($data['password']); // se encrypta contraseña con MD5
             $declaracion->bindParam(':password', $md5pass);
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->bindParam(':id_funcionario_fk', $obt_id_funcionario);
@@ -193,7 +206,8 @@ class Funcionario extends Connection
     public static function actualizarFuncionarios($data)
     {
         try {
-            $comprobacion = '';
+            $comprobacion = array();
+
             // Consulta Cedula repetidas
             $sql = 'SELECT cedula
                     FROM funcionario
@@ -202,10 +216,37 @@ class Funcionario extends Connection
             $compruebaCedula->bindParam(':cedula', $data['cedula']);
             $compruebaCedula->bindParam(':id_funcionario', $data['id_funcionario']);
             $compruebaCedula->execute();
-
-            // Si existe duplicados retorna texto
             if ($compruebaCedula->rowCount() > 0) {
-                $comprobacion = "Ya existe un usuario con la misma cédula ingresada.";
+                $comprobacion[] = "Ya existe un usuario con la misma cédula ingresada.";
+            }
+
+            // Consulta email repetidos
+            $sql = 'SELECT email
+                    FROM funcionario
+                    WHERE email=:email AND id_funcionario!=:id_funcionario';
+            $compruebaEmail = Connection::getConnection()->prepare($sql);
+            $compruebaEmail->bindParam(':email', $data['email']);
+            $compruebaEmail->bindParam(':id_funcionario', $data['id_funcionario']);
+            $compruebaEmail->execute();
+            if ($compruebaEmail->rowCount() > 0) {
+                $comprobacion[] = "Ya existe un usuario con el mismo email ingresado.";
+            }
+
+            // Consulta username repetidos
+            $sql = 'SELECT nick
+                    FROM usuario
+                    INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario
+                    WHERE nick=:nick AND id_funcionario!=:id_funcionario';
+            $compruebaUsername = Connection::getConnection()->prepare($sql);
+            $compruebaUsername->bindParam(':nick', $data['username']);
+            $compruebaUsername->bindParam(':id_funcionario', $data['id_funcionario']);
+            $compruebaUsername->execute();
+            if ($compruebaUsername->rowCount() > 0) {
+                $comprobacion[] = "Ya existe una cuenta con el mismo nombre de usuario ingresado.";
+            }
+
+            // Si existe duplicados retorna mensajes
+            if ($comprobacion) {
                 return $comprobacion;
             }
 
@@ -228,9 +269,10 @@ class Funcionario extends Connection
 
             // Actualiza tabla usuario
             $sql = 'UPDATE usuario 
-                    SET id_rol_fk=:id_rol
+                    SET nick=:nick, id_rol_fk=:id_rol
                     WHERE id_funcionario_fk=:id_funcionario';
             $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->bindParam(':nick', $data['username']);
             $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
             $declaracion->bindParam(':id_rol', $data['id_rol']);
             $declaracion->execute();

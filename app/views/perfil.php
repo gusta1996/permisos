@@ -5,22 +5,28 @@ require '../models/user_session.php';
 $userSession = new UserSession();
 $user = new User();
 
-
 if ($userSession->userLoggedIn()) {
     // Hay sesión
     $user->setUser($userSession->getCurrentUser());
-    // Titulo de la pagina
-    $title = (!isset($_GET['page']) ? 'Perfil' : 'Perfil - editar perfil');
-    // header
-    require '../template/header.php';
 
-    // cuerpo
     if (!isset($_GET['page'])) {
-        // Pagina perfil
+        // Titulo, header, contenido
+        $title = 'Perfil';
+        require '../template/header.php';
         require './page/perfil-index.php';
+
     } elseif ($_GET['page'] == 'editar') {
-        // Pagina editar perfil
+        // Titulo, header, contenido
+        $title = 'Perfil - editar perfil';
+        require '../template/header.php';
         require './page/perfil-editar.php';
+
+    } elseif ($_GET['page'] == 'contrasena') {
+        // Titulo, header, contenido
+        $title = 'Perfil - cambiar contraseña';
+        require '../template/header.php';
+        require './page/perfil-cambiar-contrasena.php';
+
     }
 
     // footer

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,14 +18,11 @@
         <div class="w-full sm:w-auto py-6 px-4 z-20">
             <div class="flex flex-col justify-center mx-auto max-w-md bg-white p-6 sm:p-10 rounded-md shadow-lg">
                 <div class="sm:mx-auto w-full md:w-80">
-                    <a href="./">
-                        <img class="mx-auto h-20 w-auto" src="../../public/images/ElGuabo.png" alt="GAD El Guabo">
-                    </a>
+                    <img class="mx-auto h-20 w-auto" src="../../public/images/ElGuabo.png" alt="GAD El Guabo">
                     <h2 class="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Iniciar sesión</h2>
                     <?php if (isset($errorLogin)) : ?>
                         <p class="text-red-600 mt-4"><?php echo $errorLogin; ?></p>
-                    <?php endif;
-                    $errorLogin = ''; ?>
+                    <?php endif; ?>
                 </div>
 
                 <div class="sm:mx-auto w-full md:w-80">
