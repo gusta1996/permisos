@@ -39,8 +39,8 @@ const app = new (function () {
     }
     this.actualizarPerfil = () => {
         // Esconder mensaje de error al guardar cada vez
-        msgError.classList.add('hidden');
-        msgError.innerHTML = '';
+        this.msgError.classList.add('hidden');
+        this.msgError.innerHTML = '';
         // Enviar formulario para la consulta
         var formPerfil = new FormData();
         formPerfil.append('id_funcionario', this.idFuncionario.value);
@@ -63,8 +63,8 @@ const app = new (function () {
                     window.location.href = './perfil.php';
                 } else {
                     // Mostrar mensaje de error al guardar
-                    msgError.classList.remove('hidden');
-                    msgError.innerHTML += `<p class="font-medium rounded-md mb-4 p-4 bg-red-100">${data}</p>`;
+                    this.msgError.classList.remove('hidden');
+                    this.msgError.innerHTML += `<p class="font-medium rounded-md mb-4 p-4 bg-red-100">${data}</p>`;
                 }
             })
             .catch((error) => console.log(error));
