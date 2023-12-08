@@ -3,8 +3,8 @@ require '../config/connection.php';
 
 class funcionarioSolicitud extends Connection
 {
-    // Lista de solicitudes
-    public static function mostrarFuncionarioSolicitudes($page)
+    // Lista de solicitudes completo (para usuarios con permisos)
+    public static function listaFuncionarioSolicitudCompleto($page)
     {
         try {
             $limit = 10; // Número de registros a mostrar por página
@@ -31,6 +31,55 @@ class funcionarioSolicitud extends Connection
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM funcionario_solicitud";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
+            $declaracion->execute();
+            $totalRegistros = $declaracion->fetchColumn();
+
+            $totalPaginas = ceil($totalRegistros / $limit); // Redondea hacia arriba para obtener el número total de páginas
+            return array(
+                'resultado' => $resultado,
+                'totalPaginas' => $totalPaginas
+            );
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+    // Lista de solicitudes simple (para usuario estandar)
+    public static function listaFuncionarioSolicitudSimple($page, $id)
+    {
+        try {
+            $id_funcionario = isset($id) ? $id : null; // Si $id esta vacio, entonces es null
+            $limit = 10; // Número de registros a mostrar por página
+            $page = isset($page) ? $page : 1; // Si $page esta vacio, entonces es 1
+            $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos 
+
+            // Consulta para obtener los datos
+            $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado, funcionario_estructura.id_funcionario_fk,
+                        funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos,
+                        solicitud.numero, solicitud.fecha,
+                        razon.descripcion AS razon
+                    FROM funcionario_solicitud
+                    INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                    INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                    INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
+                    INNER JOIN razon ON solicitud.id_razon_fk = razon.id_razon
+                    WHERE funcionario.id_funcionario = :id_funcionario
+                    ORDER BY funcionario_solicitud.id_funcionario_solicitud DESC
+                    LIMIT :limit OFFSET :start";
+
+            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->bindParam(':id_funcionario', $id_funcionario);
+            $declaracion->bindParam(':limit', $limit);
+            $declaracion->bindParam(':start', $start);
+            $declaracion->execute();
+            $resultado = $declaracion->fetchAll();
+
+            // Consulta para obtener el número total de registros
+            $sqlTotal = "SELECT COUNT(*) FROM funcionario_solicitud
+                        INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                        INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                        WHERE funcionario.id_funcionario = :id_funcionario";
+            $declaracion = Connection::getConnection()->prepare($sqlTotal);
+            $declaracion->bindParam(':id_funcionario', $id_funcionario);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
 
@@ -90,7 +139,7 @@ class funcionarioSolicitud extends Connection
         }
     }
     // Lista de solicitudes para genera PDF
-    public static function mostrarGenerarPDF($page)
+    public static function ListadoGenerarCompleto($page)
     {
         try {
             $limit = 10; // Número de registros a mostrar por página
@@ -118,6 +167,52 @@ class funcionarioSolicitud extends Connection
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM funcionario_solicitud WHERE funcionario_solicitud.estado = 'Aprobado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
+            $declaracion->execute();
+            $totalRegistros = $declaracion->fetchColumn();
+
+            $totalPaginas = ceil($totalRegistros / $limit); // Redondea hacia arriba para obtener el número total de páginas
+            return array(
+                'resultado' => $resultado,
+                'totalPaginas' => $totalPaginas
+            );
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+    public static function ListadoGenerarSimple($page, $id)
+    {
+        try {
+            $id_funcionario = isset($id) ? $id : null; // Si $id esta vacio, entonces es null
+            $limit = 10; // Número de registros a mostrar por página
+            $page = isset($page) ? $page : 1; // Si $page esta vacio, entonces es 1
+            $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos  
+            // Consulta para obtener los datos
+            $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado, funcionario_estructura.id_funcionario_fk,
+                    funcionario.nombres, funcionario.apellidos,
+                    solicitud.numero, solicitud.fecha,
+                    razon.descripcion AS razon
+                    FROM funcionario_solicitud
+                    INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                    INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                    INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
+                    INNER JOIN razon ON solicitud.id_razon_fk = razon.id_razon
+                    WHERE funcionario_solicitud.estado = 'Aprobado' AND funcionario.id_funcionario = :id_funcionario
+                    ORDER BY funcionario_solicitud.id_funcionario_solicitud DESC
+                    LIMIT :limit OFFSET :start";
+            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->bindParam(':id_funcionario', $id_funcionario);
+            $declaracion->bindParam(':limit', $limit);
+            $declaracion->bindParam(':start', $start);
+            $declaracion->execute();
+            $resultado = $declaracion->fetchAll();
+
+            // Consulta para obtener el número total de registros
+            $sqlTotal = "SELECT COUNT(*) FROM funcionario_solicitud
+                        INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                        INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                        WHERE funcionario_solicitud.estado = 'Aprobado' AND funcionario.id_funcionario = :id_funcionario";
+            $declaracion = Connection::getConnection()->prepare($sqlTotal);
+            $declaracion->bindParam(':id_funcionario', $id_funcionario);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
 
@@ -254,7 +349,8 @@ class funcionarioSolicitud extends Connection
         }
     }
     // Extraer meses con años de los registros de solicitudes
-    public static function selectMesDescarga() {
+    public static function selectMesDescarga()
+    {
         try {
             $sql = "SELECT DISTINCT lower(TO_CHAR(fecha, 'TMMonth')) AS mes, EXTRACT(YEAR FROM fecha) AS ano,
                     LPAD(CAST(EXTRACT(MONTH FROM fecha) AS TEXT), 2, '0') AS mesnumero
@@ -269,7 +365,8 @@ class funcionarioSolicitud extends Connection
         }
     }
     // Lista de solicitudes para descargar reporte mensual (no contiene paginacion)
-    public static function mostrarReporteMensual($data) {
+    public static function mostrarReporteMensual($data)
+    {
         try {
             $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado,
                             funcionario.nombres, funcionario.apellidos,
@@ -430,14 +527,27 @@ class funcionarioSolicitud extends Connection
     public static function actualizarFuncionarioSolicitud($data)
     {
         try {
-            $sqlFuncionarioSolicitud = 'UPDATE funcionario_solicitud
-                    SET estado=:estado
-                    WHERE id_funcionario_solicitud=:id_funcionario_solicitud;               
-                    ';
+            // Actualiza la tabla funcionario_solicitud
+            if ($data['estado'] != '') {
+                $sqlFuncionarioSolicitud = 'UPDATE funcionario_solicitud
+                        SET estado=:estado
+                        WHERE id_funcionario_solicitud=:id_funcionario_solicitud;               
+                        ';
+                $decFuncionarioSolicitud = Connection::getConnection()->prepare($sqlFuncionarioSolicitud);
+                $decFuncionarioSolicitud->bindParam(':id_funcionario_solicitud', $data['id_funcionario_solicitud']);
+                $decFuncionarioSolicitud->bindParam(':estado', $data['estado']);
+                $decFuncionarioSolicitud->execute();
+            }
             $sqlSolicitud = 'UPDATE solicitud
                     SET observacion=:observacion
                     WHERE id_solicitud=:id_solicitud;               
                     ';
+            $decSolicitud = Connection::getConnection()->prepare($sqlSolicitud);
+            $decSolicitud->bindParam(':observacion', $data['observacion']);
+            $decSolicitud->bindParam(':id_solicitud', $data['id_solicitud']);
+            $decSolicitud->execute();
+
+            // actualiza la tabla tiempo
             $sqlTiempo = 'UPDATE tiempo
                     SET fecha_salida=:fecha_salida,
                         fecha_entrada=:fecha_entrada, 
@@ -445,32 +555,22 @@ class funcionarioSolicitud extends Connection
                         hora_entrada=:hora_entrada
                     WHERE id_tiempo=:id_tiempo;                  
                     ';
-            $sqlRazon = 'UPDATE razon
-                    SET descripcion=:razon
-                    WHERE id_razon=:id_razon;                   
-                    ';
-            $decFuncionarioSolicitud = Connection::getConnection()->prepare($sqlFuncionarioSolicitud);
-            $decFuncionarioSolicitud->bindParam(':id_funcionario_solicitud', $data['id_funcionario_solicitud']);
-            $decFuncionarioSolicitud->bindParam(':estado', $data['estado']);
-
-            $decSolicitud = Connection::getConnection()->prepare($sqlSolicitud);
-            $decSolicitud->bindParam(':observacion', $data['observacion']);
-            $decSolicitud->bindParam(':id_solicitud', $data['id_solicitud']);
-
             $decTiempo = Connection::getConnection()->prepare($sqlTiempo);
             $decTiempo->bindParam(':fecha_salida', $data['fecha_salida']);
             $decTiempo->bindParam(':fecha_entrada', $data['fecha_entrada']);
             $decTiempo->bindParam(':hora_salida', $data['hora_salida']);
             $decTiempo->bindParam(':hora_entrada', $data['hora_entrada']);
             $decTiempo->bindParam(':id_tiempo', $data['id_tiempo']);
+            $decTiempo->execute();
 
+            // actualiza la tabla razon
+            $sqlRazon = 'UPDATE razon
+                    SET descripcion=:razon
+                    WHERE id_razon=:id_razon;                   
+                    ';
             $decRazon = Connection::getConnection()->prepare($sqlRazon);
             $decRazon->bindParam(':id_razon', $data['id_razon']);
             $decRazon->bindParam(':razon', $data['razon']);
-
-            $decFuncionarioSolicitud->execute();
-            $decSolicitud->execute();
-            $decTiempo->execute();
             $decRazon->execute();
 
             return true;

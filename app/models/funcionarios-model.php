@@ -315,12 +315,12 @@ class Funcionario extends Connection
             }
 
             // Si $data['imagen'] no esta vacio, agregar ", imagen=:imagen" a la consulta sql
-            $setImagen = !empty($data['imagen']) ? ', imagen=:imagen' : '';
+            $setImagen = $data['imagen'] != null ? ', imagen=:imagen' : '';
 
             // Actualiza tabla funcionario
             $sql = "UPDATE funcionario 
                     SET nombres=:nombres, apellidos=:apellidos, cedula=:cedula, 
-                        telefono=:telefono, direccion=:direccion, email=:email 
+                        telefono=:telefono, direccion=:direccion, email=:email
                         $setImagen
                     WHERE id_funcionario=:id_funcionario";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -331,13 +331,22 @@ class Funcionario extends Connection
             $declaracion->bindParam(':telefono', $data['telefono']);
             $declaracion->bindParam(':direccion', $data['direccion']);
             $declaracion->bindParam(':email', $data['email']);
-            if (!empty($data['imagen'])) {
-                // Leer la imagen en un string binario
+
+            // Establecer un valor predeterminado para :imagen
+            if ($data['imagen'] != null) {
                 $imagen = file_get_contents($data['imagen']['tmp_name']);
                 // Usar $imagen_binaria en lugar de $data['imagen']
                 $declaracion->bindParam(':imagen', $imagen, PDO::PARAM_LOB);
+                $declaracion->execute();
+            }else {
+                $sql = "UPDATE funcionario 
+                        SET imagen=:imagen
+                        WHERE id_funcionario=:id_funcionario";
+                $declaracion = Connection::getConnection()->prepare($sql);
+                $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
+                $declaracion->bindValue(':imagen', null);
+                $declaracion->execute();
             }
-            $declaracion->execute();
 
             return true;
         } catch (PDOException $e) {

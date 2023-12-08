@@ -35,3 +35,4 @@ if ($userSession->userLoggedIn()) {
     // No hay sesión, redicciona a login
     header('location: ../views/');
 }
+?>

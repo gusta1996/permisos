@@ -1,5 +1,6 @@
 const app = new (function () {
     this.boxVisualizar = document.getElementById('box-visualizar');
+    this.btnEliminarVisualizar = document.getElementById('btn-eliminar-visualizar');
     this.idFuncionario = document.getElementById('id-funcionario');
     this.msgError = document.getElementById('error-perfil');
     // editar perfil
@@ -21,11 +22,15 @@ const app = new (function () {
             if (!app.inputImagenPerfil.value) {
                 // Si el input esta vacio quitar vista previa
                 app.boxVisualizar.classList.add('hidden');
+                // Si el input esta vacio quitar boton de eliminar imagen
+                app.btnEliminarVisualizar.classList.add('hidden');
                 // vaciar scr=""
                 app.visualizarImagenPerfil.src = '';
             } else {
                 // sino, muestra la vista previa
                 app.boxVisualizar.classList.remove('hidden');
+                // sino, muestra boton de eliminar imagen
+                app.btnEliminarVisualizar.classList.remove('hidden');
                 // Cargar imagen
                 var reader = new FileReader();
                 reader.onload = function () {
@@ -52,6 +57,8 @@ const app = new (function () {
         formPerfil.append('emailPerfil', this.emailPerfil.value);
         if (this.inputImagenPerfil.files[0]) {
             formPerfil.append('imagenPerfil', this.inputImagenPerfil.files[0]);
+        } else {
+            formPerfil.append('imagenPerfil', null);
         }
         fetch("../controllers/actualizarPerfil.php", { method: "POST", body: formPerfil })
             .then((respuesta) => respuesta.json())
@@ -68,6 +75,17 @@ const app = new (function () {
                 }
             })
             .catch((error) => console.log(error));
+    }
+    this.eliminarImagenPerfil = () => {
+        // Quitar vista previa
+        this.boxVisualizar.classList.add('hidden');
+        // Quitar boton de eliminar imagen
+        this.btnEliminarVisualizar.classList.add('hidden');
+        // Vaciar url de la imagen
+        this.visualizarImagenPerfil.src = '';
+        // Vaciar contenido del input de imagen
+        this.inputImagenPerfil.value = '';
+        this.inputImagenPerfil.files[0] = '';
     }
     this.actualizarContrasena = () => {
         // Esconder mensaje de error al guardar cada vez

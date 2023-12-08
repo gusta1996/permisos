@@ -41,11 +41,11 @@ class User extends Connection
                 INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario
                 INNER JOIN rol ON usuario.id_rol_fk = rol.id_rol
                 WHERE usuario.nick=:user';
-    
+
         $declaracion = $this->getConnection()->prepare($sql);
         $declaracion->bindParam(':user', $user);
         $declaracion->execute();
-    
+
         foreach ($declaracion as $currentUser) {
             $this->idUser = $currentUser['id_usuario'];
             $this->idFuncionario = $currentUser['id_funcionario'];
@@ -56,7 +56,7 @@ class User extends Connection
                 $imageData = stream_get_contents($currentUser['imagen']);
                 // Convierte la cadena de texto a una imagen
                 $this->imagen = base64_encode($imageData);
-            } 
+            }
             $this->nombres = $currentUser['nombres'];
             $this->apellidos = $currentUser['apellidos'];
             $this->cedula = strval($currentUser['cedula']);
@@ -68,9 +68,8 @@ class User extends Connection
     }
     public function getImagen()
     {
-        return $this->imagen;
+        return ($this->imagen != null) ? $this->imagen : null;
     }
-    
     public function getIdUser()
     {
         return $this->idUser;
@@ -83,7 +82,6 @@ class User extends Connection
     {
         return $this->username;
     }
-
     public function getNombres()
     {
         return $this->nombres;

@@ -254,7 +254,7 @@ const appReporte = new (function () {
         `;
         let html = `
           <div class="w-full bg-gray-100 p-2 rounded-md mb-4">
-            <h1 class="text-lg font-bold -pt-2 pb-3 text-center">Reporte de solicitudes de permisos del GAP de El Guabo</h1>
+            <h1 class="text-lg font-bold -pt-2 pb-3 text-center">Reporte de solicitudes de permisos del G.A.D. El Guabo – Municipio de El Guabo</h1>
           </div>
           <p class="mb-4"><b>Fecha:</b>  ${fechaMes}</p>
           ${table}

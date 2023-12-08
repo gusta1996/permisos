@@ -17,9 +17,15 @@
                 <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div class="col-span-full">
                         <label for="imagen-perfil" class="block text-base mb-6 font-semibold leading-7 text-gray-900">Imagen</label>
-                        <div id="box-visualizar" class="hidden m-auto mb-6 rounded-full overflow-hidden w-52 h-52">
-                            <img id="visualizar-imagen-perfil" class="object-cover w-full h-full" />
+
+                        <div id="box-visualizar" class="<?php echo ($user->getImagen() == null) ? 'hidden ' : ''; ?>m-auto mb-6 rounded-full overflow-hidden w-52 h-52">
+                            <img id="visualizar-imagen-perfil" src="data:image/jpeg;base64,<?php echo $user->getImagen(); ?>" class="object-cover w-full h-full" />
                         </div>
+
+                        <div id="btn-eliminar-visualizar" class="<?php echo ($user->getImagen() == null) ? 'hidden ' : ''; ?>flex justify-center gap-x-3 mb-6">
+                            <a href="javascript:app.eliminarImagenPerfil();" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Eliminar imagen</a>
+                        </div>
+
                         <input type="file" id="imagen-perfil" name="imagen-perfil" accept="image/*">
                     </div>
                 </div>

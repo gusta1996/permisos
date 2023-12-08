@@ -9,7 +9,9 @@ $arrayName = array(
     'telefono' => $_POST['telefonoPerfil'],
     'email' => $_POST['emailPerfil']
 );
-if (!empty($_FILES['imagenPerfil'])) {
+if ( $_FILES['imagenPerfil'] != null ) {
     $arrayName['imagen'] = $_FILES['imagenPerfil'];
+} else {
+    $arrayName['imagen'] = null;
 }
 echo json_encode(Funcionario::actualizarPerfil($arrayName));

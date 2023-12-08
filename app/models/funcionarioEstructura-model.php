@@ -120,9 +120,9 @@ class funcionarioEstructura extends Connection
     {
         try {
             $sql = 'SELECT funcionario_estructura.id_funcionario_estructura, funcionario_estructura.estado AS fe_Estado,
-                    funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos, funcionario.estado AS f_Estado,
-                    contrato.id_contrato, contrato.detalle AS contrato_detalle, contrato.estado AS c_Estado,
-                    estructura.id_estructura, estructura.estado AS e_Estado
+                            funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos, funcionario.estado AS f_Estado,
+                            contrato.id_contrato, contrato.detalle AS contrato_detalle, contrato.estado AS c_Estado,
+                            estructura.id_estructura, estructura.estado AS e_Estado
                     FROM funcionario_estructura
                     INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
                     INNER JOIN contrato ON funcionario_estructura.id_contrato_fk = contrato.id_contrato
