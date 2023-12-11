@@ -55,6 +55,7 @@ const app = new (function () {
         formPerfil.append('direccionPerfil', this.direccionPerfil.value);
         formPerfil.append('telefonoPerfil', this.telefonoPerfil.value);
         formPerfil.append('emailPerfil', this.emailPerfil.value);
+
         if (this.inputImagenPerfil.files[0]) {
             formPerfil.append('imagenPerfil', this.inputImagenPerfil.files[0]);
         } else {

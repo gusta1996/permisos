@@ -49,7 +49,7 @@ const app = new (function () {
                 this.verGuardarContrato.innerHTML = `
                     <label class="block text-sm font-medium leading-6 text-gray-900">Contrato:</label>
                     <div class="mt-2">
-                        <select id="opciones-contrato" required class="contrato-id-${data.id_contrato} selectBuscador bg-white h-[38px] block !w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                        <select id="opciones-contrato" required class="contrato-id-${data.id_contrato} selectBuscador bg-white h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                             <option value="" selected disabled>-- Selecciona --</option>
                         </select>
                     </div>
@@ -61,7 +61,7 @@ const app = new (function () {
                     <label class="block text-sm font-medium leading-6 text-gray-900">Función laboral:</label>
                     <p class="text-xs leading-6 text-gray-600">Cargo - Sección - Departamento - Área</p>
                     <div class="mt-2">
-                        <select id="opciones-estructura" required class="estructura-id-${data.id_estructura} selectBuscador h-[38px] block !w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                        <select id="opciones-estructura" required class="estructura-id-${data.id_estructura} selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                             <option value="" selected disabled>-- Selecciona: Cargo - Sección - Departamento - Área --</option>
                         </select>
                     </div>

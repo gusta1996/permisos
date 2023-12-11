@@ -19,7 +19,16 @@ if (isset($_SESSION['user'])) {
         $userSession->setCurrentUser($userForm);
         $user->setUser($userForm);
 
-        require './home.php';
+        if ($user->getFuncionarioEstado() == 'Activo') {
+            // muestra home
+            require './home.php';
+        } else if ($user->getFuncionarioEstado() == 'Anulado') {
+            // cerrar sesion
+            $userSession->closeSession();
+            // Su cuenta a sido deshabilitada
+            $errorLogin = "¡Su cuenta a sido deshabilitada!";
+            require './login.php';
+        }
     } else {
         // Nombre de usuario y/o password incorrecto
         $errorLogin = "Nombre de usuario y/o password es incorrecto";
@@ -29,4 +38,3 @@ if (isset($_SESSION['user'])) {
     // No hay sesion, Mostrar login
     require './login.php';
 }
-?>

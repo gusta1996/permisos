@@ -315,7 +315,7 @@ class Funcionario extends Connection
             }
 
             // Si $data['imagen'] no esta vacio, agregar ", imagen=:imagen" a la consulta sql
-            $setImagen = $data['imagen'] != null ? ', imagen=:imagen' : '';
+            $setImagen = $data['imagen'] != null ? ', imagen=:imagen' : ', imagen=null';
 
             // Actualiza tabla funcionario
             $sql = "UPDATE funcionario 
@@ -337,16 +337,8 @@ class Funcionario extends Connection
                 $imagen = file_get_contents($data['imagen']['tmp_name']);
                 // Usar $imagen_binaria en lugar de $data['imagen']
                 $declaracion->bindParam(':imagen', $imagen, PDO::PARAM_LOB);
-                $declaracion->execute();
-            }else {
-                $sql = "UPDATE funcionario 
-                        SET imagen=:imagen
-                        WHERE id_funcionario=:id_funcionario";
-                $declaracion = Connection::getConnection()->prepare($sql);
-                $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
-                $declaracion->bindValue(':imagen', null);
-                $declaracion->execute();
-            }
+            } 
+            $declaracion->execute();
 
             return true;
         } catch (PDOException $e) {
@@ -357,17 +349,12 @@ class Funcionario extends Connection
     {
         try {
             // Actualiza funcionario
-            $sql = "UPDATE funcionario SET estado=:estado
-                    WHERE id_funcionario=:id_funcionario
-                    AND (
-                        id_funcionario NOT IN (SELECT id_funcionario_fk FROM funcionario_estructura)
-                        OR EXISTS ( SELECT 1 FROM funcionario_estructura 
-                                    WHERE id_funcionario_fk=:id_funcionario 
-                                    AND estado = 'Anulado' )
-                    )";
+            $sql = "UPDATE funcionario
+                    SET estado=:f_estado
+                    WHERE id_funcionario=:id_funcionario";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
-            $declaracion->bindParam(':estado', $data['estado']);
+            $declaracion->bindParam(':f_estado', $data['estado']);
             $declaracion->execute();
             // Actualiza usuario
             $sql = 'UPDATE usuario SET estado=:estado

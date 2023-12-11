@@ -13,6 +13,7 @@ class User extends Connection
     private $telefono;
     private $direccion;
     private $email;
+    private $f_estado;
     private $rol;
 
     public function userExists($user, $pass)
@@ -35,7 +36,8 @@ class User extends Connection
     {
         $sql = 'SELECT  usuario.id_usuario, usuario.nick,
                         funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos, funcionario.cedula,
-                        funcionario.telefono, funcionario.direccion, funcionario.email, funcionario.imagen,
+                        funcionario.telefono, funcionario.direccion, funcionario.email,
+                        funcionario.estado AS f_estado, funcionario.imagen,
                         rol.detalle AS rol_detalle, rol.estado AS rol_estado
                 FROM usuario 
                 INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario
@@ -63,6 +65,7 @@ class User extends Connection
             $this->telefono = strval($currentUser['telefono']);
             $this->direccion = $currentUser['direccion'];
             $this->email = $currentUser['email'];
+            $this->f_estado = $currentUser['f_estado'];
             $this->rol = $currentUser['rol_detalle'];
         }
     }
@@ -105,6 +108,10 @@ class User extends Connection
     public function getEmail()
     {
         return $this->email;
+    }
+    public function getFuncionarioEstado()
+    {
+        return $this->f_estado;
     }
     public function getRol()
     {
