@@ -58,13 +58,14 @@ const app = new (function () {
 
         if (this.inputImagenPerfil.files[0]) {
             formPerfil.append('imagenPerfil', this.inputImagenPerfil.files[0]);
-        } else {
-            formPerfil.append('imagenPerfil', null);
+        }
+        if (this.visualizarImagenPerfil.getAttribute('src') == "") {
+            formPerfil.append('eliminarImagenPerfil', true);
         }
         fetch("../controllers/actualizarPerfil.php", { method: "POST", body: formPerfil })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                console.log(data);
+                //console.log(data);
                 if (data == true) {
                     // Perfil actualizado
                     alert('¡Perfil actualizado con exito!');
@@ -72,7 +73,9 @@ const app = new (function () {
                 } else {
                     // Mostrar mensaje de error al guardar
                     this.msgError.classList.remove('hidden');
-                    this.msgError.innerHTML += `<p class="font-medium rounded-md mb-4 p-4 bg-red-100">${data}</p>`;
+                    data.forEach(item => {
+                        this.msgError.innerHTML += `<p class="font-medium rounded-md mb-4 p-4 bg-red-100">${item}</p>`;
+                    });
                 }
             })
             .catch((error) => console.log(error));

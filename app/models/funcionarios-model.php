@@ -285,7 +285,8 @@ class Funcionario extends Connection
     public static function actualizarPerfil($data)
     {
         try {
-            $comprobacion = '';
+            $comprobacion = array();
+
             // Consulta Cedula repetidas
             $sql = 'SELECT cedula
                     FROM funcionario
@@ -296,8 +297,7 @@ class Funcionario extends Connection
             $compruebaCedula->execute();
             // Si existe duplicados retorna texto
             if ($compruebaCedula->rowCount() > 0) {
-                $comprobacion = "Ya existe un usuario con la misma cédula ingresada.";
-                return $comprobacion;
+                $comprobacion[] = "Ya existe un usuario con la misma cédula ingresada.";
             }
 
             // Consulta email repetidos
@@ -310,18 +310,30 @@ class Funcionario extends Connection
             $compruebaEmail->execute();
             // Si existe duplicados retorna texto
             if ($compruebaEmail->rowCount() > 0) {
-                $comprobacion = "Ya existe un usuario con el mismo email ingresado.";
+                $comprobacion[] = "Ya existe un usuario con el mismo email ingresado.";
+            }
+
+            // Si existe duplicados retorna mensajes
+            if ($comprobacion) {
                 return $comprobacion;
             }
 
             // Si $data['imagen'] no esta vacio, agregar ", imagen=:imagen" a la consulta sql
-            $setImagen = $data['imagen'] != null ? ', imagen=:imagen' : ', imagen=null';
+            // $setImagen = $data['imagen'] != null ? ', imagen=:imagen' : ', imagen=null';
+            /* if (isset($data['imagen'])) {
+                $setImagen = ', imagen=:imagen';
+            } 
+            if ($data['eliminarImagen'] == true) {
+                $setImagen = ', imagen=:imagen';
+            } 
+            if ($data['eliminarImagen'] == false) {
+                $setImagen = '';
+            }*/
 
             // Actualiza tabla funcionario
             $sql = "UPDATE funcionario 
                     SET nombres=:nombres, apellidos=:apellidos, cedula=:cedula, 
                         telefono=:telefono, direccion=:direccion, email=:email
-                        $setImagen
                     WHERE id_funcionario=:id_funcionario";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
@@ -331,13 +343,23 @@ class Funcionario extends Connection
             $declaracion->bindParam(':telefono', $data['telefono']);
             $declaracion->bindParam(':direccion', $data['direccion']);
             $declaracion->bindParam(':email', $data['email']);
+            $declaracion->execute();
 
-            // Establecer un valor predeterminado para :imagen
-            if ($data['imagen'] != null) {
+            $sql = "UPDATE funcionario 
+                    SET imagen=:imagen
+                    WHERE id_funcionario=:id_funcionario";
+            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
+            if (isset($data['imagen'])) {
+                // subir imagen
                 $imagen = file_get_contents($data['imagen']['tmp_name']);
-                // Usar $imagen_binaria en lugar de $data['imagen']
                 $declaracion->bindParam(':imagen', $imagen, PDO::PARAM_LOB);
-            } 
+            }
+            if (isset($data['eliminarImagen'])) {
+                // Establecer la imagen por defecto
+                $imagen = file_get_contents('../../public/images/imagen-perfil.png');
+                $declaracion->bindParam(':imagen', $imagen, PDO::PARAM_LOB);
+            }
             $declaracion->execute();
 
             return true;

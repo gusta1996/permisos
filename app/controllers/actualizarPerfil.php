@@ -9,9 +9,13 @@ $arrayName = array(
     'telefono' => $_POST['telefonoPerfil'],
     'email' => $_POST['emailPerfil']
 );
-if ( $_FILES['imagenPerfil'] != null ) {
+if ( isset($_FILES['imagenPerfil']) ) {
+    // si la variable de la imagen está definida...
     $arrayName['imagen'] = $_FILES['imagenPerfil'];
-} else {
-    $arrayName['imagen'] = null;
 }
+if( isset($_POST['eliminarImagenPerfil']) ) {
+    // si se elimino la imagen seleccionada...
+    $arrayName['eliminarImagen'] = $_POST['eliminarImagenPerfil'];
+}
+
 echo json_encode(Funcionario::actualizarPerfil($arrayName));
