@@ -345,22 +345,28 @@ class Funcionario extends Connection
             $declaracion->bindParam(':email', $data['email']);
             $declaracion->execute();
 
-            $sql = "UPDATE funcionario 
-                    SET imagen=:imagen
-                    WHERE id_funcionario=:id_funcionario";
-            $declaracion = Connection::getConnection()->prepare($sql);
-            $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
             if (isset($data['imagen'])) {
+                $sql = "UPDATE funcionario 
+                        SET imagen=:imagen
+                        WHERE id_funcionario=:id_funcionario";
+                $declaracion = Connection::getConnection()->prepare($sql);
+                $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
                 // subir imagen
                 $imagen = file_get_contents($data['imagen']['tmp_name']);
                 $declaracion->bindParam(':imagen', $imagen, PDO::PARAM_LOB);
+                $declaracion->execute();
             }
             if (isset($data['eliminarImagen'])) {
+                $sql = "UPDATE funcionario 
+                        SET imagen=:imagen
+                        WHERE id_funcionario=:id_funcionario";
+                $declaracion = Connection::getConnection()->prepare($sql);
+                $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
                 // Establecer la imagen por defecto
                 $imagen = file_get_contents('../../public/images/imagen-perfil.png');
                 $declaracion->bindParam(':imagen', $imagen, PDO::PARAM_LOB);
+                $declaracion->execute();
             }
-            $declaracion->execute();
 
             return true;
         } catch (PDOException $e) {
