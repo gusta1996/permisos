@@ -1,13 +1,12 @@
 const appReporte = new (function () {
   this.tbodyReporte = document.getElementById('tbodyReporte');
-  this.visorReporte = document.getElementById('visor-reporte');
+  this.selecReporteMes = document.getElementById('selec-reporte-mes');
   this.btnReportePDF = document.getElementById('btn-reporte-pdf');
-  this.reportePagina = document.getElementById('reporte-pdf');
+  this.reporteMensual = document.getElementById('reporte-mensual');
   this.selectMeses = document.getElementById('select-meses');
   this.busqueda = document.getElementById('busqueda-reporte');
   this.busquedaTipo = document.getElementById('busqueda-tipo');
   this.paginacion = document.getElementById('paginacion');
-
 
   this.listadoReporte = (pagina) => {
     // al cargar la pagina, la variable pagina es igual 1
@@ -141,39 +140,14 @@ const appReporte = new (function () {
       })
       .catch((error) => console.log(error));
   }
-  this.descargarReporte = (fecha_mensual) => {
-    var btnDescargar = document.getElementById('btn-descargar-reporte');
-    // Mostrar icono "cargando"
-    btnDescargar.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="animate-spin bi bi-arrow-clockwise" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
-      </svg>Descargando...
-    `;
-    // Genera y descarga el PDF del reporte
-    // let fecha = new Date();
-    let doc = new jsPDF('p', 'pt', 'a4');
-    let margin = 20;
-    let scale = (doc.internal.pageSize.width - margin * 2) / this.reportePagina.clientWidth;
-    doc.html(this.reportePagina, {
-      x: margin,
-      y: margin,
-      html2canvas: {
-        scale: scale,
-      },
-      callback: function (doc) {
-        //Descarga pdf
-        doc.save(fecha_mensual + ".pdf");
-        // Quita el icono "Cargando"
-        btnDescargar.innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-              <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
-              <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-          </svg>Descargar
-        `;
-      }
-    });
+  this.descargarReporte = () => {
+    var contenido = this.reporteMensual.innerHTML;
+    this.selecReporteMes.remove();
+    var contenidoOriginal= document.body.innerHTML;
 
+    document.body.innerHTML = contenido;
+    window.print();
+    document.body.innerHTML = contenidoOriginal;
   }
   this.convierteFormatoFecha = (fecha) => {
     let partes = fecha.split('-');
@@ -187,22 +161,13 @@ const appReporte = new (function () {
     return textoFecha;
   }
   this.reporteMensualPDF = () => {
-    // Visualizar reporte
-    this.visorReporte.classList.remove('hidden');
     // Generar botones
-    this.btnReportePDF.innerHTML = `
-     <button onclick="appReporte.descargarReporte('reporte_${this.selectMeses.value}')" id="btn-descargar-reporte" class="flex gap-2 items-center rounded-md shadow-sm bg-green-500 px-4 py-3 mb-4 text-base font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+   this.btnReportePDF.innerHTML = `
+     <button onclick="appReporte.descargarReporte()" id="btn-descargar-reporte" class="flex gap-2 items-center rounded-md shadow-sm bg-green-500 px-4 py-3 mb-4 text-base font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-       </svg>
-       Descargar
-     </button>
-     <button onclick="appReporte.cerrarReporte()" class="flex gap-2 items-center rounded-md shadow-sm bg-red-500 px-4 py-3 mb-4 text-base font-semibold text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-           <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-       </svg>
-       Cerrar
+       </svg> Guardar o imprimir
      </button>
    `;
     // Enviar fecha_mes para perticion de datos
@@ -213,6 +178,7 @@ const appReporte = new (function () {
       .then((data) => {
         let fechaMes = this.convierteFormatoFecha(this.selectMeses.value);
         let filas = '';
+        console.log(data);
         data.forEach(item => {
           let salida = new Date(`${item.fecha_salida} ${item.hora_salida}`);
           let entrada = new Date(`${item.fecha_entrada} ${item.hora_entrada}`);
@@ -220,13 +186,14 @@ const appReporte = new (function () {
           let dias = Math.floor(diferenciaTiempo / (1000 * 60 * 60 * 24));
           let horas = Math.floor((diferenciaTiempo / (1000 * 60 * 60)) % 24);
           filas += `
-            <tr class="h-14 border-b last:border-b-0 border-b-white-100">
-                <td id="numero-solicitud" class="text-slate-700 -pt-2 pb-2 pr-4">${item.numero}</td>
-                <td class="text-slate-700 -pt-2 pb-2 pr-4">${item.apellidos} ${item.nombres}</td>
-                <td class="text-slate-700 -pt-2 pb-2 pr-4">${item.razon}</td>
-                <td class="text-slate-700 -pt-2 pb-2 pr-4 whitespace-nowrap">${item.fecha}</td>
-                <td class="text-slate-700 -pt-2 pb-2 pr-4">${dias} días y ${horas} horas</td>
-                <td class="font-semibold -pt-2 pb-2 ${item.fs_estado == 'Aprobado' ? 'text-green-600' : ''}${item.fs_estado == 'Anulado' ? 'text-red-600' : ''}${item.fs_estado == 'Pendiente' ? 'text-amber-600' : ''}">${item.fs_estado}</td>
+            <tr class="h-12 border-b last:border-b-0 border-b-white-100">
+                <td id="numero-solicitud" class="text-slate-700">${item.numero}</td>
+                <td class="text-slate-700">${item.apellidos} ${item.nombres}</td>
+                <td class="text-slate-700">${item.razon}</td>
+                <td class="text-slate-700 whitespace-nowrap">${item.fecha}</td>
+                <td class="text-slate-700 whitespace-nowrap">${item.fecha_salida}</td>
+                <td class="text-slate-700">${dias} días y ${horas} horas</td>
+                <td class="font-semibold ${item.fs_estado == 'Aprobado' ? 'text-green-600' : ''}${item.fs_estado == 'Anulado' ? 'text-red-600' : ''}${item.fs_estado == 'Pendiente' ? 'text-amber-600' : ''}">${item.fs_estado}</td>
               </tr>
             `;
         });
@@ -237,6 +204,7 @@ const appReporte = new (function () {
             <th class="font-medium pr-4">Nombres</th>
             <th class="font-medium pr-4">Razón</th>
             <th class="font-medium pr-4">Fecha</th>
+            <th class="font-medium pr-4">Fecha salida</th>
             <th class="font-medium pr-4">Tiempo</th>
             <th class="font-medium">Estado</th>
           </tr>
@@ -253,20 +221,19 @@ const appReporte = new (function () {
           </table>
         `;
         let html = `
-          <div class="w-full bg-gray-100 p-2 rounded-md mb-4">
-            <h1 class="text-lg font-bold -pt-2 pb-3 text-center">Reporte de solicitudes de permisos del G.A.D. El Guabo – Municipio de El Guabo</h1>
+          <div class="bg-white rounded-md shadow-sm mb-6">
+            <div class="p-4 rounded-md mb-4">
+              <div class="w-full bg-gray-100 p-2 rounded-md mb-4">
+                <h1 class="text-lg font-bold text-center">Reporte de solicitudes de permisos del G.A.D. El Guabo – Municipio de El Guabo</h1>
+              </div>
+              <p class="mb-4"><b>Fecha:</b>  ${fechaMes}</p>
+              ${table}
+            </div>
           </div>
-          <p class="mb-4"><b>Fecha:</b>  ${fechaMes}</p>
-          ${table}
         `;
-        appReporte.reportePagina.innerHTML = html;
+        appReporte.reporteMensual.innerHTML = html;
       })
       .catch((error) => console.log(error));
-  }
-  this.cerrarReporte = () => {
-    // ocultar vista previa del reporte
-    this.visorReporte.classList.add('hidden');
-    this.reportePagina.innerHTML = ``;
   }
 
 });

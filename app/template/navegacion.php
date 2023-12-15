@@ -4,7 +4,7 @@ $administrador = $user->getRol() == 'administrador' ? true : false;
 $autorizador = $user->getRol() == 'autorizador' ? true : false;
 ?>
 
-<div class="hidden lg:block flex-initial w-64 bg-white shadow z-50">
+<div id="navegacion" class="hidden lg:block flex-initial bg-white shadow z-50 fixed lg:relative top-0 bottom-0 w-5/6 lg:w-64 overflow-auto">
     <a href="../../" class="block border-b border-gray-900/10 p-4">
         <img class="" src="../../public/images/ElGuabo.png" alt="">
     </a>

@@ -9,11 +9,11 @@
             <h1 class="text-lg font-semibold leading-7 text-gray-900"><?php echo $title; ?></h1>
         </div>
         <div class="lg:hidden flex flex-1 justify-end">
-            <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+            <a onclick="app.abrirMenu()" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
                 </svg>
-            </button>
+            </a>
         </div>
         <div class="flex items-center gap-4 ml-4 lg:flex-1 lg:justify-end">
             <div id="info" class="hidden">
