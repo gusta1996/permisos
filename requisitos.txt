@@ -1,0 +1,1 @@
+Habilitar "extension=pdo_pgsql" en el archivo php.ini

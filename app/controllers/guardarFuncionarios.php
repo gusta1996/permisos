@@ -1,14 +1,14 @@
 <?php
 require_once '../models/funcionarios-model.php';
 $arrayName = array(
-    'nombres' => $_POST['nombres'],
-    'apellidos' => $_POST['apellidos'],
+    'nombres' => strtolower($_POST['nombres']),
+    'apellidos' => strtolower($_POST['apellidos']),
     'cedula' => $_POST['cedula'],
-    'direccion' => $_POST['direccion'],
+    'direccion' => strtolower($_POST['direccion']),
     'telefono' => $_POST['telefono'],
-    'email' => $_POST['email'],
-    'estado'=> 'Activo',
-    'usuario' => $_POST['usuario'],
+    'email' => strtolower($_POST['email']),
+    'estado'=> 'activo',
+    'usuario' => strtolower($_POST['usuario']),
     'password' => $_POST['password'],
     'id_rol' => $_POST['id_rol'],
     'id_contrato' => $_POST['id_contrato'],

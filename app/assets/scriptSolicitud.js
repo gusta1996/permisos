@@ -28,13 +28,13 @@ const appSolicitud = new (function () {
                 let html = '';
                 for (let i = 0; i < item.length; i++) {
                     html += `
-                        <tr class="h-14 border-b last:border-b-0 border-b-white-100">
+                        <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_fk}</td>
                             <td class="text-slate-700 pr-4">${item[i].numero}</td>
-                            <td class="text-slate-700 pr-4">${item[i].apellidos} ${item[i].nombres}</td>
-                            <td class="text-slate-700 pr-4">${item[i].razon}</td>
+                            <td class="text-slate-700 pr-4 capitalize">${item[i].apellidos} ${item[i].nombres}</td>
+                            <td class="text-slate-700 pr-4 capitalize">${item[i].razon}</td>
                             <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
-                            <td class="${item[i].fs_estado == 'Anulado' ? 'text-red-600' : (item[i].fs_estado == 'Pendiente' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].fs_estado}</td>
+                            <td class="capitalize ${item[i].fs_estado == 'anulado' ? 'text-red-600' : (item[i].fs_estado == 'pendiente' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].fs_estado}</td>
                             <td class="flex justify-end flex-row items-center gap-4 h-14 w-fit ml-auto">
                                 <button onclick="appSolicitud.editarSolicitudCompleta(${item[i].id_funcionario_solicitud})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -42,12 +42,12 @@ const appSolicitud = new (function () {
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                     </svg>
                                 </button>
-                                <button onclick="appSolicitud.aprobarSolicitud(${item[i].id_funcionario_solicitud})" title="Aprobar" class="${item[i].fs_estado != 'Pendiente' ? 'hidden ' : ''}btn-aprobar flex items-center gap-2 min-h-fit rounded-md bg-green-50 px-3 py-2 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
+                                <button onclick="appSolicitud.aprobarSolicitud(${item[i].id_funcionario_solicitud})" title="Aprobar" class="${item[i].fs_estado != 'pendiente' ? 'hidden ' : ''}btn-aprobar flex items-center gap-2 min-h-fit rounded-md bg-green-50 px-3 py-2 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
                                         <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
                                     </svg>
                                 </button>
-                                <button onclick="appSolicitud.eliminarSolicitud(${item[i].id_funcionario_solicitud})" title="Anular" class="${item[i].fs_estado === 'Anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                <button onclick="appSolicitud.eliminarSolicitud(${item[i].id_funcionario_solicitud})" title="Anular" class="${item[i].fs_estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                                         <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
                                     </svg>
@@ -74,27 +74,27 @@ const appSolicitud = new (function () {
                 let html = '';
                 for (let i = 0; i < item.length; i++) {
                     html += `
-                        <tr class="h-14 border-b last:border-b-0 border-b-white-100">
+                        <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_fk}</td>
                             <td class="text-slate-700 pr-4">${item[i].numero}</td>
-                            <td class="text-slate-700 pr-4">${item[i].razon}</td>
+                            <td class="text-slate-700 pr-4 capitalize">${item[i].razon}</td>
                             <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
-                            <td class="${item[i].fs_estado == 'Anulado' ? 'text-red-600' : (item[i].fs_estado == 'Pendiente' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].fs_estado}</td>
+                            <td class="capitalize ${item[i].fs_estado == 'anulado' ? 'text-red-600' : (item[i].fs_estado == 'pendiente' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].fs_estado}</td>
                             <td class="flex justify-end flex-row items-center gap-4 h-14 w-fit ml-auto">
-                            ${(item[i].fs_estado == 'Pendiente') ? `
-                                <button onclick="appSolicitud.editarSolicitudSimple(${item[i].id_funcionario_solicitud})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                                    </svg>
-                                </button>
+                                ${(item[i].fs_estado == 'pendiente') ? `
+                                    <button onclick="appSolicitud.editarSolicitudSimple(${item[i].id_funcionario_solicitud})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                        </svg>
+                                    </button>
                                 ` : `
-                                <button onclick="" title="No se puede editar" class="btn-editar cursor-no-drop flex items-center gap-2 min-h-fit rounded-md bg-gray-50 px-3 py-2 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-700/10">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                                    </svg>
-                                </button>
+                                    <button onclick="" title="No se puede editar" class="btn-editar cursor-no-drop flex items-center gap-2 min-h-fit rounded-md bg-gray-50 px-3 py-2 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-700/10">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                        </svg>
+                                    </button>
                                 ` }
                             </td>
                         </tr>
@@ -130,7 +130,7 @@ const appSolicitud = new (function () {
                                 <td class="text-slate-700 pr-4">${item[i].apellidos} ${item[i].nombres}</td>
                                 <td class="text-slate-700 pr-4">${item[i].razon}</td>
                                 <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
-                                <td class="${item[i].fs_estado == 'Anulado' ? 'text-red-600' : (item[i].fs_estado == 'Pendiente' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].fs_estado}</td>
+                                <td class="${item[i].fs_estado == 'anulado' ? 'text-red-600' : (item[i].fs_estado == 'pendiente' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].fs_estado}</td>
                                 <td class="flex justify-end flex-row items-center gap-4 h-14 w-fit ml-auto">
                                     <button onclick="appSolicitud.${listadoSolicitud}(${item[i].id_funcionario_solicitud})" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -138,12 +138,12 @@ const appSolicitud = new (function () {
                                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                         </svg>
                                     </button>
-                                    <button onclick="appSolicitud.aprobarSolicitud(${item[i].id_funcionario_solicitud})" class="${item[i].fs_estado != 'Pendiente' ? 'hidden ' : ''}btn-aprobar flex items-center gap-2 min-h-fit rounded-md bg-green-50 px-3 py-2 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
+                                    <button onclick="appSolicitud.aprobarSolicitud(${item[i].id_funcionario_solicitud})" class="${item[i].fs_estado != 'pendiente' ? 'hidden ' : ''}btn-aprobar flex items-center gap-2 min-h-fit rounded-md bg-green-50 px-3 py-2 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
                                             <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
                                         </svg>
                                     </button>
-                                    <button onclick="appSolicitud.eliminarSolicitud(${item[i].id_funcionario_solicitud})" class="${item[i].fs_estado === 'Anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                    <button onclick="appSolicitud.eliminarSolicitud(${item[i].id_funcionario_solicitud})" class="${item[i].fs_estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                                             <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
                                         </svg>
@@ -378,19 +378,19 @@ const appSolicitud = new (function () {
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Razón:</label>
                                             <select id="editar-razon-solicitud" required class="h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
-                                                <option ${data.descripcion === 'Particular' ? 'selected' : ''}>Particular</option>
-                                                <option ${data.descripcion === 'Calamidad domestica' ? 'selected' : ''}>Calamidad domestica</option>
-                                                <option ${data.descripcion === 'Enfermedad' ? 'selected' : ''}>Enfermedad</option>
-                                                <option ${data.descripcion === 'Otro' ? 'selected' : ''}>Otro</option>
+                                                <option ${data.descripcion === 'particular' ? 'selected' : ''}>Particular</option>
+                                                <option ${data.descripcion === 'calamidad domestica' ? 'selected' : ''}>Calamidad domestica</option>
+                                                <option ${data.descripcion === 'enfermedad' ? 'selected' : ''}>Enfermedad</option>
+                                                <option ${data.descripcion === 'otro' ? 'selected' : ''}>Otro</option>
                                             </select>
                                         </div>
                                         <!-- Estado -->
                                         <div class="sm:col-span-3">
-                                            <label class="block text-sm font-medium leading-6 text-gray-900">Estado:</label>
+                                            <label class="block catext-sm font-medium leading-6 text-gray-900">Estado:</label>
                                             <select id="editar-estado-solicitud" required class="h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
-                                                <option ${data.estado === 'Aprobado' ? 'selected' : ''}>Aprobado</option>
-                                                <option ${data.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+                                                <option ${data.estado === 'aprobado' ? 'selected' : ''}>Aprobado</option>
+                                                <option ${data.estado === 'pendiente' ? 'selected' : ''}>Pendiente</option>
                                             </select>
                                         </div>
                                         <!-- Observaciones -->
@@ -484,10 +484,10 @@ const appSolicitud = new (function () {
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Razón:</label>
                                             <select id="editar-razon-solicitud" required class="h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
-                                                <option ${data.descripcion === 'Particular' ? 'selected' : ''}>Particular</option>
-                                                <option ${data.descripcion === 'Calamidad domestica' ? 'selected' : ''}>Calamidad domestica</option>
-                                                <option ${data.descripcion === 'Enfermedad' ? 'selected' : ''}>Enfermedad</option>
-                                                <option ${data.descripcion === 'Otro' ? 'selected' : ''}>Otro</option>
+                                                <option ${data.descripcion === 'particular' ? 'selected' : ''}>Particular</option>
+                                                <option ${data.descripcion === 'calamidad domestica' ? 'selected' : ''}>Calamidad domestica</option>
+                                                <option ${data.descripcion === 'enfermedad' ? 'selected' : ''}>Enfermedad</option>
+                                                <option ${data.descripcion === 'otro' ? 'selected' : ''}>Otro</option>
                                             </select>
                                         </div>
                                         <!-- Observaciones -->
@@ -534,7 +534,7 @@ const appSolicitud = new (function () {
             fetch("../controllers/eliminarFuncionarioSolicitud.php", { method: "POST", body: formSolicitud })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado == 'Anulado') {
+                    if (data.estado == 'anulado') {
                         alert('¡Solicitud anulada con éxito!');
                     } else {
                         alert('¡No se pudo anular, esta solicitud está siendo usada!');

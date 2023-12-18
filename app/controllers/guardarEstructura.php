@@ -5,7 +5,7 @@ $arrayName = array(
     'seccion' => $_POST['seccion'],
     'departamento' => $_POST['departamento'],
     'area' => $_POST['area'],
-    'estado' => 'Activo'
+    'estado' => 'activo'
 );
 
 echo json_encode(Estructura::guardarEstructura($arrayName));

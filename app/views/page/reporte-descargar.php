@@ -2,11 +2,15 @@
     <h1 class="text-lg font-semibold leading-7 text-gray-900 mx-auto mt-2 mb-6 uppercase"><?php echo $title; ?></h1>
 </div>
 
-<a href="./reporte.php" class="flex items-center w-max gap-2 rounded-md shadow-sm bg-indigo-500 px-3 py-2 mb-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Volver</a>
+<a href="./reporte.php" class="flex items-center w-max gap-2 rounded-md shadow-sm bg-indigo-500 px-3 py-2 mb-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-left" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4z" />
+    </svg>Volver
+</a>
 
 <div id="selec-reporte-mes" class="bg-white rounded-md shadow-sm mb-6">
     <div class="flex items-center gap-6 p-4">
-        <h2 class="flex-auto text-lg font-semibold leading-7 text-gray-900">Descargar reporte mensual:</h2>
+        <h2 class="flex-auto text-lg font-semibold leading-7 text-gray-900">Reporte mensual:</h2>
         <form action="javascript:void(0);" onsubmit="appReporte.reporteMensualPDF()" class="flex items-center gap-4">
             <div class="w-52">
                 <select id="select-meses" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">

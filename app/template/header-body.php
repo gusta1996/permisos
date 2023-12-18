@@ -19,18 +19,11 @@
             <div id="info" class="hidden">
                 <div id="cuenta-id-funcionario"><?php echo $user->getIdFuncionario(); ?></div>
             </div>
-            <a href="../views/perfil.php" class="hidden lg:flex items-center gap-2 text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500">
+            <a href="../views/perfil.php" class="hidden lg:flex capitalize items-center gap-2 text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500">
                 <?php echo $user->getNombres(); ?> <?php echo $user->getApellidos(); ?>
 
                 <!-- Imagen de perfil -->
-                <?php if ($user->getImagen() == null) : ?>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                    </svg>
-                <?php else : ?>
-                    <img src="data:image/jpeg;base64,<?php echo $user->getImagen(); ?>" class="rounded-full overflow-hidden w-8 h-8" />
-                <?php endif; ?>
+                <img src="data:image/jpeg;base64,<?php echo $user->getImagen(); ?>" class="rounded-full overflow-hidden w-8 h-8" />
             </a>
             <a href="../models/logout.php" class="hover:text-red-500">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">

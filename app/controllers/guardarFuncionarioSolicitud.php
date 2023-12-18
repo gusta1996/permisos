@@ -7,9 +7,9 @@ $arrayName = array(
     'horaSalida' => $_POST['horaSalida'],
     'horaEntrada' => $_POST['horaEntrada'],
     'fecha' => date("Y-m-d"),
-    'razon' => $_POST['razon'],
+    'razon' => strtolower($_POST['razon']),
     'observacion' => $_POST['observacion'],
-    'estado' => 'Pendiente'
+    'estado' => 'pendiente'
 );
 
 echo json_encode(funcionarioSolicitud::guardarFuncionarioSolicitud($arrayName));

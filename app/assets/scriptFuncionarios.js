@@ -32,13 +32,19 @@ const appFuncionarios = new (function () {
                 let html = '';
                 for (let i = 0; i < item.length; i++) {
                     html += `
-                        <tr class="h-14 border-b last:border-b-0 border-b-white-100">
+                        <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="text-slate-700 pr-4">${item[i].id_funcionario}</td>
-                            <td class="text-slate-700 pr-4">${item[i].apellidos} ${item[i].nombres}</td>
-                            <td class="text-slate-700 pr-4">${item[i].cedula}</td>
+                            <td class="text-slate-700 pr-4 capitalize leading-6">
+                                <div>
+                                    ${item[i].apellidos} ${item[i].nombres}
+                                </div>
+                                <div>
+                                    CI: ${item[i].cedula}
+                                </div>
+                            </td>
                             <td class="text-slate-700 pr-4">${item[i].email}</td>
-                            <td class="text-slate-700 pr-4">${item[i].rol}</td>
-                            <td class="${item[i].f_estado == 'Anulado' ? 'text-red-600' : (item[i].f_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].f_estado}</td>
+                            <td class="text-slate-700 pr-4 capitalize">${item[i].rol}</td>
+                            <td class="capitalize ${item[i].f_estado == 'anulado' ? 'text-red-600' : (item[i].f_estado == 'suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].f_estado}</td>
                             <td class="flex justify-end flex-row items-center gap-4 h-14 w-fit ml-auto">
                                 <button onclick="appFuncionarios.editarFuncionarios(${item[i].id_funcionario})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -46,7 +52,7 @@ const appFuncionarios = new (function () {
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                     </svg>
                                 </button>
-                                <button onclick="appFuncionarios.eliminarFuncionarios(${item[i].id_funcionario})" title="Anular" class="${item[i].f_estado === 'Anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                <button onclick="appFuncionarios.eliminarFuncionarios(${item[i].id_funcionario})" title="Anular" class="${item[i].f_estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                                         <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
                                     </svg>
@@ -79,13 +85,19 @@ const appFuncionarios = new (function () {
                 if (item != '') {
                     for (let i = 0; i < item.length; i++) {
                         html += `
-                            <tr class="h-14 border-b last:border-b-0 border-b-white-100">
+                            <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                                 <td class="text-slate-700 pr-4">${item[i].id_funcionario}</td>
-                                <td class="text-slate-700 pr-4">${item[i].apellidos} ${item[i].nombres}</td>
-                                <td class="text-slate-700 pr-4">${item[i].cedula}</td>
+                                <td class="text-slate-700 pr-4 capitalize leading-6">
+                                    <div>
+                                        ${item[i].apellidos} ${item[i].nombres}
+                                    </div>
+                                    <div>
+                                        CI: ${item[i].cedula}
+                                    </div>
+                                </td>
                                 <td class="text-slate-700 pr-4">${item[i].email}</td>
-                                <td class="text-slate-700 pr-4">${item[i].rol}</td>
-                                <td class="${item[i].estado == 'Anulado' ? 'text-red-600' : (item[i].estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].estado}</td>
+                                <td class="text-slate-700 pr-4 capitalize">${item[i].rol}</td>
+                                <td class="capitalize ${item[i].estado == 'anulado' ? 'text-red-600' : (item[i].estado == 'suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].estado}</td>
                                 <td class="flex justify-end flex-row items-center gap-4 h-14 w-fit ml-auto">
                                     <button onclick="appFuncionarios.editarFuncionarios(${item[i].id_funcionario})" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -93,7 +105,7 @@ const appFuncionarios = new (function () {
                                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                         </svg>
                                     </button>
-                                    <button onclick="appFuncionarios.eliminarFuncionarios(${item[i].id_funcionario})" class="${item[i].estado === 'Anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                    <button onclick="appFuncionarios.eliminarFuncionarios(${item[i].id_funcionario})" class="${item[i].estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                                             <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
                                         </svg>
@@ -159,15 +171,15 @@ const appFuncionarios = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    if (item.estado === 'Activo') {
+                    if (item.estado === 'activo') {
                         if (editarRol) {
                             var seleted = 'rol-id-' + item.id_rol == editarRol.classList.item(0) ? 'selected' : '';
                             editarRol.innerHTML += `
-                                <option ${seleted} value="${item.id_rol}">${item.detalle}</option>
+                                <option ${seleted} value="${item.id_rol}" class="capitalize">${item.detalle}</option>
                             `;
                         } else {
                             this.idRolFuncionario.innerHTML += `
-                            <option value="${item.id_rol}">${item.detalle}</option>
+                            <option value="${item.id_rol}" class="capitalize">${item.detalle}</option>
                         `;
                         }
                     }
@@ -181,7 +193,7 @@ const appFuncionarios = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    if (item.estado === 'Activo') {
+                    if (item.estado === 'activo') {
                         if (EditContrato) {
                             var seleted = 'contrato-id-' + item.id_contrato == EditContrato.classList.item(0) ? 'selected' : '';
                             EditContrato.innerHTML += `
@@ -202,7 +214,7 @@ const appFuncionarios = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    if (item.estruc_estado === 'Activo') {
+                    if (item.estruc_estado === 'activo') {
                         this.idEstructuraFuncionario.innerHTML += `
                             <option value="${item.id_estructura}">${item.cargo_detalle} - ${item.seccion_detalle} - ${item.depa_detalle} - ${item.area_detalle}</option>
                         `;
@@ -296,7 +308,6 @@ const appFuncionarios = new (function () {
         fetch("../controllers/editarFuncionarios.php", { method: "POST", body: formFuncionarios })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                console.log('sd');
                 var modalFuncionarios = document.getElementById('modal-funcionarios');
                 modalFuncionarios.innerHTML = `
                 <div class="fixed inset-0 bg-gray-500 bg-opacity-75 overflow-y-auto z-50 ease-out duration-300">
@@ -316,12 +327,12 @@ const appFuncionarios = new (function () {
                                         <!-- Nombres -->
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Nombres:</label>
-                                            <input type="text" id="editar-nombres-funcionarios" required value="${data.nombres}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                            <input type="text" id="editar-nombres-funcionarios" required value="${data.nombres}" class="block capitalize w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Apellidos -->
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Apellidos:</label>
-                                            <input type="text" id="editar-apellidos-funcionarios" required value="${data.apellidos}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                            <input type="text" id="editar-apellidos-funcionarios" required value="${data.apellidos}" class="block capitalize w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Cédula -->
                                         <div class="sm:col-span-2">
@@ -331,7 +342,7 @@ const appFuncionarios = new (function () {
                                         <!-- Dirección -->
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Dirección:</label>
-                                            <input type="text" id="editar-direccion-funcionarios" required value="${data.direccion}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                            <input type="text" id="editar-direccion-funcionarios" required value="${data.direccion}" class="block capitalize w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Telefono -->
                                         <div class="sm:col-span-2">
@@ -351,17 +362,17 @@ const appFuncionarios = new (function () {
                                         <!-- Rol -->
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Rol:</label>
-                                            <select id="editar-rol-funcionarios" required class="rol-id-${data.id_rol} selectBuscador h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                            <select id="editar-rol-funcionarios" required class="rol-id-${data.id_rol} selectBuscador capitalize h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
                                         <!-- Estado -->
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Estado:</label>
-                                            <select id="editar-estado-funcionarios" value="${data.estado}" required class="h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                            <select id="editar-estado-funcionarios" value="${data.estado}" required class="capitalize h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
-                                                <option ${data.estado === 'Activo' ? 'selected' : ''}>Activo</option>
-                                                <option ${data.estado === 'Suspendido' ? 'selected' : ''}>Suspendido</option>
+                                                <option ${data.estado === 'activo' ? 'selected' : ''}>Activo</option>
+                                                <option ${data.estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
                                             </select>
                                         </div>
                                         <!-- Mensaje de error -->
@@ -390,7 +401,7 @@ const appFuncionarios = new (function () {
             fetch("../controllers/eliminarFuncionarios.php", { method: "POST", body: formFuncionarios })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado == 'Anulado') {
+                    if (data.estado == 'anulado') {
                         alert('¡Funcionario anulado con éxito!');
                     } else {
                         alert('¡No se pudo anular, este funcionario tiene un cargo asignado!')
@@ -406,11 +417,6 @@ const appFuncionarios = new (function () {
     this.cerrarModalFuncionarios = () => {
         var modalFuncionarios = document.getElementById('modal-funcionarios');
         modalFuncionarios.innerHTML = '';
-    }
-    this.btnCrearFuncionario = () => {
-        this.btnFuncionario.remove();
-        this.boxListaFuncionario.classList.add('hidden');
-        this.boxCrearFuncionario.classList.remove('hidden');
     }
     this.generatePassword = () => {
         const length = 10; // Longitud de la contraseña
@@ -441,8 +447,13 @@ const appFuncionarios = new (function () {
         this.passwordFuncionario.value = password;
     }
 });
-appFuncionarios.listadoFuncionarios();
-appFuncionarios.selectRol();
-appFuncionarios.selectContrato();
-appFuncionarios.selectEstructura();
-appFuncionarios.generatePassword();
+
+if (appFuncionarios.boxListaFuncionario) {
+    appFuncionarios.listadoFuncionarios();
+}
+if (appFuncionarios.boxCrearFuncionario) {
+    appFuncionarios.selectRol();
+    appFuncionarios.selectContrato();
+    appFuncionarios.selectEstructura();
+    appFuncionarios.generatePassword();
+}

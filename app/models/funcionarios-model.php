@@ -51,7 +51,9 @@ class Funcionario extends Connection
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos
             // Hacer busqueda
             $sql = "SELECT usuario.nick,
-                        funcionario.*,
+                        funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos,
+                        funcionario.cedula, funcionario.direccion, funcionario.telefono,
+                        funcionario.email, funcionario.estado,
                         rol.detalle AS rol
                     FROM usuario 
                     INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario
@@ -99,7 +101,9 @@ class Funcionario extends Connection
     {
         try {
             $sql = 'SELECT usuario.nick,
-                        funcionario.*,
+                        funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos,
+                        funcionario.cedula, funcionario.direccion, funcionario.telefono,
+                        funcionario.email, funcionario.estado,
                         rol.id_rol, rol.detalle AS rol
                     FROM usuario 
                     INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario
@@ -164,8 +168,8 @@ class Funcionario extends Connection
             $obt_id_funcionario = null;
 
             // Inserta funcionario
-            $sql = 'INSERT INTO funcionario (nombres, apellidos, cedula, telefono, direccion, email, estado)
-                    VALUES (:nombres, :apellidos, :cedula, :telefono, :direccion, :email, :estado) RETURNING id_funcionario';
+            $sql = 'INSERT INTO funcionario (nombres, apellidos, cedula, telefono, direccion, email, estado, imagen)
+                    VALUES (:nombres, :apellidos, :cedula, :telefono, :direccion, :email, :estado, :imagen) RETURNING id_funcionario';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':nombres', $data['nombres']);
             $declaracion->bindParam(':apellidos', $data['apellidos']);
@@ -174,6 +178,9 @@ class Funcionario extends Connection
             $declaracion->bindParam(':direccion', $data['direccion']);
             $declaracion->bindParam(':email', $data['email']);
             $declaracion->bindParam(':estado', $data['estado']);
+            // Establecer la imagen por defecto
+            $imagen = file_get_contents('../../public/images/imagen-perfil.png');
+            $declaracion->bindParam(':imagen', $imagen, PDO::PARAM_LOB);
             $declaracion->execute();
             $obt_id_funcionario = $declaracion->fetchColumn();
 
@@ -317,18 +324,6 @@ class Funcionario extends Connection
             if ($comprobacion) {
                 return $comprobacion;
             }
-
-            // Si $data['imagen'] no esta vacio, agregar ", imagen=:imagen" a la consulta sql
-            // $setImagen = $data['imagen'] != null ? ', imagen=:imagen' : ', imagen=null';
-            /* if (isset($data['imagen'])) {
-                $setImagen = ', imagen=:imagen';
-            } 
-            if ($data['eliminarImagen'] == true) {
-                $setImagen = ', imagen=:imagen';
-            } 
-            if ($data['eliminarImagen'] == false) {
-                $setImagen = '';
-            }*/
 
             // Actualiza tabla funcionario
             $sql = "UPDATE funcionario 

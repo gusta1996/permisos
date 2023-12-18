@@ -58,10 +58,7 @@ if ($userSession->userLoggedIn()) {
                     <!-- Mensaje de no guardado -->
                     <div id="mensaje-no-guardado" class="sm:col-span-6"></div>
 
-                    <div class="grid grid-cols-1 gap-6 lg:grid-cols-6 text-center">
-                        <a type="submit" id="btn-actualizar-contrato-estructura" class="w-full lg:col-span-3 rounded-md bg-red-500 px-4 py-2 mt-4 text-sm font-semibold text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Actualizar contratos y cargos</a>
-                        <button type="submit" id="btn-actualizar-contrato-estructura" class="w-full lg:col-span-3 rounded-md bg-indigo-500 px-4 py-2 mt-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Actualizar contratos y cargos</button>
-                    </div>
+                    <button type="submit" id="btn-actualizar-contrato-estructura" class="w-full lg:col-span-3 rounded-md bg-indigo-500 px-4 py-2 mt-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Actualizar contratos y cargos</button>
                 </form>
             </div>
         </div>

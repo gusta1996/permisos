@@ -19,10 +19,10 @@ if (isset($_SESSION['user'])) {
         $userSession->setCurrentUser($userForm);
         $user->setUser($userForm);
 
-        if ($user->getFuncionarioEstado() == 'Activo') {
+        if ($user->getFuncionarioEstado() == 'activo') {
             // muestra home
             require './home.php';
-        } else if ($user->getFuncionarioEstado() == 'Anulado') {
+        } else if ($user->getFuncionarioEstado() == 'anulado') {
             // cerrar sesion
             $userSession->closeSession();
             // Su cuenta a sido deshabilitada

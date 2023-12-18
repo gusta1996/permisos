@@ -9,8 +9,8 @@ $arrayName = array(
     'fecha_entrada' => $_POST['fecha_entrada'],
     'hora_salida' => $_POST['hora_salida'],
     'hora_entrada' => $_POST['hora_entrada'],
-    'razon' => $_POST['razon'],
-    'estado' => $_POST['estado'],
+    'razon' => strtolower($_POST['razon']),
+    'estado' => strtolower($_POST['estado']),
     'observacion' => $_POST['observacion']
 );
 
