@@ -146,7 +146,7 @@ class funcionarioEstructura extends Connection
                     funcionario.nombres, funcionario.apellidos, funcionario.estado AS f_estado
                     FROM funcionario_estructura
                     INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
-                    WHERE funcionario_estructura.estado = 'Activo'
+                    WHERE funcionario_estructura.estado = 'activo'
                     ORDER BY funcionario.apellidos ASC";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
@@ -189,11 +189,11 @@ class funcionarioEstructura extends Connection
                 return $resultado;
             }
 
-            // Actualizar el último registro con el mismo id_funcionario estado="Activo" a estado="Suspendido"
+            // Actualizar el último registro con el mismo id_funcionario estado="activo" a estado="suspendido"
             $updateSql = "UPDATE funcionario_estructura
-                      SET estado = 'Suspendido'
+                      SET estado = 'suspendido'
                       WHERE id_funcionario_fk=:id_funcionario
-                      AND estado = 'Activo'";
+                      AND estado = 'activo'";
             $updateDeclaracion = Connection::getConnection()->prepare($updateSql);
             $updateDeclaracion->bindParam(':id_funcionario', $data['id_funcionario']);
             $updateDeclaracion->execute();

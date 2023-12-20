@@ -36,9 +36,9 @@ const app = new (function () {
                 // Insertar funcionario
                 this.verFuncionario.innerHTML = `
                     <label class="block text-sm font-medium leading-6 text-gray-900">Funcionario:</label>
-                    <input type="text" id="id-funcionario" disabled placeholder="${data.apellidos} ${data.nombres}" class="funcionario-id-${data.id_funcionario} bg-white block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                    <input type="text" id="id-funcionario" disabled placeholder="${data.apellidos} ${data.nombres}" class="funcionario-id-${data.id_funcionario} capitalize bg-white block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                 `;
-                if (data.fe_estado != 'Activo') {
+                if (data.fe_estado != 'activo') {
                     // si no esta activo, mostrar mensaje "este funcionario no tiene "
                     this.verFuncionario.innerHTML += `
                         <p class="mt-4 text-red-500">Este funcionario no tiene un contrato o cargo activo, click en actualizar para guardar.</div>
@@ -88,8 +88,12 @@ const app = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
+                    // Capitalizar letras minusculas
+                    const nombres = item.nombres.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    const apellidos = item.apellidos.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    // Imprimir las opciones
                     this.funcionario.innerHTML += `
-                        <option value="${item.id_funcionario}">${item.apellidos} ${item.nombres}</option>
+                        <option value="${item.id_funcionario}">${apellidos} ${nombres}</option>
                     `;
                 });
             })
@@ -101,15 +105,18 @@ const app = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    if (item.estado === 'Activo') {
+                    // Capitalizar letras minusculas
+                    let contrato = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    // Imprimir las opciones
+                    if (item.estado === 'activo') {
                         if (opcionesContrato) {
                             var seleted = 'contrato-id-' + item.id_contrato == opcionesContrato.classList.item(0) ? 'selected' : '';
                             opcionesContrato.innerHTML += `
-                            <option ${seleted} value="${item.id_contrato}">${item.detalle}</option>
+                            <option ${seleted} value="${item.id_contrato}">${contrato}</option>
                         `;
                         } else {
                             opcionesContrato.innerHTML += `
-                            <option value="${item.id_contrato}">${item.detalle}</option>
+                            <option value="${item.id_contrato}">${contrato}</option>
                         `;
                         }
                     }
@@ -123,15 +130,21 @@ const app = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    if (item.estruc_estado === 'Activo') {
+                    // Capitalizar letras minusculas
+                    let cargo = item.cargo_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    let seccion = item.seccion_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    let departamento = item.depa_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    let area = item.area_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    // Imprimir las opciones
+                    if (item.estruc_estado === 'activo') {
                         if (opcionesEstructura) {
                             var seleted = 'estructura-id-' + item.id_estructura == opcionesEstructura.classList.item(0) ? 'selected' : '';
                             opcionesEstructura.innerHTML += `
-                            <option ${seleted} value="${item.id_estructura}">${item.cargo_detalle} - ${item.seccion_detalle} - ${item.depa_detalle} - ${item.area_detalle}</option>
+                            <option ${seleted} value="${item.id_estructura}">${cargo} - ${seccion} - ${departamento} - ${area}</option>
                         `;
                         } else {
                             this.estructura.innerHTML += `
-                            <option value="${item.id_estructura}">${item.cargo_detalle} - ${item.seccion_detalle} - ${item.depa_detalle} - ${item.area_detalle}</option>
+                            <option value="${item.id_estructura}">${cargo} - ${seccion} - ${departamento} - ${area}</option>
                         `;
                         }
                     }
@@ -198,12 +211,18 @@ const app = new (function () {
                 let html = '';
                 for (let i = 0; i < item.length; i++) {
                     html += `
-                        <tr class="h-14 border-b last:border-b-0 border-b-white-100">
+                        <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="text-slate-700 pr-4">${item[i].id_funcionario_estructura}</td>
-                            <td class="${item[i].f_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700'} pr-4">${item[i].apellidos} ${item[i].nombres}</td>
-                            <td class="${item[i].c_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700'} pr-4">${item[i].contrato_detalle}</td>
-                            <td class="${item[i].e_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700'} pr-4">${item[i].cargo_detalle}</td>
-                            <td class="${item[i].fe_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700'} pr-4">${item[i].fe_estado}</td>
+                            <td class="capitalize pr-4">
+                                <div class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].f_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="8"/>
+                                    </svg>${item[i].apellidos} ${item[i].nombres}
+                                </div>
+                            </td>
+                            <td class="capitalize pr-4">${item[i].contrato_detalle}</td>
+                            <td class="capitalize pr-4">${item[i].cargo_detalle}</td>
+                            <td class="font-medium capitalize ${item[i].fe_estado == 'activo' ? 'text-green-600' : ''}${item[i].fe_estado == 'suspendido' ? 'text-amber-400' : ''} pr-4">${item[i].fe_estado}</td>
                         </tr>
                     `;
                 }
@@ -231,14 +250,20 @@ const app = new (function () {
                 if (item != '') {
                     for (let i = 0; i < item.length; i++) {
                         html += `
-                            <tr class="h-14 border-b last:border-b-0 border-b-white-100">
+                            <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                                 <td class="text-slate-700 pr-4">${item[i].id_funcionario_estructura}</td>
-                                <td class="${item[i].f_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700'} pr-4">${item[i].apellidos} ${item[i].nombres}</td>
-                                <td class="${item[i].c_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700'} pr-4">${item[i].contrato_detalle}</td>
-                                <td class="${item[i].e_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700'} pr-4">${item[i].cargo_detalle}</td>
-                                <td class="${item[i].fe_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700'} pr-4">${item[i].fe_estado}</td>
+                                <td class="capitalize pr-4">
+                                    <div class="flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].f_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                                            <circle cx="8" cy="8" r="8"/>
+                                        </svg>${item[i].apellidos} ${item[i].nombres}
+                                    </div>
+                                </td>
+                                <td class="capitalize pr-4">${item[i].contrato_detalle}</td>
+                                <td class="capitalize pr-4">${item[i].cargo_detalle}</td>
+                                <td class="font-medium capitalize ${item[i].fe_estado == 'activo' ? 'text-green-600' : ''}${item[i].fe_estado == 'suspendido' ? 'text-amber-400' : ''} pr-4">${item[i].fe_estado}</td>
                             </tr>
-                    `;
+                        `;
                     }
                 } else {
                     html += '<p class="w-full my-5">No se encontró resultados.</p>';

@@ -2,8 +2,8 @@
 require_once '../models/contrato-model.php';
 $arrayName = array(
     'id_contrato' => $_POST['id_contrato'],
-    'detalle' => $_POST['detalle'],
-    'tipo' => $_POST['tipo'],
+    'detalle' => strtolower($_POST['detalle']),
+    'tipo' => strtolower($_POST['tipo']),
     'estado' => strtolower($_POST['estado'])
 );
 

@@ -17,10 +17,10 @@
                 <img src="data:image/jpeg;base64,<?php echo $user->getImagen(); ?>" class="object-cover w-full h-full" />
             </div>
 
-            <!-- Rol de usuario -->
+            <!-- Nombre de usuario -->
             <p class="text-center mb-2 text-xl font-normal leading-7 text-gray-900"><?php echo $user->getUserName(); ?></p>
             <!-- Rol de usuario -->
-            <p class="text-center mb-4 text-base font-bold leading-7 text-gray-900"><?php echo $user->getRol(); ?></p>
+            <p class="capitalize text-center mb-4 text-base font-bold leading-7 text-gray-900"><?php echo $user->getRol(); ?></p>
             <!-- Editar -->
             <div class="flex flex-col items-center gap-2 pt-4 border-t border-gray-100">
                 <a href="./perfil.php?page=editar" class="text-base font-medium leading-7 text-indigo-500 hover:text-indigo-600">Editar perfil</a>
@@ -38,11 +38,11 @@
                 <dl class="divide-y divide-gray-100">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt class="text-sm font-medium leading-6 text-gray-900">Nombres</dt>
-                        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><?php echo $user->getNombres(); ?></dd>
+                        <dd class="capitalize mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><?php echo $user->getNombres(); ?></dd>
                     </div>
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt class="text-sm font-medium leading-6 text-gray-900">Apellidos</dt>
-                        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><?php echo $user->getApellidos(); ?></dd>
+                        <dd class="capitalize mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><?php echo $user->getApellidos(); ?></dd>
                     </div>
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt class="text-sm font-medium leading-6 text-gray-900">Cédula</dt>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt class="text-sm font-medium leading-6 text-gray-900">Dirección</dt>
-                        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><?php echo $user->getDireccion(); ?></dd>
+                        <dd class="capitalize mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><?php echo $user->getDireccion(); ?></dd>
                     </div>
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt class="text-sm font-medium leading-6 text-gray-900">Teléfono</dt>

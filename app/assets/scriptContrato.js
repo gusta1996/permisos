@@ -31,19 +31,19 @@ const app = new (function () {
                 let html = '';
                 for (let i = 0; i < item.length; i++) {
                     html += `
-                        <tr class="h-14 border-b last:border-b-0 border-b-white-100">
-                            <td class="text-slate-700 h-14 pr-4">${item[i].id_contrato}</td>
-                            <td class="text-slate-700 h-14 pr-4">${item[i].detalle}</td>
-                            <td class="text-slate-700 h-14 pr-4">${item[i].tipo}</td>
-                            <td class="${item[i].estado == 'Anulado' ? 'text-red-600' : (item[i].estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} h-14 pr-4">${item[i].estado}</td>
-                            <td class="flex justify-end flex-row h-14 items-center gap-4 h-14 w-fit ml-auto">
+                        <tr class="h-16 border-b last:border-b-0 border-b-white-100">
+                            <td class="text-slate-700 pr-4">${item[i].id_contrato}</td>
+                            <td class="capitalize text-slate-700 pr-4">${item[i].detalle}</td>
+                            <td class="capitalize text-slate-700 pr-4">${item[i].tipo}</td>
+                            <td class="font-medium capitalize ${item[i].estado == 'activo' ? 'text-green-600' : ''}${item[i].estado == 'suspendido' ? 'text-amber-600' : ''}${item[i].estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].estado}</td>
+                            <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
                                 <button onclick="app.editarContrato(${item[i].id_contrato})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                     </svg>
                                 </button>
-                                <button onclick="app.eliminarContrato(${item[i].id_contrato})" title="Anular" class="${item[i].estado === 'Anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                <button onclick="app.eliminarContrato(${item[i].id_contrato})" title="Anular" class="${item[i].estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                                         <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
                                     </svg>
@@ -75,19 +75,19 @@ const app = new (function () {
                 if (item != '') {
                     for (let i = 0; i < item.length; i++) {
                         html += `
-                        <tr class="h-14 border-b last:border-b-0 border-b-white-100">
-                            <td class="text-slate-700 h-14 pr-4">${item[i].id_contrato}</td>
-                            <td class="text-slate-700 h-14 pr-4">${item[i].detalle}</td>
-                            <td class="text-slate-700 h-14 pr-4">${item[i].tipo}</td>
-                            <td class="${item[i].estado == 'Anulado' ? 'text-red-600' : (item[i].estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} h-14 pr-4">${item[i].estado}</td>
-                            <td class="flex justify-end flex-row h-14 items-center gap-4 h-14 w-fit ml-auto">
-                                <button onclick="app.editarContrato(${item[i].id_contrato})" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                        <tr class="h-16 border-b last:border-b-0 border-b-white-100">
+                            <td class="text-slate-700 pr-4">${item[i].id_contrato}</td>
+                            <td class="capitalize text-slate-700 pr-4">${item[i].detalle}</td>
+                            <td class="capitalize text-slate-700 pr-4">${item[i].tipo}</td>
+                            <td class="font-medium capitalize ${item[i].estado == 'activo' ? 'text-green-600' : ''}${item[i].estado == 'suspendido' ? 'text-amber-600' : ''}${item[i].estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].estado}</td>
+                            <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
+                                <button onclick="app.editarContrato(${item[i].id_contrato})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                     </svg>
                                 </button>
-                                <button onclick="app.eliminarContrato(${item[i].id_contrato})" class="${item[i].estado === 'Anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                <button onclick="app.eliminarContrato(${item[i].id_contrato})" title="Anular" class="${item[i].estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                                         <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
                                     </svg>
@@ -177,7 +177,7 @@ const app = new (function () {
                 modalContrato.innerHTML = `
                 <div class="fixed inset-0 bg-gray-500 bg-opacity-75 overflow-y-auto z-50 ease-out duration-300">
                     <div class="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
-                        <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
+                        <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-5xl">
                             <form action="javascript:void(0);" onsubmit="app.actualizarContrato()">
                                 <div class="border-b border-gray-900/10 px-4 py-3">
                                     <h3 class="text-md font-semibold leading-7 text-gray-900">Editar contrato</h3>
@@ -192,20 +192,20 @@ const app = new (function () {
                                         <!-- Detalle -->
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Detalle:</label>
-                                            <input type="text" id="editar-detalle-contrato" value="${data.detalle}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                            <input type="text" id="editar-detalle-contrato" value="${data.detalle}" class="capitalize block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Tipo -->
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Tipo:</label>
-                                            <input type="text" id="editar-tipo-contrato" value="${data.tipo}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                            <input type="text" id="editar-tipo-contrato" value="${data.tipo}" class="capitalize block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Estado -->
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Estado:</label>
                                             <select id="editar-estado-contrato" value="${data.estado}" required class="h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
-                                                <option ${data.estado === 'Activo' ? 'selected' : ''}>Activo</option>
-                                                <option ${data.estado === 'Suspendido' ? 'selected' : ''}>Suspendido</option>
+                                                <option ${data.estado === 'activo' ? 'selected' : ''}>Activo</option>
+                                                <option ${data.estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
                                             </select>
                                         </div>
                                     </div>
@@ -234,7 +234,7 @@ const app = new (function () {
             fetch("../controllers/eliminarContrato.php", { method: "POST", body: formContrato })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado == 'Anulado') {
+                    if (data.estado == 'anulado') {
                         alert('¡Contrato anulado con éxito!');
                     } else {
                         alert('¡No se pudo anular, este contrato está siendo usado!')

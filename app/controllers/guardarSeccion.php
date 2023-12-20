@@ -1,7 +1,7 @@
 <?php
 require_once '../models/seccion-model.php';
 $arrayName = array(
-    'detalle' => $_POST['detalle'],
+    'detalle' => strtolower($_POST['detalle']),
     'estado' => 'activo'
 );
 

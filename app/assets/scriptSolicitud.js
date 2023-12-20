@@ -31,11 +31,18 @@ const appSolicitud = new (function () {
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_fk}</td>
                             <td class="text-slate-700 pr-4">${item[i].numero}</td>
-                            <td class="text-slate-700 pr-4 capitalize">${item[i].apellidos} ${item[i].nombres}</td>
+                            <td class="text-slate-700 pr-4 capitalize leading-6">
+                                <div>
+                                    ${item[i].apellidos} ${item[i].nombres}
+                                </div>
+                                <div>
+                                    CI: ${item[i].cedula}
+                                </div>
+                            </td>
                             <td class="text-slate-700 pr-4 capitalize">${item[i].razon}</td>
                             <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
-                            <td class="capitalize ${item[i].fs_estado == 'anulado' ? 'text-red-600' : (item[i].fs_estado == 'pendiente' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].fs_estado}</td>
-                            <td class="flex justify-end flex-row items-center gap-4 h-14 w-fit ml-auto">
+                            <td class="font-medium capitalize ${item[i].fs_estado == 'aprobado' ? 'text-green-600' : ''}${item[i].fs_estado == 'pendiente' ? 'text-amber-600' : ''}${item[i].fs_estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].fs_estado}</td>
+                            <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
                                 <button onclick="appSolicitud.editarSolicitudCompleta(${item[i].id_funcionario_solicitud})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
@@ -79,8 +86,8 @@ const appSolicitud = new (function () {
                             <td class="text-slate-700 pr-4">${item[i].numero}</td>
                             <td class="text-slate-700 pr-4 capitalize">${item[i].razon}</td>
                             <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
-                            <td class="capitalize ${item[i].fs_estado == 'anulado' ? 'text-red-600' : (item[i].fs_estado == 'pendiente' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].fs_estado}</td>
-                            <td class="flex justify-end flex-row items-center gap-4 h-14 w-fit ml-auto">
+                            <td class="font-medium capitalize ${item[i].fs_estado == 'aprobado' ? 'text-green-600' : ''}${item[i].fs_estado == 'pendiente' ? 'text-amber-600' : ''}${item[i].fs_estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].fs_estado}</td>
+                            <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
                                 ${(item[i].fs_estado == 'pendiente') ? `
                                     <button onclick="appSolicitud.editarSolicitudSimple(${item[i].id_funcionario_solicitud})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -124,14 +131,21 @@ const appSolicitud = new (function () {
                 if (item != '') {
                     for (let i = 0; i < item.length; i++) {
                         html += `
-                            <tr class="h-14 border-b last:border-b-0 border-b-white-100">
+                            <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                                 <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_fk}</td>
                                 <td class="text-slate-700 pr-4">${item[i].numero}</td>
-                                <td class="text-slate-700 pr-4">${item[i].apellidos} ${item[i].nombres}</td>
-                                <td class="text-slate-700 pr-4">${item[i].razon}</td>
+                                <td class="text-slate-700 pr-4 capitalize leading-6">
+                                    <div>
+                                        ${item[i].apellidos} ${item[i].nombres}
+                                    </div>
+                                    <div>
+                                        CI: ${item[i].cedula}
+                                    </div>
+                                </td>
+                                <td class="text-slate-700 pr-4 capitalize">${item[i].razon}</td>
                                 <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
-                                <td class="${item[i].fs_estado == 'anulado' ? 'text-red-600' : (item[i].fs_estado == 'pendiente' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].fs_estado}</td>
-                                <td class="flex justify-end flex-row items-center gap-4 h-14 w-fit ml-auto">
+                                <td class="font-medium capitalize ${item[i].fs_estado == 'aprobado' ? 'text-green-600' : ''}${item[i].fs_estado == 'pendiente' ? 'text-amber-600' : ''}${item[i].fs_estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].fs_estado}</td>
+                                <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
                                     <button onclick="appSolicitud.${listadoSolicitud}(${item[i].id_funcionario_solicitud})" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />

@@ -6,6 +6,8 @@ $userSession = new UserSession();
 $user = new User();
 
 if ($userSession->userLoggedIn()) {
+    // Hay sesión
+    $user->setUser($userSession->getCurrentUser());
     // Verifica el rol de usuario
     $administrador = $user->getRol() == 'administrador' ? true : false;
     $autorizador = $user->getRol() == 'autorizador' ? true : false;
@@ -54,6 +56,25 @@ if ($userSession->userLoggedIn()) {
                     </form>
                 </div>
             </div>
+            
+            <!-- Mensaje -->
+            <div class="flex gap-4 mb-4">
+                <div class="flex items-center gap-2 bg-green-200 rounded-md shadow-sm px-3 py-2 text-green-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].f_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                        <circle cx="8" cy="8" r="8" />
+                    </svg>Activo
+                </div>
+                <div class="flex items-center gap-2 bg-amber-200 rounded-md shadow-sm px-3 py-2 text-amber-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].f_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                        <circle cx="8" cy="8" r="8" />
+                    </svg>Suspendido
+                </div>
+                <div class="flex items-center gap-2 bg-red-200 rounded-md shadow-sm px-3 py-2 text-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].f_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                        <circle cx="8" cy="8" r="8" />
+                    </svg>Anulado
+                </div>
+            </div>
 
             <div class="bg-white rounded-md shadow-sm mb-6">
                 <!-- Titulo -->
@@ -75,11 +96,11 @@ if ($userSession->userLoggedIn()) {
                     <table class="w-full text-xs md:text-sm text-left">
                         <thead>
                             <tr class="h-16 border-b border-b-slate-400">
-                                <th class="font-medium py-4 pr-4">ID</th>
-                                <th class="font-medium py-4 pr-4">Detalle</th>
-                                <th class="font-medium py-4 pr-4">Categoría</th>
-                                <th class="font-medium py-4 pr-4">Estado</th>
-                                <th class="font-medium py-4 pr-4 text-right">Opciones</th>
+                                <th class="font-medium pr-4">ID</th>
+                                <th class="font-medium pr-4">Detalle</th>
+                                <th class="font-medium pr-4">Categoría</th>
+                                <th class="font-medium pr-4">Estado</th>
+                                <th class="text-right">Opciones</th>
                             </tr>
                         </thead>
                         <tbody id="tbodyArea">

@@ -26,14 +26,21 @@ const appReporte = new (function () {
           let dias = Math.floor(diferenciaTiempo / (1000 * 60 * 60 * 24));
           let horas = Math.floor((diferenciaTiempo / (1000 * 60 * 60)) % 24);
           html += `
-                  <tr class="h-14 border-b last:border-b-0 border-b-white-100">
+                  <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                       <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
                       <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
-                      <td class="text-slate-700 pr-4">${item[i].apellidos} ${item[i].nombres}</td>
-                      <td class="text-slate-700 pr-4">${item[i].razon}</td>
+                      <td class="text-slate-700 pr-4 capitalize leading-6">
+                          <div>
+                              ${item[i].apellidos} ${item[i].nombres}
+                          </div>
+                          <div>
+                              CI: ${item[i].cedula}
+                          </div>
+                      </td>
+                      <td class="text-slate-700 pr-4 capitalize">${item[i].razon}</td>
                       <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
                       <td class="text-slate-700 pr-4">${dias} días y ${horas} horas</td>
-                      <td class="font-semibold ${item[i].fs_estado == 'Aprobado' ? 'text-green-600' : ''}${item[i].fs_estado == 'Anulado' ? 'text-red-600' : ''}${item[i].fs_estado == 'Pendiente' ? 'text-amber-600' : ''}">${item[i].fs_estado}</td>
+                      <td class="font-medium capitalize ${item[i].fs_estado == 'aprobado' ? 'text-green-600' : ''}${item[i].fs_estado == 'anulado' ? 'text-red-600' : ''}${item[i].fs_estado == 'pendiente' ? 'text-amber-600' : ''}">${item[i].fs_estado}</td>
                     </tr>
                   `;
         }
@@ -66,16 +73,23 @@ const appReporte = new (function () {
             let dias = Math.floor(diferenciaTiempo / (1000 * 60 * 60 * 24));
             let horas = Math.floor((diferenciaTiempo / (1000 * 60 * 60)) % 24);
             html += `
-                        <tr class="h-14 border-b last:border-b-0 border-b-white-100">
-                            <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
-                            <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
-                            <td class="text-slate-700 pr-4">${item[i].apellidos} ${item[i].nombres}</td>
-                            <td class="text-slate-700 pr-4">${item[i].razon}</td>
-                            <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
-                            <td class="text-slate-700 pr-4">${dias} días y ${horas} horas</td>
-                            <td class="font-semibold ${item[i].fs_estado == 'Aprobado' ? 'text-green-600' : ''}${item[i].fs_estado == 'Anulado' ? 'text-red-600' : ''}${item[i].fs_estado == 'Pendiente' ? 'text-amber-600' : ''}">${item[i].fs_estado}</td>
-                          </tr>
-                        `;
+              <tr class="h-16 border-b last:border-b-0 border-b-white-100">
+                  <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
+                  <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
+                  <td class="text-slate-700 pr-4 capitalize leading-6">
+                      <div>
+                          ${item[i].apellidos} ${item[i].nombres}
+                      </div>
+                      <div>
+                          CI: ${item[i].cedula}
+                      </div>
+                  </td>
+                  <td class="text-slate-700 pr-4 capitalize">${item[i].razon}</td>
+                  <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
+                  <td class="text-slate-700 pr-4">${dias} días y ${horas} horas</td>
+                  <td class="font-medium capitalize ${item[i].fs_estado == 'aprobado' ? 'text-green-600' : ''}${item[i].fs_estado == 'anulado' ? 'text-red-600' : ''}${item[i].fs_estado == 'pendiente' ? 'text-amber-600' : ''}">${item[i].fs_estado}</td>
+                </tr>
+              `;
           }
         } else {
           html += '<p class="w-full my-5">No se encontró resultados.</p>';
@@ -143,7 +157,7 @@ const appReporte = new (function () {
   this.descargarReporte = () => {
     var contenido = this.reporteMensual.innerHTML;
     this.selecReporteMes.remove();
-    var contenidoOriginal= document.body.innerHTML;
+    var contenidoOriginal = document.body.innerHTML;
 
     document.body.innerHTML = contenido;
     window.print();
@@ -162,7 +176,7 @@ const appReporte = new (function () {
   }
   this.reporteMensualPDF = () => {
     // Generar botones
-   this.btnReportePDF.innerHTML = `
+    this.btnReportePDF.innerHTML = `
      <button onclick="appReporte.descargarReporte()" id="btn-descargar-reporte" class="flex gap-2 items-center rounded-md shadow-sm bg-green-500 px-4 py-3 mb-4 text-base font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
@@ -178,7 +192,6 @@ const appReporte = new (function () {
       .then((data) => {
         let fechaMes = this.convierteFormatoFecha(this.selectMeses.value);
         let filas = '';
-        console.log(data);
         data.forEach(item => {
           let salida = new Date(`${item.fecha_salida} ${item.hora_salida}`);
           let entrada = new Date(`${item.fecha_entrada} ${item.hora_entrada}`);
@@ -186,22 +199,29 @@ const appReporte = new (function () {
           let dias = Math.floor(diferenciaTiempo / (1000 * 60 * 60 * 24));
           let horas = Math.floor((diferenciaTiempo / (1000 * 60 * 60)) % 24);
           filas += `
-            <tr class="h-12 border-b last:border-b-0 border-b-white-100">
+            <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                 <td id="numero-solicitud" class="text-slate-700">${item.numero}</td>
-                <td class="text-slate-700">${item.apellidos} ${item.nombres}</td>
-                <td class="text-slate-700">${item.razon}</td>
-                <td class="text-slate-700 whitespace-nowrap">${item.fecha}</td>
-                <td class="text-slate-700 whitespace-nowrap">${item.fecha_salida}</td>
-                <td class="text-slate-700">${dias} días y ${horas} horas</td>
-                <td class="font-semibold ${item.fs_estado == 'Aprobado' ? 'text-green-600' : ''}${item.fs_estado == 'Anulado' ? 'text-red-600' : ''}${item.fs_estado == 'Pendiente' ? 'text-amber-600' : ''}">${item.fs_estado}</td>
+                <td class="text-slate-700 pr-4 capitalize leading-6">
+                    <div>
+                        ${item.apellidos} ${item.nombres}
+                    </div>
+                    <div>
+                        CI: ${item.cedula}
+                    </div>
+                </td>
+                <td class="text-slate-700 pr-4 capitalize">${item.razon}</td>
+                <td class="text-slate-700 pr-4 whitespace-nowrap">${item.fecha}</td>
+                <td class="text-slate-700 pr-4 whitespace-nowrap">${item.fecha_salida}</td>
+                <td class="text-slate-700 pr-4">${dias} días y ${horas} horas</td>
+                <td class="font-medium capitalize ${item.fs_estado == 'aprobado' ? 'text-green-600' : ''}${item.fs_estado == 'anulado' ? 'text-red-600' : ''}${item.fs_estado == 'pendiente' ? 'text-amber-600' : ''}">${item.fs_estado}</td>
               </tr>
             `;
         });
         thead = `
-          <tr class="h-14 border-b border-b-slate-400">
+          <tr class="h-16 border-b border-b-slate-400">
             <th class="hidden font-medium pr-4">ID</th>
             <th class="font-medium pr-4">No.</th>
-            <th class="font-medium pr-4">Nombres</th>
+            <th class="font-medium pr-4">Funcionario</th>
             <th class="font-medium pr-4">Razón</th>
             <th class="font-medium pr-4">Fecha</th>
             <th class="font-medium pr-4">Fecha salida</th>
@@ -237,5 +257,14 @@ const appReporte = new (function () {
   }
 
 });
-appReporte.listadoReporte();
-appReporte.selectMesDescarga();
+
+var tbodyReporte = document.getElementById('tbodyReporte');
+var selecReporteMes = document.getElementById('selec-reporte-mes');
+
+if (tbodyReporte) {
+  // Solo existe en: reporte-index.php
+  appReporte.listadoReporte();
+} else if (selecReporteMes) {
+  // Solo existe en: reporte-descargar.php
+  appReporte.selectMesDescarga();
+}

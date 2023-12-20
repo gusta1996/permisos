@@ -15,7 +15,7 @@ class Funcionario extends Connection
                         funcionario.cedula, funcionario.email,
                         funcionario.estado AS f_estado,
                         rol.detalle AS rol
-                    FROM usuario 
+                    FROM usuario
                     INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario
                     INNER JOIN rol ON usuario.id_rol_fk = rol.id_rol
                     ORDER BY funcionario.id_funcionario DESC
@@ -52,8 +52,8 @@ class Funcionario extends Connection
             // Hacer busqueda
             $sql = "SELECT usuario.nick,
                         funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos,
-                        funcionario.cedula, funcionario.direccion, funcionario.telefono,
-                        funcionario.email, funcionario.estado,
+                        funcionario.cedula, funcionario.email,
+                        funcionario.estado,
                         rol.detalle AS rol
                     FROM usuario 
                     INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario

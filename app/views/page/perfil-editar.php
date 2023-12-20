@@ -41,7 +41,7 @@
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <!-- ID -->
                     <div class="hidden sm:col-span-3">
-                        <label class="block text-sm font-medium leading-6 text-gray-900">Nombres:</label>
+                        <label class="block text-sm font-medium leading-6 text-gray-900">ID:</label>
                         <div class="mt-2">
                             <input type="num" required id="id-funcionario" value="<?php echo $user->getIdFuncionario(); ?>" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                         </div>
@@ -51,7 +51,7 @@
                     <div class="sm:col-span-3">
                         <label class="block text-sm font-medium leading-6 text-gray-900">Nombres:</label>
                         <div class="mt-2">
-                            <input type="text" required id="nombres-perfil" value="<?php echo $user->getNombres(); ?>" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                            <input type="text" required id="nombres-perfil" value="<?php echo $user->getNombres(); ?>" class="capitalize block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                         </div>
                     </div>
 
@@ -59,7 +59,7 @@
                     <div class="sm:col-span-3">
                         <label class="block text-sm font-medium leading-6 text-gray-900">Apellidos:</label>
                         <div class="mt-2">
-                            <input type="text" required id="apellidos-perfil" value="<?php echo $user->getApellidos(); ?>" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                            <input type="text" required id="apellidos-perfil" value="<?php echo $user->getApellidos(); ?>" class="capitalize block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                         </div>
                     </div>
 
@@ -75,7 +75,7 @@
                     <div class="sm:col-span-3">
                         <label class="block text-sm font-medium leading-6 text-gray-900">Dirección:</label>
                         <div class="mt-2">
-                            <input type="text" required id="direccion-perfil" value="<?php echo $user->getDireccion(); ?>" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                            <input type="text" required id="direccion-perfil" value="<?php echo $user->getDireccion(); ?>" class="capitalize block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                         </div>
                     </div>
 

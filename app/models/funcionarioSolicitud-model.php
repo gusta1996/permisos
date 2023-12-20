@@ -12,7 +12,7 @@ class funcionarioSolicitud extends Connection
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos  
             // Consulta para obtener los datos
             $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado, funcionario_estructura.id_funcionario_fk,
-                    funcionario.nombres, funcionario.apellidos,
+                    funcionario.nombres, funcionario.apellidos, funcionario.cedula,
                     solicitud.numero, solicitud.fecha,
                     razon.descripcion AS razon
                     FROM funcionario_solicitud
@@ -147,7 +147,7 @@ class funcionarioSolicitud extends Connection
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos  
             // Consulta para obtener los datos
             $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado, funcionario_estructura.id_funcionario_fk,
-                    funcionario.nombres, funcionario.apellidos,
+                    funcionario.nombres, funcionario.apellidos, funcionario.cedula,
                     solicitud.numero, solicitud.fecha,
                     razon.descripcion AS razon
                     FROM funcionario_solicitud
@@ -155,7 +155,7 @@ class funcionarioSolicitud extends Connection
                     INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
                     INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
                     INNER JOIN razon ON solicitud.id_razon_fk = razon.id_razon
-                    WHERE funcionario_solicitud.estado = 'Aprobado'
+                    WHERE funcionario_solicitud.estado = 'aprobado'
                     ORDER BY funcionario_solicitud.id_funcionario_solicitud DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -165,7 +165,7 @@ class funcionarioSolicitud extends Connection
             $resultado = $declaracion->fetchAll();
 
             // Consulta para obtener el número total de registros
-            $sqlTotal = "SELECT COUNT(*) FROM funcionario_solicitud WHERE funcionario_solicitud.estado = 'Aprobado'";
+            $sqlTotal = "SELECT COUNT(*) FROM funcionario_solicitud WHERE funcionario_solicitud.estado = 'aprobado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -196,7 +196,7 @@ class funcionarioSolicitud extends Connection
                     INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
                     INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
                     INNER JOIN razon ON solicitud.id_razon_fk = razon.id_razon
-                    WHERE funcionario_solicitud.estado = 'Aprobado' AND funcionario.id_funcionario = :id_funcionario
+                    WHERE funcionario_solicitud.estado = 'aprobado' AND funcionario.id_funcionario = :id_funcionario
                     ORDER BY funcionario_solicitud.id_funcionario_solicitud DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -210,7 +210,7 @@ class funcionarioSolicitud extends Connection
             $sqlTotal = "SELECT COUNT(*) FROM funcionario_solicitud
                         INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
                         INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
-                        WHERE funcionario_solicitud.estado = 'Aprobado' AND funcionario.id_funcionario = :id_funcionario";
+                        WHERE funcionario_solicitud.estado = 'aprobado' AND funcionario.id_funcionario = :id_funcionario";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->bindParam(':id_funcionario', $id_funcionario);
             $declaracion->execute();
@@ -245,7 +245,7 @@ class funcionarioSolicitud extends Connection
                     INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
                     INNER JOIN razon ON solicitud.id_razon_fk = razon.id_razon
                     WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%'
-                    AND funcionario_solicitud.estado = 'Aprobado'
+                    AND funcionario_solicitud.estado = 'aprobado'
                     ORDER BY funcionario_solicitud.id_funcionario_solicitud DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -259,7 +259,7 @@ class funcionarioSolicitud extends Connection
                         INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
                         INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
                         WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%'
-                        AND funcionario_solicitud.estado = 'Aprobado'";
+                        AND funcionario_solicitud.estado = 'aprobado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -312,7 +312,7 @@ class funcionarioSolicitud extends Connection
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos  
             // Consulta para obtener los datos
             $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado,
-                            funcionario.nombres, funcionario.apellidos, funcionario.direccion,
+                            funcionario.nombres, funcionario.apellidos, funcionario.cedula,
                             solicitud.numero, solicitud.observacion, solicitud.fecha,
                             tiempo.fecha_salida, tiempo.fecha_entrada, tiempo.hora_salida, tiempo.hora_entrada,
                             razon.id_razon, razon.descripcion AS razon,
@@ -369,7 +369,7 @@ class funcionarioSolicitud extends Connection
     {
         try {
             $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado,
-                            funcionario.nombres, funcionario.apellidos,
+                            funcionario.nombres, funcionario.apellidos, funcionario.cedula,
                             solicitud.numero, solicitud.fecha,
                             tiempo.fecha_salida, tiempo.fecha_entrada, tiempo.hora_salida, tiempo.hora_entrada,
                             razon.descripcion AS razon
@@ -401,7 +401,7 @@ class funcionarioSolicitud extends Connection
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos
             // Hacer busqueda
             $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado,
-                            funcionario.nombres, funcionario.apellidos, funcionario.direccion,
+                            funcionario.nombres, funcionario.apellidos, funcionario.cedula,
                             solicitud.numero, solicitud.observacion, solicitud.fecha,
                             tiempo.fecha_salida, tiempo.fecha_entrada, tiempo.hora_salida, tiempo.hora_entrada,
                             razon.id_razon, razon.descripcion AS razon,

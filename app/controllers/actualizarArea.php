@@ -2,7 +2,7 @@
 require_once '../models/area-model.php';
 $arrayName = array(
     'id_area' => $_POST['id_area'],
-    'detalle' => $_POST['detalle'],
+    'detalle' => strtolower($_POST['detalle']),
     'estado' => strtolower($_POST['estado']),
     'categoria' => $_POST['categoria']
 );

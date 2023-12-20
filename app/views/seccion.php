@@ -66,7 +66,7 @@ if ($userSession->userLoggedIn()) {
                     <!-- Tabla Seccion -->
                     <table class="w-full text-xs md:text-sm text-left">
                         <thead>
-                            <tr class="h-14 border-b border-b-slate-400">
+                            <tr class="h-16 border-b border-b-slate-400">
                                 <th class="font-medium pr-4">ID</th>
                                 <th class="font-medium pr-4">Detalle</th>
                                 <th class="font-medium pr-4">Estado</th>

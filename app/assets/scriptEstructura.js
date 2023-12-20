@@ -8,23 +8,25 @@ const app = new (function () {
     this.busquedaTipo = document.getElementById('busqueda-tipo');
     this.paginacion = document.getElementById('paginacion');
 
-
     this.selectCargo = () => {
         var EditCargo = document.getElementById('editar-cargo-estructura');
         fetch("../controllers/selectCargo.php")
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    if (item.estado === 'Activo') {
+                    if (item.estado === 'activo') {
+                        // Capitalizar letras minusculas
+                        let cargo = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        // Imprimir las opciones
                         if (EditCargo) {
                             var seleted = 'cargo-id-' + item.id_cargo == EditCargo.classList.item(0) ? 'selected' : '';
                             EditCargo.innerHTML += `
-                            <option ${seleted} value="${item.id_cargo}">${item.detalle}</option>
-                        `;
+                                <option ${seleted} value="${item.id_cargo}">${cargo}</option>
+                            `;
                         } else {
                             this.cargo.innerHTML += `
-                            <option value="${item.id_cargo}">${item.detalle}</option>
-                        `;
+                                <option value="${item.id_cargo}">${cargo}</option>
+                            `;
                         }
                     }
                 });
@@ -37,16 +39,19 @@ const app = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    if (item.estado === 'Activo') {
+                    if (item.estado === 'activo') {
+                        // Capitalizar letras minusculas
+                        let seccion = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        // Imprimir las opciones
                         if (editarSeccion) {
                             var seleted = 'seccion-id-' + item.id_seccion == editarSeccion.classList.item(0) ? 'selected' : '';
                             editarSeccion.innerHTML += `
-                            <option ${seleted} value="${item.id_seccion}">${item.detalle}</option>
-                        `;
+                                <option ${seleted} value="${item.id_seccion}">${seccion}</option>
+                            `;
                         } else {
                             this.seccion.innerHTML += `
-                            <option value="${item.id_seccion}">${item.detalle}</option>
-                        `;
+                                <option value="${item.id_seccion}">${seccion}</option>
+                            `;
                         }
                     }
                 });
@@ -59,15 +64,18 @@ const app = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    if (item.estado === 'Activo') {
+                    if (item.estado === 'activo') {
+                        // Capitalizar letras minusculas
+                        let departamento = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        // Imprimir las opciones
                         if (editarDepartamento) {
                             var seleted = 'departamento-id-' + item.id_departamento == editarDepartamento.classList.item(0) ? 'selected' : '';
                             editarDepartamento.innerHTML += `
-                            <option ${seleted} value="${item.id_departamento}">${item.detalle}</option>
+                            <option ${seleted} value="${item.id_departamento}">${departamento}</option>
                         `;
                         } else {
                             this.departamento.innerHTML += `
-                            <option value="${item.id_departamento}">${item.detalle}</option>
+                            <option value="${item.id_departamento}">${departamento}</option>
                         `;
                         }
                     }
@@ -83,15 +91,18 @@ const app = new (function () {
                 data.forEach(item => {
                     var detalleArea = 1;
                     var estadoArea = 2;
-                    if (item[estadoArea] === 'Activo') {
+                    if (item[estadoArea] === 'activo') {
+                        // Capitalizar letras minusculas
+                        let area = item[detalleArea].toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        // Imprimir las opciones
                         if (editarArea) {
                             var seleted = 'area-id-' + item.id_area == editarArea.classList.item(0) ? 'selected' : '';
                             editarArea.innerHTML += `
-                            <option ${seleted} value="${item.id_area}">${item[detalleArea]}</option>
+                            <option ${seleted} value="${item.id_area}">${area}</option>
                         `;
                         } else {
                             this.area.innerHTML += `
-                            <option value="${item.id_area}">${item[detalleArea]}</option>
+                            <option value="${item.id_area}">${area}</option>
                         `;
                         }
                     }
@@ -126,21 +137,21 @@ const app = new (function () {
                 let html = '';
                 for (let i = 0; i < item.length; i++) {
                     html += `
-                        <tr class="h-14 border-b last:border-b-0 border-b-white-100">
+                        <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="text-slate-700 pr-4">${item[i].id_estructura}</td>
-                            <td class="${item[i].cargo_estado == 'Anulado' ? 'text-red-600' : (item[i].cargo_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].cargo_detalle}</td>
-                            <td class="${item[i].seccion_estado == 'Anulado' ? 'text-red-600' : (item[i].seccion_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].seccion_detalle}</td>
-                            <td class="${item[i].depa_estado == 'Anulado' ? 'text-red-600' : (item[i].depa_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].depa_detalle}</td>
-                            <td class="${item[i].area_estado == 'Anulado' ? 'text-red-600' : (item[i].area_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].area_detalle}</td>
-                            <td class="${item[i].estruc_estado == 'Anulado' ? 'text-red-600' : (item[i].estruc_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].estruc_estado}</td>
-                            <td class="flex justify-end flex-row items-center gap-4 h-14 w-fit ml-auto">
+                            <td class="capitalize pr-4 ${item[i].cargo_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].cargo_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].cargo_detalle}</td>
+                            <td class="capitalize pr-4 ${item[i].seccion_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].seccion_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].seccion_detalle}</td>
+                            <td class="capitalize pr-4 ${item[i].depa_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].depa_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].depa_detalle}</td>
+                            <td class="capitalize pr-4 ${item[i].area_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].area_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].area_detalle}</td>
+                            <td class="font-medium capitalize pr-4 ${item[i].estruc_estado == 'activo' ? 'text-green-600' : ''}${item[i].estruc_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].estruc_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].estruc_estado}</td>
+                            <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
                                 <button onclick="app.editarEstructura(${item[i].id_estructura})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                     </svg>
                                 </button>
-                                <button onclick="app.eliminarEstructura(${item[i].id_estructura})" title="Anular" class="${item[i].estruc_estado === 'Anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                <button onclick="app.eliminarEstructura(${item[i].id_estructura})" title="Anular" class="${item[i].estruc_estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                                         <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
                                     </svg>
@@ -173,21 +184,21 @@ const app = new (function () {
                 if ( item != '') {
                     for (let i = 0; i < item.length; i++) {
                         html += `
-                            <tr class="h-14 border-b last:border-b-0 border-b-white-100">
+                            <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                                 <td class="text-slate-700 pr-4">${item[i].id_estructura}</td>
-                                <td class="${item[i].cargo_estado == 'Anulado' ? 'text-red-600' : (item[i].cargo_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].cargo_detalle}</td>
-                                <td class="${item[i].seccion_estado == 'Anulado' ? 'text-red-600' : (item[i].seccion_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].seccion_detalle}</td>
-                                <td class="${item[i].depa_estado == 'Anulado' ? 'text-red-600' : (item[i].depa_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].depa_detalle}</td>
-                                <td class="${item[i].area_estado == 'Anulado' ? 'text-red-600' : (item[i].area_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].area_detalle}</td>
-                                <td class="${item[i].estruc_estado == 'Anulado' ? 'text-red-600' : (item[i].estruc_estado == 'Suspendido' ? 'text-amber-400' : 'text-slate-700')} pr-4">${item[i].estruc_estado}</td>
+                                <td class="capitalize pr-4 ${item[i].cargo_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].cargo_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].cargo_detalle}</td>
+                                <td class="capitalize pr-4 ${item[i].seccion_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].seccion_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].seccion_detalle}</td>
+                                <td class="capitalize pr-4 ${item[i].depa_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].depa_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].depa_detalle}</td>
+                                <td class="capitalize pr-4 ${item[i].area_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].area_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].area_detalle}</td>
+                                <td class="font-medium capitalize pr-4 ${item[i].estruc_estado == 'activo' ? 'text-green-600' : ''}${item[i].estruc_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].estruc_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].estruc_estado}</td>
                                 <td class="flex justify-end flex-row items-center gap-4 h-14 w-fit ml-auto">
-                                    <button onclick="app.editarEstructura(${item[i].id_estructura})" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                                    <button onclick="app.editarEstructura(${item[i].id_estructura})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                         </svg>
                                     </button>
-                                    <button onclick="app.eliminarEstructura(${item[i].id_estructura})" class="${item[i].estruc_estado === 'Anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                    <button onclick="app.eliminarEstructura(${item[i].id_estructura})" title="Anular" class="${item[i].estruc_estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                                             <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
                                         </svg>
@@ -281,7 +292,7 @@ const app = new (function () {
                 modalEstructura.innerHTML = `
                 <div class="fixed inset-0 bg-gray-500 bg-opacity-75 overflow-y-auto z-50 ease-out duration-300">
                     <div class="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
-                        <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
+                        <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-5xl">
                             <form action="javascript:void(0);" onsubmit="app.actualizarEstructura()">
                                 <div class="border-b border-gray-900/10 px-4 py-3">
                                     <h3 class="text-md font-semibold leading-7 text-gray-900">Editar estructura ID: ${data.id_estructura}</h3>
@@ -326,8 +337,8 @@ const app = new (function () {
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Estado:</label>
                                             <select id="editar-estado-estructura" required class="h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
-                                                <option ${data.estado === 'Activo' ? 'selected' : ''}>Activo</option>
-                                                <option ${data.estado === 'Suspendido' ? 'selected' : ''}>Suspendido</option>
+                                                <option ${data.estado === 'activo' ? 'selected' : ''}>Activo</option>
+                                                <option ${data.estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
                                             </select>
                                         </div>
                                     </div>
@@ -356,7 +367,7 @@ const app = new (function () {
             fetch("../controllers/eliminarEstructura.php", { method: "POST", body: formEstructura })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado == 'Anulado') {
+                    if (data.estado == 'anulado') {
                         alert('¡Estructura anulada con éxito!');
                     } else {
                         alert('¡No se pudo anular, esta estructura está siendo usada!')

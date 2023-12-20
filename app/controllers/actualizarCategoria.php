@@ -2,7 +2,7 @@
 require_once '../models/categoria-model.php';
 $arrayName = array(
     'id_categoria' => $_POST['id_categoria'],
-    'detalle' => $_POST['detalle'],
+    'detalle' => strtolower($_POST['detalle']),
     'estado' => strtolower($_POST['estado'])
 );
 
