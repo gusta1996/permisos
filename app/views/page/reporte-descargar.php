@@ -14,8 +14,8 @@
         <form action="javascript:void(0);" onsubmit="appReporte.reporteMensualPDF()" class="flex items-center gap-4">
             <div class="w-52">
                 <select id="select-meses" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">
-                    <!-- <option value="" selected="" disabled="" data-select2-id="select2-data-4-s8hd">-- Selecciona --</option> -->
-                </select>
+
+            </select>
             </div>
 
             <button type="submit" class="flex items-center w-max gap-2 rounded-md bg-indigo-500 px-4 py-2 m-auto text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">

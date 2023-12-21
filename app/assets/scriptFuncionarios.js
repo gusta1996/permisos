@@ -179,14 +179,17 @@ const appFuncionarios = new (function () {
             .then((data) => {
                 data.forEach(item => {
                     if (item.estado === 'activo') {
+                        // Capitalizar letras minusculas
+                        let rol = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        // Imprimir las opciones
                         if (editarRol) {
                             var seleted = 'rol-id-' + item.id_rol == editarRol.classList.item(0) ? 'selected' : '';
                             editarRol.innerHTML += `
-                                <option ${seleted} value="${item.id_rol}" class="capitalize">${item.detalle}</option>
+                                <option ${seleted} value="${item.id_rol}">${rol}</option>
                             `;
                         } else {
                             this.idRolFuncionario.innerHTML += `
-                            <option value="${item.id_rol}" class="capitalize">${item.detalle}</option>
+                            <option value="${item.id_rol}">${rol}</option>
                         `;
                         }
                     }
@@ -201,14 +204,17 @@ const appFuncionarios = new (function () {
             .then((data) => {
                 data.forEach(item => {
                     if (item.estado === 'activo') {
+                        // Capitalizar letras minusculas
+                        let contrato = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        // Imprimir las opciones
                         if (EditContrato) {
                             var seleted = 'contrato-id-' + item.id_contrato == EditContrato.classList.item(0) ? 'selected' : '';
                             EditContrato.innerHTML += `
-                            <option ${seleted} value="${item.id_contrato}">${item.detalle}</option>
+                            <option ${seleted} value="${item.id_contrato}">${contrato}</option>
                         `;
                         } else {
                             this.idContratoFuncionario.innerHTML += `
-                            <option value="${item.id_contrato}">${item.detalle}</option>
+                            <option value="${item.id_contrato}">${contrato}</option>
                         `;
                         }
                     }
@@ -222,8 +228,14 @@ const appFuncionarios = new (function () {
             .then((data) => {
                 data.forEach(item => {
                     if (item.estruc_estado === 'activo') {
+                        // Capitalizar letras minusculas
+                        let cargo = item.cargo_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        let seccion = item.seccion_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        let departamento = item.depa_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        let area = item.area_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        // Imprimir las opciones
                         this.idEstructuraFuncionario.innerHTML += `
-                            <option value="${item.id_estructura}">${item.cargo_detalle} - ${item.seccion_detalle} - ${item.depa_detalle} - ${item.area_detalle}</option>
+                            <option value="${item.id_estructura}">${cargo}</option>
                         `;
                     }
                 });

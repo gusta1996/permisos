@@ -101,7 +101,7 @@
             <h3 class="text-center mb-4 text-base font-semibold leading-7 text-gray-900">Información ocupacional</h3>
             <div class="mb-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <!-- Contrato -->
-                <div class="sm:col-span-2">
+                <div class="sm:col-span-3">
                     <label class="block text-sm font-medium leading-6 text-gray-900">Contrato:</label>
                     <div class="mt-2">
                         <select id="contrato-funcionarios" required class="selectBuscador h-[38px] capitalize block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
@@ -111,11 +111,11 @@
                 </div>
 
                 <!-- Estructura -->
-                <div class="sm:col-span-4">
-                    <label class="block text-sm font-medium leading-6 text-gray-900">Función laboral:</label>
+                <div class="sm:col-span-3">
+                    <label class="block text-sm font-medium leading-6 text-gray-900">Cargo:</label>
                     <div class="mt-2">
                         <select id="estructura-funcionarios" required class="selectBuscador h-[38px] capitalize block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
-                            <option value="" selected disabled>-- Selecciona: Cargo - Sección - Departamento - Área --</option>
+                            <option value="" selected disabled>-- Selecciona: --</option>
                         </select>
                     </div>
                 </div>

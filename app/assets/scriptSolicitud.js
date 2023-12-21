@@ -223,8 +223,12 @@ const appSolicitud = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
+                    // Capitalizar letras minusculas
+                    let nombres = item.nombres.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    let apellidos = item.apellidos.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    // Imprimir las opciones
                     this.funcionarioSolicitud.innerHTML += `
-                        <option value="${item.id_funcionario_estructura}">${item.apellidos} ${item.nombres}</option>
+                        <option value="${item.id_funcionario_estructura}">${apellidos} ${nombres}</option>
                     `;
                 });
             })

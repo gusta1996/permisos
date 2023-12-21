@@ -41,14 +41,16 @@
         <div class="p-4 rounded-md mb-4">
 
             <!-- Tabla Reporte -->
-            <table class="w-full text-xs md:text-sm text-left">
+            <table class="w-full text-xs text-left">
                 <thead>
                     <tr class="h-16 border-b border-b-slate-400">
                         <th class="hidden font-medium pr-4">ID</th>
                         <th class="font-medium pr-4">No.</th>
                         <th class="font-medium pr-4">Funcionario</th>
                         <th class="font-medium pr-4">Razón</th>
-                        <th class="font-medium pr-4">Fecha</th>
+                        <th class="font-medium pr-4">Fecha solicitud</th>
+                        <th class="font-medium pr-4">Fecha salida</th>
+                        <th class="font-medium pr-4">Fecha retorno</th>
                         <th class="font-medium pr-4">Tiempo</th>
                         <th class="font-medium">Estado</th>
                     </tr>

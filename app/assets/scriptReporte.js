@@ -29,7 +29,7 @@ const appReporte = new (function () {
                   <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                       <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
                       <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
-                      <td class="text-slate-700 pr-4 capitalize leading-6">
+                      <td class="text-slate-700 pr-4 capitalize leading-5">
                           <div>
                               ${item[i].apellidos} ${item[i].nombres}
                           </div>
@@ -39,6 +39,8 @@ const appReporte = new (function () {
                       </td>
                       <td class="text-slate-700 pr-4 capitalize">${item[i].razon}</td>
                       <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
+                      <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha_salida}</td>
+                      <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha_entrada}</td>
                       <td class="text-slate-700 pr-4">${dias} días y ${horas} horas</td>
                       <td class="font-medium capitalize ${item[i].fs_estado == 'aprobado' ? 'text-green-600' : ''}${item[i].fs_estado == 'anulado' ? 'text-red-600' : ''}${item[i].fs_estado == 'pendiente' ? 'text-amber-600' : ''}">${item[i].fs_estado}</td>
                     </tr>
@@ -74,21 +76,23 @@ const appReporte = new (function () {
             let horas = Math.floor((diferenciaTiempo / (1000 * 60 * 60)) % 24);
             html += `
               <tr class="h-16 border-b last:border-b-0 border-b-white-100">
-                  <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
-                  <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
-                  <td class="text-slate-700 pr-4 capitalize leading-6">
-                      <div>
-                          ${item[i].apellidos} ${item[i].nombres}
-                      </div>
-                      <div>
-                          CI: ${item[i].cedula}
-                      </div>
-                  </td>
-                  <td class="text-slate-700 pr-4 capitalize">${item[i].razon}</td>
-                  <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
-                  <td class="text-slate-700 pr-4">${dias} días y ${horas} horas</td>
-                  <td class="font-medium capitalize ${item[i].fs_estado == 'aprobado' ? 'text-green-600' : ''}${item[i].fs_estado == 'anulado' ? 'text-red-600' : ''}${item[i].fs_estado == 'pendiente' ? 'text-amber-600' : ''}">${item[i].fs_estado}</td>
-                </tr>
+                <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
+                <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
+                <td class="text-slate-700 pr-4 capitalize leading-5">
+                    <div>
+                        ${item[i].apellidos} ${item[i].nombres}
+                    </div>
+                    <div>
+                        CI: ${item[i].cedula}
+                    </div>
+                </td>
+                <td class="text-slate-700 pr-4 capitalize">${item[i].razon}</td>
+                <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
+                <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha_salida}</td>
+                <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha_entrada}</td>
+                <td class="text-slate-700 pr-4">${dias} días y ${horas} horas</td>
+                <td class="font-medium capitalize ${item[i].fs_estado == 'aprobado' ? 'text-green-600' : ''}${item[i].fs_estado == 'anulado' ? 'text-red-600' : ''}${item[i].fs_estado == 'pendiente' ? 'text-amber-600' : ''}">${item[i].fs_estado}</td>
+              </tr>
               `;
           }
         } else {
@@ -201,7 +205,7 @@ const appReporte = new (function () {
           filas += `
             <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                 <td id="numero-solicitud" class="text-slate-700">${item.numero}</td>
-                <td class="text-slate-700 pr-4 capitalize leading-6">
+                <td class="text-slate-700 pr-4 capitalize leading-5">
                     <div>
                         ${item.apellidos} ${item.nombres}
                     </div>
@@ -212,6 +216,7 @@ const appReporte = new (function () {
                 <td class="text-slate-700 pr-4 capitalize">${item.razon}</td>
                 <td class="text-slate-700 pr-4 whitespace-nowrap">${item.fecha}</td>
                 <td class="text-slate-700 pr-4 whitespace-nowrap">${item.fecha_salida}</td>
+                <td class="text-slate-700 pr-4 whitespace-nowrap">${item.fecha_entrada}</td>
                 <td class="text-slate-700 pr-4">${dias} días y ${horas} horas</td>
                 <td class="font-medium capitalize ${item.fs_estado == 'aprobado' ? 'text-green-600' : ''}${item.fs_estado == 'anulado' ? 'text-red-600' : ''}${item.fs_estado == 'pendiente' ? 'text-amber-600' : ''}">${item.fs_estado}</td>
               </tr>
@@ -223,8 +228,9 @@ const appReporte = new (function () {
             <th class="font-medium pr-4">No.</th>
             <th class="font-medium pr-4">Funcionario</th>
             <th class="font-medium pr-4">Razón</th>
-            <th class="font-medium pr-4">Fecha</th>
+            <th class="font-medium pr-4">Fecha solicitud</th>
             <th class="font-medium pr-4">Fecha salida</th>
+            <th class="font-medium pr-4">Fecha retorno</th>
             <th class="font-medium pr-4">Tiempo</th>
             <th class="font-medium">Estado</th>
           </tr>
@@ -235,7 +241,7 @@ const appReporte = new (function () {
           </tbody>
         `;
         table = `
-          <table class="w-full text-xs md:text-sm text-left">
+          <table class="w-full text-xs text-left">
             ${thead}
             ${tbody}
           </table>
