@@ -154,7 +154,6 @@ const app = new (function () {
         fetch("../controllers/actualizarSeccion.php", { method: "POST", body: formSeccion })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Sección actualizado con exito!');
                 this.listadoSeccion();
                 this.cerrarModalSeccion();
                 this.busqueda.value = null;
@@ -222,9 +221,7 @@ const app = new (function () {
             fetch("../controllers/eliminarSeccion.php", { method: "POST", body: formSeccion })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado == 'anulado') {
-                        alert('¡Seccion anulada con éxito!');
-                    } else {
+                    if (data.estado != 'anulado') {
                         alert('¡No se pudo anular, este sección está siendo usada!')
                     }
                     this.listadoSeccion();

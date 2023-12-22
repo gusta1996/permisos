@@ -178,7 +178,6 @@ const app = new (function () {
                     `;
                 } else {
                     // Guardado con exito
-                    alert('¡Informacion ocupacional guardada con exito!');
                     window.location.href = '../views/cargos-asignados.php';   
                 }
             })

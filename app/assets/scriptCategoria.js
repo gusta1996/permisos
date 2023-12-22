@@ -155,7 +155,6 @@ const app = new (function () {
         fetch("../controllers/actualizarCategoria.php", { method: "POST", body: formCategoria })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Categoría actualizada con exito!');
                 this.listadoCategoria();
                 this.cerrarModalCategoria();
                 this.busqueda.value = null;
@@ -224,9 +223,7 @@ const app = new (function () {
             fetch("../controllers/eliminarCategoria.php", { method: "POST", body: formCategoria })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado == 'anulado') {
-                        alert('¡Categoría anulada con exito!');
-                    } else {
+                    if (data.estado != 'anulado') {
                         alert('¡No se pudo anular, esta categoría está siendo usada!')
                     }
                     this.listadoCategoria();

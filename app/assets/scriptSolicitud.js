@@ -308,7 +308,6 @@ const appSolicitud = new (function () {
         fetch("../controllers/actualizarFuncionarioSolicitud.php", { method: "POST", body: formSolicitud })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Solicitud actualizada con exito!');
                 if (this.tablaCompleta) {
                     this.listadoSolicitudCompleta();
                 } else if (this.tablaSimple) {
@@ -552,9 +551,7 @@ const appSolicitud = new (function () {
             fetch("../controllers/eliminarFuncionarioSolicitud.php", { method: "POST", body: formSolicitud })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado == 'anulado') {
-                        alert('¡Solicitud anulada con éxito!');
-                    } else {
+                    if (data.estado != 'anulado') {
                         alert('¡No se pudo anular, esta solicitud está siendo usada!');
                     }
                     if (this.tablaCompleta) {

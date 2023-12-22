@@ -10,7 +10,8 @@ $arrayName = array(
     'email' => strtolower($_POST['email']),
     'username' => strtolower($_POST['username']),
     'id_rol' => $_POST['id_rol'],
-    'estado' => strtolower($_POST['estado'])
+    'f_estado' => strtolower($_POST['f_estado']),
+    'u_estado' => strtolower($_POST['u_estado'])
 );
 
 echo json_encode(Funcionario::actualizarFuncionarios($arrayName));

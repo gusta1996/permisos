@@ -154,7 +154,6 @@ const app = new (function () {
         fetch("../controllers/actualizarDepartamento.php", { method: "POST", body: formDepartamento })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Departamento actualizado con exito!');
                 this.listadoDepartamento();
                 this.cerrarModalDepartamento();
                 this.busqueda.value = null;
@@ -222,9 +221,7 @@ const app = new (function () {
             fetch("../controllers/eliminarDepartamento.php", { method: "POST", body: formDepartamento })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado == 'anulado') {
-                        alert('¡Departamento anulado con éxito!');
-                    } else {
+                    if (data.estado != 'anulado') {
                         alert('¡No se pudo anular, este departamento está siendo usado!')
                     }
                     this.listadoDepartamento();

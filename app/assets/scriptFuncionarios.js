@@ -33,24 +33,22 @@ const appFuncionarios = new (function () {
                 let html = '';
                 for (let i = 0; i < item.length; i++) {
                     let botones = `
-                        <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
-                            <button onclick="appFuncionarios.editarFuncionarios(${item[i].id_funcionario})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                                </svg>
-                            </button>
-                            <button onclick="appFuncionarios.eliminarFuncionarios(${item[i].id_funcionario})" title="Anular" class="${item[i].f_estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
-                                </svg>
-                            </button>
-                        </td>
+                        <button onclick="appFuncionarios.editarFuncionarios(${item[i].id_funcionario})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                            </svg>
+                        </button>
+                        <button onclick="appFuncionarios.eliminarFuncionarios(${item[i].id_funcionario})" title="Anular" class="btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+                            </svg>
+                        </button>
                     `;
                     html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
-                            <td class="text-slate-700 pr-4">${item[i].id_funcionario}</td>
-                            <td class="text-slate-700 pr-4 capitalize leading-6">
+                            <td class="pr-4">${item[i].id_funcionario}</td>
+                            <td class="pr-4 capitalize leading-6">
                                 <div>
                                     ${item[i].apellidos} ${item[i].nombres}
                                 </div>
@@ -58,10 +56,21 @@ const appFuncionarios = new (function () {
                                     CI: ${item[i].cedula}
                                 </div>
                             </td>
-                            <td class="text-slate-700 pr-4">${item[i].email}</td>
-                            <td class="text-slate-700 pr-4 capitalize">${item[i].rol}</td>
-                            <td class="font-medium capitalize ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-600' : ''}${item[i].f_estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].f_estado}</td>
-                            ${cuentaIdFuncionario != item[i].id_funcionario ? botones : '<td></td>'}
+                            <td class="font-medium capitalize ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-600' : ''} pr-4">${item[i].f_estado}</td>
+                            <td class="max-w-40 block truncate pr-4">${item[i].email}</td>
+                            <td class="pr-4">${item[i].nick}</td>
+                            <td class="pr-4 capitalize">${item[i].rol}</td>
+                            <td class="font-medium capitalize ${item[i].u_estado == 'activo' ? 'text-green-600' : ''}${item[i].u_estado == 'suspendido' ? 'text-amber-600' : ''}${item[i].u_estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].u_estado}</td>
+                            <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
+                                ${(cuentaIdFuncionario != item[i].id_funcionario) ? botones : `
+                                    <button onclick="" title="No se puede editar" class="btn-editar cursor-no-drop flex items-center gap-2 min-h-fit rounded-md bg-gray-50 px-3 py-2 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-700/10">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                        </svg>
+                                    </button>
+                                ` }
+                            </td>
                         </tr>
                     `;
                 }
@@ -89,24 +98,22 @@ const appFuncionarios = new (function () {
                 if (item != '') {
                     for (let i = 0; i < item.length; i++) {
                         let botones = `
-                            <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
-                                <button onclick="appFuncionarios.editarFuncionarios(${item[i].id_funcionario})" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                                    </svg>
-                                </button>
-                                <button onclick="appFuncionarios.eliminarFuncionarios(${item[i].id_funcionario})" class="${item[i].estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
-                                    </svg>
-                                </button>
-                            </td>
+                            <button onclick="appFuncionarios.editarFuncionarios(${item[i].id_funcionario})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                </svg>
+                            </button>
+                            <button onclick="appFuncionarios.eliminarFuncionarios(${item[i].id_funcionario})" title="Anular" class="btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+                                </svg>
+                            </button>
                         `;
                         html += `
                             <tr class="h-16 border-b last:border-b-0 border-b-white-100">
-                                <td class="text-slate-700 pr-4">${item[i].id_funcionario}</td>
-                                <td class="text-slate-700 pr-4 capitalize leading-6">
+                                <td class="pr-4">${item[i].id_funcionario}</td>
+                                <td class="pr-4 capitalize leading-6">
                                     <div>
                                         ${item[i].apellidos} ${item[i].nombres}
                                     </div>
@@ -114,10 +121,21 @@ const appFuncionarios = new (function () {
                                         CI: ${item[i].cedula}
                                     </div>
                                 </td>
-                                <td class="text-slate-700 pr-4">${item[i].email}</td>
-                                <td class="text-slate-700 pr-4 capitalize">${item[i].rol}</td>
-                                <td class="font-medium capitalize ${item[i].estado == 'activo' ? 'text-green-600' : ''}${item[i].estado == 'suspendido' ? 'text-amber-600' : ''}${item[i].estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].estado}</td>
-                                ${cuentaIdFuncionario != item[i].id_funcionario ? botones : '<td></td>'}
+                                <td class="font-medium capitalize ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-600' : ''} pr-4">${item[i].f_estado}</td>
+                                <td class="max-w-40 block truncate pr-4">${item[i].email}</td>
+                                <td class="pr-4">${item[i].nick}</td>
+                                <td class="pr-4 capitalize">${item[i].rol}</td>
+                                <td class="font-medium capitalize ${item[i].u_estado == 'activo' ? 'text-green-600' : ''}${item[i].u_estado == 'suspendido' ? 'text-amber-600' : ''}${item[i].u_estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].u_estado}</td>
+                                <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
+                                    ${(cuentaIdFuncionario != item[i].id_funcionario) ? botones : `
+                                        <button onclick="" title="No se puede editar" class="btn-editar cursor-no-drop flex items-center gap-2 min-h-fit rounded-md bg-gray-50 px-3 py-2 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-700/10">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                            </svg>
+                                        </button>
+                                    ` }
+                                </td>
                             </tr>
                         `;
                     }
@@ -292,7 +310,8 @@ const appFuncionarios = new (function () {
         var editarEmail = document.getElementById('editar-email-funcionarios');
         var editarUsername = document.getElementById('editar-username-funcionarios');
         var editarIdRol = document.getElementById('editar-rol-funcionarios');
-        var editarEstado = document.getElementById('editar-estado-funcionarios');
+        var editarEstadoFuncionario = document.getElementById('editar-f_estado-funcionarios');
+        var editarEstadoUsuario = document.getElementById('editar-u_estado-funcionarios');
         formFuncionario.append('id_funcionario', editarId_funcionario.value);
         formFuncionario.append('nombres', editarNombres.value);
         formFuncionario.append('apellidos', editarApellidos.value);
@@ -302,12 +321,12 @@ const appFuncionarios = new (function () {
         formFuncionario.append('email', editarEmail.value);
         formFuncionario.append('username', editarUsername.value);
         formFuncionario.append('id_rol', editarIdRol.value);
-        formFuncionario.append('estado', editarEstado.value);
+        formFuncionario.append('f_estado', editarEstadoFuncionario.value);
+        formFuncionario.append('u_estado', editarEstadoUsuario.value);
         fetch("../controllers/actualizarFuncionarios.php", { method: "POST", body: formFuncionario })
             .then((respuesta) => respuesta.json())
             .then((data) => {
                 if (data == true) {
-                    alert('¡Funcionario actualizado con exito!');
                     this.listadoFuncionarios();
                     this.cerrarModalFuncionarios();
                 } else {
@@ -337,61 +356,72 @@ const appFuncionarios = new (function () {
                                     <h3 class="text-md font-semibold leading-7 text-gray-900">Editar funcionarios</h3>
                                 </div>
                                 <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                                    <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                                    <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-12">
                                         <!-- ID -->
-                                        <div class="hidden sm:col-span-2">
+                                        <div class="hidden sm:col-span-4">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">ID:</label>
                                             <input type="text" id="editar-id-funcionarios" value="${data.id_funcionario}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Nombres -->
-                                        <div class="sm:col-span-2">
+                                        <div class="sm:col-span-4">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Nombres:</label>
                                             <input type="text" id="editar-nombres-funcionarios" required value="${data.nombres}" class="block capitalize w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Apellidos -->
-                                        <div class="sm:col-span-2">
+                                        <div class="sm:col-span-4">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Apellidos:</label>
                                             <input type="text" id="editar-apellidos-funcionarios" required value="${data.apellidos}" class="block capitalize w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Cédula -->
-                                        <div class="sm:col-span-2">
+                                        <div class="sm:col-span-4">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Cédula:</label>
                                             <input type="tel" id="editar-cedula-funcionarios" required minlength="10" maxlength="10" value="${data.cedula}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Dirección -->
-                                        <div class="sm:col-span-2">
+                                        <div class="sm:col-span-4">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Dirección:</label>
                                             <input type="text" id="editar-direccion-funcionarios" required value="${data.direccion}" class="block capitalize w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Telefono -->
-                                        <div class="sm:col-span-2">
+                                        <div class="sm:col-span-4">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Telefono:</label>
                                             <input type="tel" id="editar-telefono-funcionarios" minlength="10" maxlength="10" value="${data.telefono}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
+                                        <!-- Estado del funcionario -->
+                                        <div class="sm:col-span-4">
+                                            <label class="block text-sm font-medium leading-6 text-gray-900">Estado del funcionario:</label>
+                                            <select id="editar-f_estado-funcionarios" value="${data.f_estado}" required class="capitalize h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                                <option disabled>-- Selecciona --</option>
+                                                <option ${data.f_estado === 'activo' ? 'selected' : ''}>Activo</option>
+                                                <option ${data.f_estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
+                                            </select>
+                                        </div>
+                                        <hr class="col-span-12">
+                                        <!-- username -->
+                                        <div class="sm:col-span-3">
+                                            <label class="block text-sm font-medium leading-6 text-gray-900">Username:</label>
+                                            <input type="text" id="editar-username-funcionarios" value="${data.nick}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                        </div>
                                         <!-- Email -->
-                                        <div class="sm:col-span-2">
+                                        <div class="sm:col-span-3">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Email:</label>
                                             <input type="email" id="editar-email-funcionarios" value="${data.email}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
-                                        <!-- username -->
-                                        <div class="sm:col-span-2">
-                                            <label class="block text-sm font-medium leading-6 text-gray-900">Usuario:</label>
-                                            <input type="text" id="editar-username-funcionarios" value="${data.nick}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
-                                        </div>
                                         <!-- Rol -->
-                                        <div class="sm:col-span-2">
+                                        <div class="sm:col-span-3">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Rol:</label>
                                             <select id="editar-rol-funcionarios" required class="rol-id-${data.id_rol} selectBuscador capitalize h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
-                                        <!-- Estado -->
-                                        <div class="sm:col-span-2">
-                                            <label class="block text-sm font-medium leading-6 text-gray-900">Estado:</label>
-                                            <select id="editar-estado-funcionarios" value="${data.estado}" required class="capitalize h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                        <!-- Estado de usuario -->
+                                        <div class="sm:col-span-3">
+                                            <label class="block text-sm font-medium leading-6 text-gray-900">Estado de usuario:</label>
+                                            <select id="editar-u_estado-funcionarios" value="${data.u_estado}" required class="capitalize h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
-                                                <option ${data.estado === 'activo' ? 'selected' : ''}>Activo</option>
-                                                <option ${data.estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
+                                                <option ${data.u_estado === 'activo' ? 'selected' : ''}>Activo</option>
+                                                <option ${data.u_estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
+                                                <option ${data.u_estado === 'anulado' ? 'selected' : ''}>Anulado</option>
                                             </select>
                                         </div>
                                         <!-- Mensaje de error -->
@@ -399,7 +429,7 @@ const appFuncionarios = new (function () {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                                <div class="border-t border-gray-900/10 bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                     <button type="submit" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto">Guardar</button>
                                     <button type="button" onclick="appFuncionarios.cerrarModalFuncionarios()" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancelar</button>
                                 </div>
@@ -420,9 +450,7 @@ const appFuncionarios = new (function () {
             fetch("../controllers/eliminarFuncionarios.php", { method: "POST", body: formFuncionarios })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado == 'anulado') {
-                        alert('¡Funcionario anulado con éxito!');
-                    } else {
+                    if (data.f_estado != 'anulado') {
                         alert('¡No se pudo anular, este funcionario tiene un cargo asignado!')
                     }
                     this.listadoFuncionarios();

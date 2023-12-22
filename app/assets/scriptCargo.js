@@ -154,7 +154,6 @@ const app = new (function () {
         fetch("../controllers/actualizarCargo.php", { method: "POST", body: formCargo })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Cargo actualizado con exito!');
                 this.listadoCargo();
                 this.cerrarModalCargo();
                 this.busqueda.value = null;
@@ -222,9 +221,7 @@ const app = new (function () {
             fetch("../controllers/eliminarCargo.php", { method: "POST", body: formCargo })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado == 'anulado') {
-                        alert('¡Cargo anulado con éxito!');
-                    } else {
+                    if (data.estado != 'anulado') {
                         alert('¡No se pudo anular, este cargo está siendo usado!')
                     }
                     this.listadoCargo();

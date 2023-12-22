@@ -44,10 +44,12 @@
                     <tr class="h-16 border-b border-b-slate-400">
                         <th class="font-medium pr-4">ID</th>
                         <th class="font-medium pr-4">Funcionario</th>
-                        <th class="font-medium pr-4">Email</th>
-                        <th class="font-medium pr-4">Rol</th>
                         <th class="font-medium pr-4">Estado</th>
-                        <th class="font-medium pr-4 text-right">Opciones</th>
+                        <th class="font-medium pr-4">Email</th>
+                        <th class="font-medium pr-4">Username</th>
+                        <th class="font-medium pr-4">Rol</th>
+                        <th class="font-medium pr-4">Estado usuario</th>
+                        <th class="font-medium text-right">Opciones</th>
                     </tr>
                 </thead>
                 <tbody id="tbodyFuncionarios">

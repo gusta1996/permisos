@@ -275,7 +275,6 @@ const app = new (function () {
         fetch("../controllers/actualizarEstructura.php", { method: "POST", body: formEstructura })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Estructura actualizada con exito!');
                 this.listadoEstructura();
                 this.cerrarModalEstructura();
                 this.busqueda.value = null;
@@ -367,9 +366,7 @@ const app = new (function () {
             fetch("../controllers/eliminarEstructura.php", { method: "POST", body: formEstructura })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado == 'anulado') {
-                        alert('¡Estructura anulada con éxito!');
-                    } else {
+                    if (data.estado != 'anulado') {
                         alert('¡No se pudo anular, esta estructura está siendo usada!')
                     }
                     this.listadoEstructura();

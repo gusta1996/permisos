@@ -160,7 +160,6 @@ const app = new (function () {
         fetch("../controllers/actualizarContrato.php", { method: "POST", body: formContrato })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Contrato actualizado con exito!');
                 this.listadoContrato();
                 this.cerrarModalContrato();
                 this.busqueda.value = null;
@@ -234,9 +233,7 @@ const app = new (function () {
             fetch("../controllers/eliminarContrato.php", { method: "POST", body: formContrato })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado == 'anulado') {
-                        alert('¡Contrato anulado con éxito!');
-                    } else {
+                    if (data.estado != 'anulado') {
                         alert('¡No se pudo anular, este contrato está siendo usado!')
                     }
                     this.listadoContrato();

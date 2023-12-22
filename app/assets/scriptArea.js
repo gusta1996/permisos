@@ -190,7 +190,6 @@ const app = new (function () {
         fetch("../controllers/actualizarArea.php", { method: "POST", body: formArea })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Area actualizada con exito!');
                 this.listadoArea();
                 this.cerrarModalArea();
                 this.busqueda.value = null;
@@ -263,9 +262,7 @@ const app = new (function () {
             fetch("../controllers/eliminarArea.php", { method: "POST", body: formArea })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado == 'anulado') {
-                        alert('¡Área anulada con éxito!');
-                    } else {
+                    if (data.estado != 'anulado') {
                         alert('¡No se pudo anular, esta área está siendo usada!')
                     }
                     this.listadoArea();

@@ -10,7 +10,7 @@ class Funcionario extends Connection
             $page = isset($page) ? $page : 1; // Si $page esta vacio, entonces es 1
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos  
             // Consulta para obtener los datos
-            $sql = "SELECT usuario.nick,
+            $sql = "SELECT usuario.nick, usuario.estado AS u_estado,
                         funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos,
                         funcionario.cedula, funcionario.email,
                         funcionario.estado AS f_estado,
@@ -18,6 +18,7 @@ class Funcionario extends Connection
                     FROM usuario
                     INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario
                     INNER JOIN rol ON usuario.id_rol_fk = rol.id_rol
+                    WHERE funcionario.estado != 'anulado'
                     ORDER BY funcionario.id_funcionario DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -27,7 +28,7 @@ class Funcionario extends Connection
             $resultado = $declaracion->fetchAll();
 
             // Consulta para obtener el número total de registros
-            $sqlTotal = "SELECT COUNT(*) FROM funcionario";
+            $sqlTotal = "SELECT COUNT(*) FROM funcionario WHERE funcionario.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -50,15 +51,15 @@ class Funcionario extends Connection
             $page = isset($data['pagina']) ? $data['pagina'] : 1; // Si $data['page'] esta vacio, entonces es 1
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos
             // Hacer busqueda
-            $sql = "SELECT usuario.nick,
+            $sql = "SELECT usuario.nick, usuario.estado AS u_estado,
                         funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos,
                         funcionario.cedula, funcionario.email,
-                        funcionario.estado,
+                        funcionario.estado AS f_estado,
                         rol.detalle AS rol
                     FROM usuario 
                     INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario
                     INNER JOIN rol ON usuario.id_rol_fk = rol.id_rol
-                    WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%'
+                    WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%' AND funcionario.estado != 'anulado'
                     ORDER BY funcionario.id_funcionario DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -69,7 +70,7 @@ class Funcionario extends Connection
 
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM funcionario 
-                        WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%'";
+                        WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%' AND funcionario.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -100,10 +101,10 @@ class Funcionario extends Connection
     public static function obtenerFuncionarios($id_funcionario)
     {
         try {
-            $sql = 'SELECT usuario.nick,
+            $sql = 'SELECT usuario.nick, usuario.estado AS u_estado,
                         funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos,
                         funcionario.cedula, funcionario.direccion, funcionario.telefono,
-                        funcionario.email, funcionario.estado,
+                        funcionario.email, funcionario.estado AS f_estado,
                         rol.id_rol, rol.detalle AS rol
                     FROM usuario 
                     INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario
@@ -271,15 +272,17 @@ class Funcionario extends Connection
             $declaracion->bindParam(':telefono', $data['telefono']);
             $declaracion->bindParam(':direccion', $data['direccion']);
             $declaracion->bindParam(':email', $data['email']);
-            $declaracion->bindParam(':estado', $data['estado']);
+            $declaracion->bindParam(':estado', $data['f_estado']);
             $declaracion->execute();
 
             // Actualiza tabla usuario
             $sql = 'UPDATE usuario 
-                    SET nick=:nick, id_rol_fk=:id_rol
+                    SET nick=:nick, estado=:estado,
+                        id_rol_fk=:id_rol
                     WHERE id_funcionario_fk=:id_funcionario';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':nick', $data['username']);
+            $declaracion->bindParam(':estado', $data['u_estado']);
             $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
             $declaracion->bindParam(':id_rol', $data['id_rol']);
             $declaracion->execute();
@@ -378,13 +381,6 @@ class Funcionario extends Connection
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
             $declaracion->bindParam(':f_estado', $data['estado']);
-            $declaracion->execute();
-            // Actualiza usuario
-            $sql = 'UPDATE usuario SET estado=:estado
-                    WHERE id_funcionario_fk=:id_funcionario';
-            $declaracion = Connection::getConnection()->prepare($sql);
-            $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
-            $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
 
             // Obtener el estado del usuario anulado
