@@ -1,6 +1,7 @@
 const app = new (function () {
     this.tbodyCategoria = document.getElementById('tbodyCategoria');
     this.detalle = document.getElementById('detalle-categoria');
+    this.errorCategoria = document.getElementById('error-categoria');
     this.estado = document.getElementById('estado-categoria');
     this.busqueda = document.getElementById('busqueda-categoria');
     this.paginacion = document.getElementById('paginacion');
@@ -133,14 +134,24 @@ const app = new (function () {
         this.paginacion.innerHTML = html;
     }
     this.guardarCategoria = () => {
+        // Esconder mensaje de error al guardar cada vez
+        this.errorCategoria.classList.add('hidden');
+        this.errorCategoria.innerHTML = '';
+        // Enviar formulario para la consulta
         var formCategoria = new FormData();
         formCategoria.append('detalle', this.detalle.value);
         fetch("../controllers/guardarCategoria.php", { method: "POST", body: formCategoria })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Categoría guardada con exito!');
-                this.listadoCategoria();
-                this.limpiarCategoria();
+                if (data == true) {
+                    alert('¡Categoría guardada con exito!');
+                    this.listadoCategoria();
+                    this.limpiarCategoria();
+                } else {
+                    // Mostrar mensaje de error al guardar
+                    this.errorCategoria.classList.remove('hidden');
+                    this.errorCategoria.innerHTML += '<p class="font-medium rounded-md p-4 bg-red-100">' + data + '</p>';
+                }
             })
             .catch((error) => console.log(error));
     }

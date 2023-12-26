@@ -87,9 +87,10 @@ class Funcionario extends Connection
     public static function selectFuncionarios()
     {
         try {
-            $sql = 'SELECT id_funcionario, nombres, apellidos
+            $sql = "SELECT id_funcionario, nombres, apellidos, estado
                     FROM funcionario 
-                    ORDER BY apellidos ASC';
+                    WHERE funcionario.estado != 'anulado'
+                    ORDER BY apellidos ASC";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();

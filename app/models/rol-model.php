@@ -56,7 +56,7 @@ class Rol extends Connection {
             WHERE id_rol=:id_rol
             AND (
                 id_rol NOT IN (SELECT id_rol_fk FROM estructura)
-                OR EXISTS ( SELECT 1 FROM estructura WHERE id_rol_fk=:id_rol AND estado = 'Anulado' )
+                OR EXISTS ( SELECT 1 FROM estructura WHERE id_rol_fk=:id_rol AND estado = 'anulado' )
             )";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_rol', $data['id_rol']);

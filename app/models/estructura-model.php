@@ -20,6 +20,7 @@ class Estructura extends Connection
                     INNER JOIN seccion ON estructura.id_seccion_fk = seccion.id_seccion
                     INNER JOIN departamento ON estructura.id_departamento_fk = departamento.id_departamento
                     INNER JOIN area ON estructura.id_area_fk = area.id_area
+                    WHERE estructura.estado != 'anulado'
                     ORDER BY id_estructura DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -29,7 +30,7 @@ class Estructura extends Connection
             $resultado = $declaracion->fetchAll();
 
             // Consulta para obtener el número total de registros
-            $sqlTotal = "SELECT COUNT(*) FROM estructura";
+            $sqlTotal = "SELECT COUNT(*) FROM estructura WHERE estructura.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -63,7 +64,7 @@ class Estructura extends Connection
             INNER JOIN seccion ON estructura.id_seccion_fk = seccion.id_seccion
             INNER JOIN departamento ON estructura.id_departamento_fk = departamento.id_departamento
             INNER JOIN area ON estructura.id_area_fk = area.id_area
-            WHERE  $tipoBusqueda.detalle ILIKE '%$busqueda%'
+            WHERE  $tipoBusqueda.detalle ILIKE '%$busqueda%' AND estructura.estado != 'anulado'
             ORDER BY id_estructura DESC
             LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -79,7 +80,7 @@ class Estructura extends Connection
                         INNER JOIN seccion ON estructura.id_seccion_fk = seccion.id_seccion
                         INNER JOIN departamento ON estructura.id_departamento_fk = departamento.id_departamento
                         INNER JOIN area ON estructura.id_area_fk = area.id_area
-                        WHERE $tipoBusqueda.detalle ILIKE '%$busqueda%'";
+                        WHERE $tipoBusqueda.detalle ILIKE '%$busqueda%' AND estructura.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -131,6 +132,25 @@ class Estructura extends Connection
     public static function guardarEstructura($data)
     {
         try {
+            // Consulta que no existe un estructura (activo) igual
+            $sql = 'SELECT id_cargo_fk, id_seccion_fk, id_departamento_fk, id_area_fk, estado
+                    FROM estructura
+                    WHERE id_cargo_fk=:cargo AND id_seccion_fk=:seccion 
+                    AND id_departamento_fk=:departamento AND id_area_fk=:area AND estado=:estado';
+            $compruebaEstructura = Connection::getConnection()->prepare($sql);
+            $compruebaEstructura->bindParam(':cargo', $data['cargo']);
+            $compruebaEstructura->bindParam(':seccion', $data['seccion']);
+            $compruebaEstructura->bindParam(':departamento', $data['departamento']);
+            $compruebaEstructura->bindParam(':area', $data['area']);
+            $compruebaEstructura->bindParam(':estado', $data['estado']);
+            $compruebaEstructura->execute();
+
+            if ($compruebaEstructura->rowCount() > 0) {
+                // Si existe duplicados retorna mensajes
+                $comprobacion = "Ya existe una estructura activa igual a esta.";
+                return $comprobacion;
+            }
+
             $sql = 'INSERT INTO estructura (id_cargo_fk, id_seccion_fk, id_departamento_fk, id_area_fk, estado)
                     VALUES (:cargo, :seccion, :departamento, :area, :estado)';
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -167,11 +187,11 @@ class Estructura extends Connection
     {
         try {
             $sql = "UPDATE estructura SET estado=:estado
-            WHERE id_estructura=:id_estructura
-            AND (
-                id_estructura NOT IN (SELECT id_estructura_fk FROM funcionario_estructura)
-                OR EXISTS ( SELECT 1 FROM funcionario_estructura WHERE id_estructura_fk=:id_estructura AND estado = 'Anulado' )
-            )";
+                    WHERE id_estructura=:id_estructura
+                    AND (
+                        id_estructura NOT IN (SELECT id_estructura_fk FROM funcionario_estructura)
+                        OR EXISTS ( SELECT 1 FROM funcionario_estructura WHERE id_estructura_fk=:id_estructura AND estado = 'anulado' )
+                    )";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_estructura', $data['id_estructura']);
             $declaracion->bindParam(':estado', $data['estado']);

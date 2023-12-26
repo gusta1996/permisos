@@ -27,6 +27,7 @@ if ($userSession->userLoggedIn()) {
             <div class="border-b border-gray-900/10 p-4">
                 <h2 class="text-lg font-semibold leading-7 text-gray-900">Agregar categoría</h2>
             </div>
+
             <!-- Formulario Categoria -->
             <div class="p-4">
                 <form action="javascript:void(0);" onsubmit="app.guardarCategoria()">
@@ -44,6 +45,10 @@ if ($userSession->userLoggedIn()) {
                         </div>
                     </div>
                 </form>
+            </div>
+
+            <!-- Mensaje de error -->
+            <div id="error-categoria" class="hidden p-4">
             </div>
         </div>
 

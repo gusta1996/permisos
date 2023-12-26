@@ -12,6 +12,7 @@ class Categoria extends Connection
             // Consulta para obtener los datos
             $sql = "SELECT *
                     FROM categoria
+                    WHERE categoria.estado != 'anulado'
                     ORDER BY id_categoria DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -21,7 +22,7 @@ class Categoria extends Connection
             $resultado = $declaracion->fetchAll();
 
             // Consulta para obtener el número total de registros
-            $sqlTotal = "SELECT COUNT(*) FROM categoria";
+            $sqlTotal = "SELECT COUNT(*) FROM categoria WHERE categoria.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -45,7 +46,7 @@ class Categoria extends Connection
             // Hacer busqueda
             $sql = "SELECT *
                     FROM categoria
-                    WHERE detalle ILIKE '%$busqueda%'
+                    WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'
                     ORDER BY id_categoria DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -56,7 +57,7 @@ class Categoria extends Connection
 
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM categoria 
-                        WHERE detalle ILIKE '%$busqueda%'";
+                        WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -99,6 +100,21 @@ class Categoria extends Connection
     public static function guardarCategoria($data)
     {
         try {
+            // Consulta que no existe un categoria (activo) igual
+            $sql = 'SELECT detalle, estado
+                    FROM categoria
+                    WHERE detalle=:detalle AND estado=:estado';
+            $compruebaCategoria = Connection::getConnection()->prepare($sql);
+            $compruebaCategoria->bindParam(':detalle', $data['detalle']);
+            $compruebaCategoria->bindParam(':estado', $data['estado']);
+            $compruebaCategoria->execute();
+
+            if ($compruebaCategoria->rowCount() > 0) {
+                // Si existe duplicados retorna mensajes
+                $comprobacion = "Ya existe una categoria activa con este nombre.";
+                return $comprobacion;
+            }
+
             $sql = 'INSERT INTO categoria (detalle, estado) VALUES (:detalle, :estado)';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':detalle', $data['detalle']);
@@ -131,7 +147,7 @@ class Categoria extends Connection
             WHERE id_categoria=:id_categoria
             AND (
                 id_categoria NOT IN (SELECT id_categoria_fk FROM area)
-                OR EXISTS ( SELECT 1 FROM area WHERE id_categoria_fk=:id_categoria AND estado = 'Anulado' )
+                OR EXISTS ( SELECT 1 FROM area WHERE id_categoria_fk=:id_categoria AND estado = 'anulado' )
             )";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_categoria', $data['id_categoria']);

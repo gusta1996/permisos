@@ -1,19 +1,30 @@
 const app = new (function () {
     this.tbodyArea = document.getElementById('tbodyArea');
     this.detalle = document.getElementById('detalle-area');
+    this.errorArea = document.getElementById('error-area');
     this.categoria = document.getElementById('categoria-area');
     this.busqueda = document.getElementById('busqueda-area');
     this.paginacion = document.getElementById('paginacion');
 
     this.guardarArea = () => {
+        // Esconder mensaje de error al guardar cada vez
+        this.errorArea.classList.add('hidden');
+        this.errorArea.innerHTML = '';
+        // Enviar formulario para la consulta
         var formArea = new FormData();
         formArea.append('detalle', this.detalle.value);
         formArea.append('categoria', this.categoria.value);
         fetch("../controllers/guardarArea.php", { method: "POST", body: formArea })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Area guardada con exito!');
-                window.location.href = '../views/area.php';
+                if (data == true) {
+                    alert('¡Area guardada con exito!');
+                    window.location.href = '../views/area.php';
+                } else {
+                    // Mostrar mensaje de error al guardar
+                    this.errorArea.classList.remove('hidden');
+                    this.errorArea.innerHTML += '<p class="font-medium rounded-md p-4 bg-red-100">' + data + '</p>';
+                }
             })
             .catch((error) => console.log(error));
     }

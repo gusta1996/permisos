@@ -12,6 +12,7 @@ class Departamento extends Connection
             // Consulta para obtener los datos
             $sql = "SELECT *
                     FROM departamento
+                    WHERE departamento.estado != 'anulado'
                     ORDER BY id_departamento DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -21,7 +22,7 @@ class Departamento extends Connection
             $resultado = $declaracion->fetchAll();
 
             // Consulta para obtener el número total de registros
-            $sqlTotal = "SELECT COUNT(*) FROM departamento";
+            $sqlTotal = "SELECT COUNT(*) FROM departamento WHERE departamento.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -45,7 +46,7 @@ class Departamento extends Connection
             // Hacer busqueda
             $sql = "SELECT *
                     FROM departamento
-                    WHERE detalle ILIKE '%$busqueda%'
+                    WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'
                     ORDER BY id_departamento DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -56,7 +57,7 @@ class Departamento extends Connection
 
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM departamento 
-                        WHERE detalle ILIKE '%$busqueda%'";
+                        WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -99,11 +100,27 @@ class Departamento extends Connection
     public static function guardarDepartamento($data)
     {
         try {
+            // Consulta que no existe un departamento (activo) igual
+            $sql = 'SELECT detalle, estado
+                    FROM departamento
+                    WHERE detalle=:detalle AND estado=:estado';
+            $compruebaDepa = Connection::getConnection()->prepare($sql);
+            $compruebaDepa->bindParam(':detalle', $data['detalle']);
+            $compruebaDepa->bindParam(':estado', $data['estado']);
+            $compruebaDepa->execute();
+
+            if ($compruebaDepa->rowCount() > 0) {
+                // Si existe duplicados retorna mensajes
+                $comprobacion = "Ya existe un departamento activo con este nombre.";
+                return $comprobacion;
+            }
+
             $sql = 'INSERT INTO departamento (detalle, estado) VALUES (:detalle, :estado)';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':detalle', $data['detalle']);
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
+
             return true;
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -130,7 +147,7 @@ class Departamento extends Connection
             WHERE id_departamento=:id_departamento
             AND (
                 id_departamento NOT IN (SELECT id_departamento_fk FROM estructura)
-                OR EXISTS ( SELECT 1 FROM estructura WHERE id_departamento_fk=:id_departamento AND estado = 'Anulado' )
+                OR EXISTS ( SELECT 1 FROM estructura WHERE id_departamento_fk=:id_departamento AND estado = 'anulado' )
             )";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_departamento', $data['id_departamento']);

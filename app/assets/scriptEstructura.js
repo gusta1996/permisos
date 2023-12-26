@@ -1,5 +1,6 @@
 const app = new (function () {
     this.tbodyEstructura = document.getElementById('tbodyEstructura');
+    this.errorEstructura = document.getElementById('error-estructura');
     this.cargo = document.getElementById('cargo-estructura');
     this.seccion = document.getElementById('seccion-estructura');
     this.departamento = document.getElementById('departamento-estructura');
@@ -111,6 +112,10 @@ const app = new (function () {
             .catch((error) => console.log(error));
     }
     this.guardarEstructura = () => {
+        // Esconder mensaje de error al guardar cada vez
+        this.errorEstructura.classList.add('hidden');
+        this.errorEstructura.innerHTML = '';
+        // Enviar formulario para la consulta
         var formEstructura = new FormData();
         formEstructura.append('cargo', this.cargo.value);
         formEstructura.append('seccion', this.seccion.value);
@@ -119,8 +124,14 @@ const app = new (function () {
         fetch("../controllers/guardarEstructura.php", { method: "POST", body: formEstructura })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Estructura guardada con exito!');
-                window.location.href = '../views/estructura.php';
+                if (data == true) {
+                    alert('¡Estructura guardada con exito!');
+                    window.location.href = '../views/estructura.php';
+                } else {
+                    // Mostrar mensaje de error al guardar
+                    this.errorEstructura.classList.remove('hidden');
+                    this.errorEstructura.innerHTML += '<p class="font-medium rounded-md p-4 bg-red-100">' + data + '</p>';
+                }
             })
             .catch((error) => console.log(error));
     }

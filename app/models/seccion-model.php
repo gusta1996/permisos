@@ -12,6 +12,7 @@ class Seccion extends Connection
             // Consulta para obtener los datos
             $sql = "SELECT *
                     FROM seccion
+                    WHERE seccion.estado != 'anulado'
                     ORDER BY id_seccion DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -21,7 +22,7 @@ class Seccion extends Connection
             $resultado = $declaracion->fetchAll();
 
             // Consulta para obtener el número total de registros
-            $sqlTotal = "SELECT COUNT(*) FROM seccion";
+            $sqlTotal = "SELECT COUNT(*) FROM seccion WHERE seccion.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -45,7 +46,7 @@ class Seccion extends Connection
             // Hacer busqueda
             $sql = "SELECT *
                     FROM seccion
-                    WHERE detalle ILIKE '%$busqueda%'
+                    WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'
                     ORDER BY id_seccion DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -56,7 +57,7 @@ class Seccion extends Connection
 
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM seccion 
-                        WHERE detalle ILIKE '%$busqueda%'";
+                        WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -99,11 +100,27 @@ class Seccion extends Connection
     public static function guardarSeccion($data)
     {
         try {
+            // Consulta que no existe un seccion (activo) igual
+            $sql = 'SELECT detalle, estado
+                    FROM seccion
+                    WHERE detalle=:detalle AND estado=:estado';
+            $compruebaSeccion = Connection::getConnection()->prepare($sql);
+            $compruebaSeccion->bindParam(':detalle', $data['detalle']);
+            $compruebaSeccion->bindParam(':estado', $data['estado']);
+            $compruebaSeccion->execute();
+
+            if ($compruebaSeccion->rowCount() > 0) {
+                // Si existe duplicados retorna mensajes
+                $comprobacion = "Ya existe una sección activo con este nombre.";
+                return $comprobacion;
+            }
+
             $sql = 'INSERT INTO seccion (detalle, estado) VALUES (:detalle, :estado)';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':detalle', $data['detalle']);
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
+
             return true;
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -130,7 +147,7 @@ class Seccion extends Connection
             WHERE id_seccion=:id_seccion
             AND (
                 id_seccion NOT IN (SELECT id_seccion_fk FROM estructura)
-                OR EXISTS ( SELECT 1 FROM estructura WHERE id_seccion_fk=:id_seccion AND estado = 'Anulado' )
+                OR EXISTS ( SELECT 1 FROM estructura WHERE id_seccion_fk=:id_seccion AND estado = 'anulado' )
             )";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_seccion', $data['id_seccion']);

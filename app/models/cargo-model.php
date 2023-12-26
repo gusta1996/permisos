@@ -12,6 +12,7 @@ class Cargo extends Connection
             // Consulta para obtener los datos
             $sql = "SELECT *
                     FROM cargo
+                    WHERE cargo.estado != 'anulado'
                     ORDER BY id_cargo DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -21,7 +22,7 @@ class Cargo extends Connection
             $resultado = $declaracion->fetchAll();
 
             // Consulta para obtener el número total de registros
-            $sqlTotal = "SELECT COUNT(*) FROM cargo";
+            $sqlTotal = "SELECT COUNT(*) FROM cargo WHERE cargo.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -45,7 +46,7 @@ class Cargo extends Connection
             // Hacer busqueda
             $sql = "SELECT *
                     FROM cargo
-                    WHERE detalle ILIKE '%$busqueda%'
+                    WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'
                     ORDER BY id_cargo DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -56,7 +57,7 @@ class Cargo extends Connection
 
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM cargo 
-                        WHERE detalle ILIKE '%$busqueda%'";
+                        WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -73,8 +74,8 @@ class Cargo extends Connection
     public static function selectCargo()
     {
         try {
-            $sql = 'SELECT * FROM cargo 
-                    ORDER BY detalle ASC';
+            $sql = "SELECT * FROM cargo
+                    ORDER BY detalle ASC";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
@@ -99,11 +100,27 @@ class Cargo extends Connection
     public static function guardarCargo($data)
     {
         try {
+            // Consulta que no existe un cargo (activo) igual
+            $sql = 'SELECT detalle, estado
+                    FROM cargo
+                    WHERE detalle=:detalle AND estado=:estado';
+            $compruebaCargo = Connection::getConnection()->prepare($sql);
+            $compruebaCargo->bindParam(':detalle', $data['detalle']);
+            $compruebaCargo->bindParam(':estado', $data['estado']);
+            $compruebaCargo->execute();
+
+            if ($compruebaCargo->rowCount() > 0) {
+                // Si existe duplicados retorna mensajes
+                $comprobacion = "Ya existe un cargo activo con este nombre.";
+                return $comprobacion;
+            }
+
             $sql = 'INSERT INTO cargo (detalle, estado) VALUES (:detalle, :estado)';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':detalle', $data['detalle']);
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
+
             return true;
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -130,7 +147,7 @@ class Cargo extends Connection
             WHERE id_cargo=:id_cargo
             AND (
                 id_cargo NOT IN (SELECT id_cargo_fk FROM estructura)
-                OR EXISTS ( SELECT 1 FROM estructura WHERE id_cargo_fk=:id_cargo AND estado = 'Anulado' )
+                OR EXISTS ( SELECT 1 FROM estructura WHERE id_cargo_fk=:id_cargo AND estado = 'anulado' )
             )";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_cargo', $data['id_cargo']);

@@ -12,6 +12,7 @@ class Contrato extends Connection
             // Consulta para obtener los datos
             $sql = "SELECT *
                     FROM contrato
+                    WHERE contrato.estado != 'anulado'
                     ORDER BY id_contrato DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -21,7 +22,7 @@ class Contrato extends Connection
             $resultado = $declaracion->fetchAll();
 
             // Consulta para obtener el número total de registros
-            $sqlTotal = "SELECT COUNT(*) FROM contrato";
+            $sqlTotal = "SELECT COUNT(*) FROM contrato WHERE contrato.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -45,7 +46,7 @@ class Contrato extends Connection
             // Hacer busqueda
             $sql = "SELECT *
                     FROM contrato
-                    WHERE detalle ILIKE '%$busqueda%'
+                    WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'
                     ORDER BY id_contrato DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -56,7 +57,7 @@ class Contrato extends Connection
 
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM contrato 
-                        WHERE detalle ILIKE '%$busqueda%'";
+                        WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -99,6 +100,21 @@ class Contrato extends Connection
     public static function guardarContrato($data)
     {
         try {
+            // Consulta que no existe un contrato (activo) igual
+            $sql = 'SELECT detalle, estado
+                    FROM contrato
+                    WHERE detalle=:detalle AND estado=:estado';
+            $compruebaContrato = Connection::getConnection()->prepare($sql);
+            $compruebaContrato->bindParam(':detalle', $data['detalle']);
+            $compruebaContrato->bindParam(':estado', $data['estado']);
+            $compruebaContrato->execute();
+
+            if ($compruebaContrato->rowCount() > 0) {
+                // Si existe duplicados retorna mensajes
+                $comprobacion = "Ya existe un contrato activo con este nombre.";
+                return $comprobacion;
+            }
+
             $sql = 'INSERT INTO contrato (detalle, tipo, estado) VALUES (:detalle, :tipo, :estado)';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':detalle', $data['detalle']);
@@ -120,6 +136,7 @@ class Contrato extends Connection
             $declaracion->bindParam(':tipo', $data['tipo']);
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
+
             return true;
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -132,7 +149,7 @@ class Contrato extends Connection
             WHERE id_contrato=:id_contrato
             AND (
                 id_contrato NOT IN (SELECT id_contrato_fk FROM funcionario_estructura)
-                OR EXISTS ( SELECT 1 FROM funcionario_estructura WHERE id_contrato_fk=:id_contrato AND estado = 'Anulado' )
+                OR EXISTS ( SELECT 1 FROM funcionario_estructura WHERE id_contrato_fk=:id_contrato AND estado != 'activo' )
             )";
 
             $declaracion = Connection::getConnection()->prepare($sql);

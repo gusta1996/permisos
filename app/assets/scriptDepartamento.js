@@ -1,18 +1,29 @@
 const app = new (function () {
     this.tbodyDepartamento = document.getElementById('tbodyDepartamento');
     this.detalle = document.getElementById('detalle-departamento');
+    this.errorDepartamento = document.getElementById('error-departamento');
     this.busqueda = document.getElementById('busqueda-departamento');
     this.paginacion = document.getElementById('paginacion');
 
     this.guardarDepartamento = () => {
+        // Esconder mensaje de error al guardar cada vez
+        this.errorDepartamento.classList.add('hidden');
+        this.errorDepartamento.innerHTML = '';
+        // Enviar formulario para la consulta
         var formDepartamento = new FormData();
         formDepartamento.append('detalle', this.detalle.value);
         fetch("../controllers/guardarDepartamento.php", { method: "POST", body: formDepartamento })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Departamento guardado con exito!');
-                this.listadoDepartamento();
-                this.limpiarDepartamento();
+                if (data == true) {
+                    alert('¡Departamento guardado con exito!');
+                    this.listadoDepartamento();
+                    this.limpiarDepartamento();
+                } else {
+                    // Mostrar mensaje de error al guardar
+                    this.errorDepartamento.classList.remove('hidden');
+                    this.errorDepartamento.innerHTML += '<p class="font-medium rounded-md p-4 bg-red-100">' + data + '</p>';
+                }
             })
             .catch((error) => console.log(error));
     }

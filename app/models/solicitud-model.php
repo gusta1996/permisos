@@ -65,7 +65,7 @@ class Solicitud extends Connection {
             WHERE id_solicitud=:id_solicitud
             AND (
                 id_solicitud NOT IN (SELECT id_solicitud_fk FROM estructura)
-                OR EXISTS ( SELECT 1 FROM estructura WHERE id_solicitud_fk=:id_solicitud AND estado = 'Anulado' )
+                OR EXISTS ( SELECT 1 FROM estructura WHERE id_solicitud_fk=:id_solicitud AND estado = 'anulado' )
             )";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_solicitud', $data['id_solicitud']);

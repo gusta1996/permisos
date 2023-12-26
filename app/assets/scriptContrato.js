@@ -1,20 +1,31 @@
 const app = new (function () {
     this.tbodyContrato = document.getElementById('tbodyContrato');
     this.detalle = document.getElementById('detalle-contrato');
+    this.errorContrato = document.getElementById('error-contrato');
     this.tipo = document.getElementById('tipo-contrato');
     this.busqueda = document.getElementById('busqueda-contrato');
     this.paginacion = document.getElementById('paginacion');
 
     this.guardarContrato = () => {
+        // Esconder mensaje de error al guardar cada vez
+        this.errorContrato.classList.add('hidden');
+        this.errorContrato.innerHTML = '';
+        // Enviar formulario para la consulta
         var formContrato = new FormData();
         formContrato.append('detalle', this.detalle.value);
         formContrato.append('tipo', this.tipo.value);
         fetch("../controllers/guardarContrato.php", { method: "POST", body: formContrato })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Contrato guardado con exito!');
-                this.listadoContrato();
-                this.limpiarContrato();
+                if (data == true) {
+                    alert('¡Contrato guardado con exito!');
+                    this.listadoContrato();
+                    this.limpiarContrato();
+                } else {
+                    // Mostrar mensaje de error al guardar
+                    this.errorContrato.classList.remove('hidden');
+                    this.errorContrato.innerHTML += '<p class="font-medium rounded-md p-4 bg-red-100">' + data + '</p>';
+                }
             })
             .catch((error) => console.log(error));
     }
@@ -148,6 +159,11 @@ const app = new (function () {
         this.paginacion.innerHTML = html;
     }
     this.actualizarContrato = () => {
+        // Esconder mensaje de error al guardar cada vez
+        var editarErrorContrato = document.getElementById('editar-error-contrato');
+        editarErrorContrato.classList.add('hidden');
+        editarErrorContrato.innerHTML = '';
+        // Enviar formulario para la consulta
         var formContrato = new FormData();
         var editarId_Contrato = document.getElementById('editar-id-contrato');
         var editarDetalle = document.getElementById('editar-detalle-contrato');
@@ -160,9 +176,15 @@ const app = new (function () {
         fetch("../controllers/actualizarContrato.php", { method: "POST", body: formContrato })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                this.listadoContrato();
-                this.cerrarModalContrato();
-                this.busqueda.value = null;
+                if (data == true) {
+                    this.listadoContrato();
+                    this.cerrarModalContrato();
+                    this.busqueda.value = null;
+                } else {
+                    // Mostrar mensaje de error al guardar
+                    editarErrorContrato.classList.remove('hidden');
+                    editarErrorContrato.innerHTML += '<p class="font-medium rounded-md p-4 bg-red-100">' + data + '</p>';
+                }
             })
             .catch((error) => console.log(error));
     }
@@ -206,6 +228,9 @@ const app = new (function () {
                                                 <option ${data.estado === 'activo' ? 'selected' : ''}>Activo</option>
                                                 <option ${data.estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
                                             </select>
+                                        </div>
+                                        <!-- Mensaje error -->
+                                        <div id="editar-error-contrato" class="hidden sm:col-span-6">
                                         </div>
                                     </div>
                                 </div>
