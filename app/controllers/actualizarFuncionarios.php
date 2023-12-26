@@ -13,5 +13,8 @@ $arrayName = array(
     'f_estado' => strtolower($_POST['f_estado']),
     'u_estado' => strtolower($_POST['u_estado'])
 );
+if ( isset($_POST['password']) ) { // si la variable está definida...
+    $arrayName['password'] = $_POST['password'];
+}
 
 echo json_encode(Funcionario::actualizarFuncionarios($arrayName));

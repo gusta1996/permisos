@@ -287,6 +287,18 @@ class Funcionario extends Connection
             $declaracion->bindParam(':id_rol', $data['id_rol']);
             $declaracion->execute();
 
+            // Actualiza contraseña de la tabla usuario
+            if ( isset($data['password']) ) { // si la variable está definida...
+                $sql = 'UPDATE usuario 
+                        SET clave=:clave
+                        WHERE id_funcionario_fk=:id_funcionario';
+                $declaracion = Connection::getConnection()->prepare($sql);
+                $md5pass = md5($data['password']); // se encrypta contraseña con MD5
+                $declaracion->bindParam(':clave', $md5pass);
+                $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
+                $declaracion->execute();
+            }
+            
             return true;
         } catch (PDOException $e) {
             echo $e->getMessage();

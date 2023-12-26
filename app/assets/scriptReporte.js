@@ -164,6 +164,7 @@ const appReporte = new (function () {
     var contenidoOriginal = document.body.innerHTML;
 
     document.body.innerHTML = contenido;
+    document.body.classList.add('writing-mode');
     window.print();
     document.body.innerHTML = contenidoOriginal;
   }

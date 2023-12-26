@@ -309,6 +309,7 @@ const appFuncionarios = new (function () {
         var editarDireccion = document.getElementById('editar-direccion-funcionarios');
         var editarEmail = document.getElementById('editar-email-funcionarios');
         var editarUsername = document.getElementById('editar-username-funcionarios');
+        var editarPassword = document.getElementById('editar-password-funcionarios');
         var editarIdRol = document.getElementById('editar-rol-funcionarios');
         var editarEstadoFuncionario = document.getElementById('editar-f_estado-funcionarios');
         var editarEstadoUsuario = document.getElementById('editar-u_estado-funcionarios');
@@ -320,6 +321,9 @@ const appFuncionarios = new (function () {
         formFuncionario.append('direccion', editarDireccion.value);
         formFuncionario.append('email', editarEmail.value);
         formFuncionario.append('username', editarUsername.value);
+        if (editarPassword.value != '') {
+            formFuncionario.append('password', editarPassword.value);
+        }
         formFuncionario.append('id_rol', editarIdRol.value);
         formFuncionario.append('f_estado', editarEstadoFuncionario.value);
         formFuncionario.append('u_estado', editarEstadoUsuario.value);
@@ -398,24 +402,29 @@ const appFuncionarios = new (function () {
                                         </div>
                                         <hr class="col-span-12">
                                         <!-- username -->
-                                        <div class="sm:col-span-3">
+                                        <div class="sm:col-span-6">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Username:</label>
                                             <input type="text" id="editar-username-funcionarios" value="${data.nick}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Email -->
-                                        <div class="sm:col-span-3">
+                                        <div class="sm:col-span-6">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Email:</label>
                                             <input type="email" id="editar-email-funcionarios" value="${data.email}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
+                                        <!-- password -->
+                                        <div class="sm:col-span-4">
+                                            <label class="block text-sm font-medium leading-6 text-gray-900">Contraseña: (opcional)</label>
+                                            <input type="password" autocomplete="new-password" id="editar-password-funcionarios" pattern="^(?=.*[a-zA-Z])(?=.*\\d).{6,}$" placeholder="Usar letras y números (min 6 digitos)" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                        </div>
                                         <!-- Rol -->
-                                        <div class="sm:col-span-3">
+                                        <div class="sm:col-span-4">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Rol:</label>
                                             <select id="editar-rol-funcionarios" required class="rol-id-${data.id_rol} selectBuscador capitalize h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
                                         <!-- Estado de usuario -->
-                                        <div class="sm:col-span-3">
+                                        <div class="sm:col-span-4">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Estado de usuario:</label>
                                             <select id="editar-u_estado-funcionarios" value="${data.u_estado}" required class="capitalize h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>

@@ -12,11 +12,6 @@
     <!-- contenido -->
     <form action="javascript:void(0);" onsubmit="app.actualizarContrasena()">
         <div class="grid grid-cols-3 gap-6 py-8 p-4 border-b border-gray-900/10">
-            <!-- Datos personales -->
-            <div class="sm:col-span-3 px-4 sm:px-0">
-                <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Usar letras y números (minimo 6 digitos)</p>
-            </div>
-
             <!-- ID -->
             <div class="hidden">
                 <label class="block text-sm font-medium leading-6 text-gray-900">Nombres:</label>
@@ -45,7 +40,7 @@
             <div class="">
                 <label class="block text-sm font-medium leading-6 text-gray-900">Nueva contraseña:</label>
                 <div class="mt-2">
-                    <input type="password" required id="nueva-contrasena" pattern="^(?=.*[a-zA-Z])(?=.*\d).{6,}$" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                    <input type="password" required id="nueva-contrasena" autocomplete="new-password" pattern="^(?=.*[a-zA-Z])(?=.*\d).{6,}$" placeholder="Usar letras y números (min 6 digitos)" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                 </div>
             </div>
 
@@ -53,7 +48,7 @@
             <div class="">
                 <label class="block text-sm font-medium leading-6 text-gray-900">Confirmar contraseña:</label>
                 <div class="mt-2">
-                    <input type="password" required id="confirmar-contrasena" pattern="^(?=.*[a-zA-Z])(?=.*\d).{6,}$" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                    <input type="password" required id="confirmar-contrasena" autocomplete="new-password" pattern="^(?=.*[a-zA-Z])(?=.*\d).{6,}$" placeholder="repetir nueva contraseña" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                 </div>
             </div>
             <!-- Mensaje de error -->

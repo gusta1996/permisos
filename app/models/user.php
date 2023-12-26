@@ -13,6 +13,7 @@ class User extends Connection
     private $telefono;
     private $direccion;
     private $email;
+    private $u_estado;
     private $f_estado;
     private $rol;
 
@@ -34,7 +35,7 @@ class User extends Connection
     }
     public function setUser($user)
     {
-        $sql = 'SELECT  usuario.id_usuario, usuario.nick,
+        $sql = 'SELECT  usuario.id_usuario, usuario.nick, usuario.estado AS u_estado,
                         funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos, funcionario.cedula,
                         funcionario.telefono, funcionario.direccion, funcionario.email,
                         funcionario.estado AS f_estado, funcionario.imagen,
@@ -65,6 +66,7 @@ class User extends Connection
             $this->telefono = strval($currentUser['telefono']);
             $this->direccion = $currentUser['direccion'];
             $this->email = $currentUser['email'];
+            $this->u_estado = $currentUser['u_estado'];
             $this->f_estado = $currentUser['f_estado'];
             $this->rol = $currentUser['rol_detalle'];
         }
@@ -108,6 +110,10 @@ class User extends Connection
     public function getEmail()
     {
         return $this->email;
+    }
+    public function getUsuarioEstado()
+    {
+        return $this->u_estado;
     }
     public function getFuncionarioEstado()
     {
