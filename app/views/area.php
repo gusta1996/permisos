@@ -34,7 +34,7 @@ if ($userSession->userLoggedIn()) {
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-7">
                         <!-- Detalle -->
                         <div class="sm:col-span-3">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">Detalle:</label>
+                            <label class="block text-sm font-medium leading-6 text-gray-900">Nueva área:</label>
                             <div class="mt-2">
                                 <input type="text" required id="detalle-area" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                             </div>
@@ -42,7 +42,7 @@ if ($userSession->userLoggedIn()) {
 
                         <!-- Categoria -->
                         <div class="sm:col-span-3">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">Categoría:</label>
+                            <label class="block text-sm font-medium leading-6 text-gray-900">Categoría a la que pertenece:</label>
                             <div class="mt-2">
                                 <select id="categoria-area" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                     <option value="" selected disabled>-- Selecciona --</option>
@@ -102,10 +102,10 @@ if ($userSession->userLoggedIn()) {
                     <thead>
                         <tr class="h-16 border-b border-b-slate-400">
                             <th class="font-medium pr-4">ID</th>
-                            <th class="font-medium pr-4">Detalle</th>
+                            <th class="font-medium pr-4">Área</th>
                             <th class="font-medium pr-4">Categoría</th>
                             <th class="font-medium pr-4">Estado</th>
-                            <th class="text-right">Opciones</th>
+                            <th class="font-medium text-right">Opciones</th>
                         </tr>
                     </thead>
                     <tbody id="tbodyArea">

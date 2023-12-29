@@ -1,6 +1,7 @@
 const app = new (function () {
     this.tbodyCargo = document.getElementById('tbodyCargo');
     this.detalle = document.getElementById('detalle-cargo');
+    this.seccion = document.getElementById('seccion-cargo');
     this.errorCargo = document.getElementById('error-cargo');
     this.busqueda = document.getElementById('busqueda-cargo');
     this.paginacion = document.getElementById('paginacion');
@@ -12,18 +13,43 @@ const app = new (function () {
         // Enviar formulario para la consulta
         var formCargo = new FormData();
         formCargo.append('detalle', this.detalle.value);
+        formCargo.append('seccion', this.seccion.value);
         fetch("../controllers/guardarCargo.php", { method: "POST", body: formCargo })
             .then((respuesta) => respuesta.json())
             .then((data) => {
                 if (data == true) {
                     alert('¡Cargo guardado con exito!');
-                    this.listadoCargo();
-                    this.limpiarCargo();
+                    window.location.href = '../views/cargo.php';
                 } else {
                     // Mostrar mensaje de error al guardar
                     this.errorCargo.classList.remove('hidden');
                     this.errorCargo.innerHTML += '<p class="font-medium rounded-md p-4 bg-red-100">' + data + '</p>';
                 }
+            })
+            .catch((error) => console.log(error));
+    }
+    this.selectSeccion = () => {
+        var editarSeccion = document.getElementById('editar-seccion-cargo');
+        fetch("../controllers/selectSeccion.php")
+            .then((resultado) => resultado.json())
+            .then((data) => {
+                data.forEach(item => {
+                    if (item.estado === 'activo') {
+                        // Capitalizar letras minusculas
+                        let seccion = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        // Imprimir las opciones
+                        if (editarSeccion) {
+                            var seleted = 'seccion-id-' + item.id_seccion == editarSeccion.classList.item(0) ? 'selected' : '';
+                            editarSeccion.innerHTML += `
+                                <option ${seleted} value="${item.id_seccion}">${seccion}</option>
+                            `;
+                        } else {
+                            this.seccion.innerHTML += `
+                                <option value="${item.id_seccion}">${seccion}</option>
+                            `;
+                        }
+                    }
+                });
             })
             .catch((error) => console.log(error));
     }
@@ -38,12 +64,20 @@ const app = new (function () {
                 let totalPaginas = data.totalPaginas;
 
                 let html = '';
-                for (let i = 0; i < item.length; i++) {
-                    html += `
+                if (item != '') {
+                    for (let i = 0; i < item.length; i++) {
+                        html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="capitalize pr-4">${item[i].id_cargo}</td>
-                            <td class="capitalize pr-4">${item[i].detalle}</td>
-                            <td class="font-medium capitalize ${item[i].estado == 'activo' ? 'text-green-600' : ''}${item[i].estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].estado}</td>
+                            <td class="capitalize pr-4">${item[i].cargo_detalle}</td>
+                            <td class="capitalize pr-4">
+                                <div class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].seccion_estado == 'activo' ? 'text-green-600' : ''}${item[i].seccion_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].seccion_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="8"/>
+                                    </svg>${item[i].seccion_detalle}
+                                </div>
+                            </td>
+                            <td class="font-medium capitalize ${item[i].cargo_estado == 'activo' ? 'text-green-600' : ''}${item[i].cargo_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].cargo_estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].cargo_estado}</td>
                             <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
                                 <button onclick="app.editarCargo(${item[i].id_cargo})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -51,7 +85,7 @@ const app = new (function () {
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                     </svg>
                                 </button>
-                                <button onclick="app.eliminarCargo(${item[i].id_cargo})" title="Anular" class="${item[i].estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                <button onclick="app.eliminarCargo(${item[i].id_cargo})" title="Anular" class="${item[i].cargo_estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                                         <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
                                     </svg>
@@ -59,7 +93,11 @@ const app = new (function () {
                             </td>
                         </tr>
                     `;
+                    }
+                } else {
+                    html += '<p class="w-full mt-5">No se encontró resultados.</p>';
                 }
+
                 this.tbodyCargo.innerHTML = html;
                 this.paginacionCargo(pagina, totalPaginas, false);
             });
@@ -78,15 +116,22 @@ const app = new (function () {
                 // Datos de la lista y total de paginas
                 let item = data.resultado;
                 let totalPaginas = data.totalPaginas;
-                let html = '';
 
+                let html = '';
                 if (item != '') {
                     for (let i = 0; i < item.length; i++) {
                         html += `
                             <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                                 <td class="capitalize pr-4">${item[i].id_cargo}</td>
-                                <td class="capitalize pr-4">${item[i].detalle}</td>
-                                <td class="font-medium capitalize ${item[i].estado == 'activo' ? 'text-green-600' : ''}${item[i].estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].estado}</td>
+                                <td class="capitalize pr-4">${item[i].cargo_detalle}</td>
+                                <td class="capitalize pr-4">
+                                    <div class="flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].seccion_estado == 'activo' ? 'text-green-600' : ''}${item[i].seccion_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].seccion_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                                            <circle cx="8" cy="8" r="8"/>
+                                        </svg>${item[i].seccion_detalle}
+                                    </div>
+                                </td>
+                                <td class="font-medium capitalize ${item[i].cargo_estado == 'activo' ? 'text-green-600' : ''}${item[i].cargo_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].cargo_estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].cargo_estado}</td>
                                 <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
                                     <button onclick="app.editarCargo(${item[i].id_cargo})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -94,7 +139,7 @@ const app = new (function () {
                                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                         </svg>
                                     </button>
-                                    <button onclick="app.eliminarCargo(${item[i].id_cargo})" title="Anular" class="${item[i].estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                                    <button onclick="app.eliminarCargo(${item[i].id_cargo})" title="Anular" class="${item[i].cargo_estado === 'anulado' ? 'hidden ' : ''}btn-eliminar flex items-center gap-2 min-h-fit rounded-md bg-red-50 px-3 py-2 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                                             <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
                                         </svg>
@@ -104,7 +149,7 @@ const app = new (function () {
                         `;
                     }
                 } else {
-                    html += '<p class="w-full my-5">No se encontró resultados.</p>';
+                    html += '<p class="w-full mt-5">No se encontró resultados.</p>';
                 }
 
                 this.tbodyCargo.innerHTML = html;
@@ -158,9 +203,11 @@ const app = new (function () {
         var formCargo = new FormData();
         var editarId_Cargo = document.getElementById('editar-id-cargo');
         var editarDetalle = document.getElementById('editar-detalle-cargo');
+        var editarSeccion = document.getElementById('editar-seccion-cargo');
         var editarEstado = document.getElementById('editar-estado-cargo');
         formCargo.append('id_cargo', editarId_Cargo.value);
         formCargo.append('detalle', editarDetalle.value);
+        formCargo.append('seccion', editarSeccion.value);
         formCargo.append('estado', editarEstado.value);
         fetch("../controllers/actualizarCargo.php", { method: "POST", body: formCargo })
             .then((respuesta) => respuesta.json())
@@ -181,7 +228,7 @@ const app = new (function () {
                 modalCargo.innerHTML = `
                 <div class="fixed inset-0 bg-gray-500 bg-opacity-75 overflow-y-auto z-50 ease-out duration-300">
                     <div class="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
-                        <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
+                        <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-5xl">
                             <form action="javascript:void(0);" onsubmit="app.actualizarCargo()">
                                 <div class="border-b border-gray-900/10 px-4 py-3">
                                     <h3 class="text-md font-semibold leading-7 text-gray-900">Editar cargo</h3>
@@ -189,17 +236,24 @@ const app = new (function () {
                                 <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                     <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                         <!-- ID -->
-                                        <div class="hidden sm:col-span-3">
+                                        <div class="hidden">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">ID:</label>
                                             <input type="text" id="editar-id-cargo" value="${data.id_cargo}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
-                                        <!-- Detalle -->
-                                        <div class="sm:col-span-3">
-                                            <label class="block text-sm font-medium leading-6 text-gray-900">Detalle:</label>
+                                        <!-- Cargo -->
+                                        <div class="sm:col-span-2">
+                                            <label class="block text-sm font-medium leading-6 text-gray-900">Cargo:</label>
                                             <input type="text" id="editar-detalle-cargo" value="${data.detalle}" class="capitalize block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
+                                        <!-- Sección -->
+                                        <div class="sm:col-span-2">
+                                            <label class="block text-sm font-medium leading-6 text-gray-900">Sección:</label>
+                                            <select id="editar-seccion-cargo" required class="seccion-id-${data.id_seccion_fk} h-[38px] capitalize block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                                <option disabled>-- Selecciona --</option>
+                                            </select>
+                                        </div>
                                         <!-- Estado -->
-                                        <div class="sm:col-span-3">
+                                        <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Estado:</label>
                                             <select id="editar-estado-cargo" value="${data.estado}" required class="h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
@@ -218,11 +272,9 @@ const app = new (function () {
                     </div>
                 </div>
                 `;
+                this.selectSeccion();
             })
             .catch((error) => console.log(error));
-    }
-    this.limpiarCargo = () => {
-        this.detalle.value = '';
     }
     this.eliminarCargo = (id_cargo) => {
         var confirmar = confirm('¿Estas seguro que quieres eliminar?');
@@ -248,4 +300,5 @@ const app = new (function () {
         modalCargo.innerHTML = '';
     }
 });
+app.selectSeccion();
 app.listadoCargo();

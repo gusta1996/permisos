@@ -10,8 +10,10 @@ class Cargo extends Connection
             $page = isset($page) ? $page : 1; // Si $page esta vacio, entonces es 1
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos  
             // Consulta para obtener los datos
-            $sql = "SELECT *
+            $sql = "SELECT cargo.id_cargo, cargo.detalle AS cargo_detalle, cargo.estado AS cargo_estado, 
+                            seccion.detalle AS seccion_detalle, seccion.estado AS seccion_estado
                     FROM cargo
+                    INNER JOIN seccion ON cargo.id_seccion_fk = seccion.id_seccion
                     WHERE cargo.estado != 'anulado'
                     ORDER BY id_cargo DESC
                     LIMIT :limit OFFSET :start";
@@ -44,9 +46,11 @@ class Cargo extends Connection
             $page = isset($data['pagina']) ? $data['pagina'] : 1; // Si $data['page'] esta vacio, entonces es 1
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos
             // Hacer busqueda
-            $sql = "SELECT *
+            $sql = "SELECT cargo.id_cargo, cargo.detalle AS cargo_detalle, cargo.estado AS cargo_estado, 
+                            seccion.detalle AS seccion_detalle, seccion.estado AS seccion_estado
                     FROM cargo
-                    WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'
+                    INNER JOIN seccion ON cargo.id_seccion_fk = seccion.id_seccion
+                    WHERE cargo.detalle ILIKE '%$busqueda%' AND cargo.estado != 'anulado'
                     ORDER BY id_cargo DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -57,7 +61,7 @@ class Cargo extends Connection
 
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM cargo 
-                        WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'";
+                        WHERE cargo.detalle ILIKE '%$busqueda%' AND cargo.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -115,9 +119,10 @@ class Cargo extends Connection
                 return $comprobacion;
             }
 
-            $sql = 'INSERT INTO cargo (detalle, estado) VALUES (:detalle, :estado)';
+            $sql = 'INSERT INTO cargo (detalle, estado, id_seccion_fk) VALUES (:detalle, :estado, :seccion)';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':detalle', $data['detalle']);
+            $declaracion->bindParam(':seccion', $data['seccion']);
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
 
@@ -129,10 +134,12 @@ class Cargo extends Connection
     public static function actualizarCargo($data)
     {
         try {
-            $sql = 'UPDATE cargo SET detalle=:detalle, estado=:estado WHERE id_cargo=:id_cargo';
+            $sql = 'UPDATE cargo SET detalle=:detalle, estado=:estado, id_seccion_fk=:seccion 
+                    WHERE id_cargo=:id_cargo';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_cargo', $data['id_cargo']);
             $declaracion->bindParam(':detalle', $data['detalle']);
+            $declaracion->bindParam(':seccion', $data['seccion']);
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
             return true;
@@ -144,11 +151,7 @@ class Cargo extends Connection
     {
         try {
             $sql = "UPDATE cargo SET estado=:estado
-            WHERE id_cargo=:id_cargo
-            AND (
-                id_cargo NOT IN (SELECT id_cargo_fk FROM estructura)
-                OR EXISTS ( SELECT 1 FROM estructura WHERE id_cargo_fk=:id_cargo AND estado = 'anulado' )
-            )";
+                    WHERE id_cargo=:id_cargo";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_cargo', $data['id_cargo']);
             $declaracion->bindParam(':estado', $data['estado']);

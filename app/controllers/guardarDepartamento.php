@@ -2,6 +2,7 @@
 require_once '../models/departamento-model.php';
 $arrayName = array(
     'detalle' => strtolower($_POST['detalle']),
+    'area' => $_POST['area'],
     'estado' => 'activo'
 );
 

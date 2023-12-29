@@ -10,8 +10,10 @@ class Departamento extends Connection
             $page = isset($page) ? $page : 1; // Si $page esta vacio, entonces es 1
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos  
             // Consulta para obtener los datos
-            $sql = "SELECT *
+            $sql = "SELECT departamento.id_departamento, departamento.detalle AS departamento_detalle, departamento.estado AS departamento_estado, 
+                            area.detalle AS area_detalle, area.estado AS area_estado
                     FROM departamento
+                    INNER JOIN area ON departamento.id_area_fk = area.id_area
                     WHERE departamento.estado != 'anulado'
                     ORDER BY id_departamento DESC
                     LIMIT :limit OFFSET :start";
@@ -44,9 +46,11 @@ class Departamento extends Connection
             $page = isset($data['pagina']) ? $data['pagina'] : 1; // Si $data['page'] esta vacio, entonces es 1
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos
             // Hacer busqueda
-            $sql = "SELECT *
+            $sql = "SELECT departamento.id_departamento, departamento.detalle AS departamento_detalle, departamento.estado AS departamento_estado, 
+                            area.detalle AS area_detalle, area.estado AS area_estado
                     FROM departamento
-                    WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'
+                    INNER JOIN area ON departamento.id_area_fk = area.id_area
+                    WHERE departamento.detalle ILIKE '%$busqueda%' AND departamento.estado != 'anulado'
                     ORDER BY id_departamento DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -57,7 +61,7 @@ class Departamento extends Connection
 
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM departamento 
-                        WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'";
+                        WHERE departamento.detalle ILIKE '%$busqueda%' AND departamento.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -115,9 +119,10 @@ class Departamento extends Connection
                 return $comprobacion;
             }
 
-            $sql = 'INSERT INTO departamento (detalle, estado) VALUES (:detalle, :estado)';
+            $sql = 'INSERT INTO departamento (detalle, estado, id_area_fk) VALUES (:detalle, :estado, :area)';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':detalle', $data['detalle']);
+            $declaracion->bindParam(':area', $data['area']);
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
 
@@ -129,11 +134,13 @@ class Departamento extends Connection
     public static function actualizarDepartamento($data)
     {
         try {
-            $sql = 'UPDATE departamento SET detalle=:detalle, estado=:estado WHERE id_departamento=:id_departamento';
+            $sql = 'UPDATE departamento SET detalle=:detalle, estado=:estado, id_area_fk=:area 
+                    WHERE id_departamento=:id_departamento';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_departamento', $data['id_departamento']);
             $declaracion->bindParam(':detalle', $data['detalle']);
             $declaracion->bindParam(':estado', $data['estado']);
+            $declaracion->bindParam(':area', $data['area']);
             $declaracion->execute();
             return true;
         } catch (PDOException $e) {
@@ -146,8 +153,8 @@ class Departamento extends Connection
             $sql = "UPDATE departamento SET estado=:estado
             WHERE id_departamento=:id_departamento
             AND (
-                id_departamento NOT IN (SELECT id_departamento_fk FROM estructura)
-                OR EXISTS ( SELECT 1 FROM estructura WHERE id_departamento_fk=:id_departamento AND estado = 'anulado' )
+                id_departamento NOT IN (SELECT id_departamento_fk FROM seccion)
+                OR EXISTS ( SELECT 1 FROM seccion WHERE id_departamento_fk=:id_departamento AND estado = 'anulado' )
             )";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_departamento', $data['id_departamento']);

@@ -85,16 +85,14 @@ const app = new (function () {
             .catch((error) => console.log(error));
     }
     this.selectArea = () => {
-        var editarArea = document.getElementById('editar-area-estructura');
+        var editarArea = document.getElementById('editar-area-departamento');
         fetch("../controllers/selectArea.php")
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    var detalleArea = 1;
-                    var estadoArea = 2;
-                    if (item[estadoArea] === 'activo') {
+                    if (item.area_estado === 'activo') {
                         // Capitalizar letras minusculas
-                        let area = item[detalleArea].toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        let area = item.area_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
                         // Imprimir las opciones
                         if (editarArea) {
                             var seleted = 'area-id-' + item.id_area == editarArea.classList.item(0) ? 'selected' : '';
@@ -146,8 +144,9 @@ const app = new (function () {
                 let totalPaginas = data.totalPaginas;
 
                 let html = '';
-                for (let i = 0; i < item.length; i++) {
-                    html += `
+                if (item != '') {
+                    for (let i = 0; i < item.length; i++) {
+                        html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="text-slate-700 pr-4">${item[i].id_estructura}</td>
                             <td class="capitalize pr-4 ${item[i].cargo_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].cargo_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].cargo_detalle}</td>
@@ -170,7 +169,11 @@ const app = new (function () {
                             </td>
                         </tr>
                     `;
+                    }
+                } else {
+                    html += '<p class="w-full mt-5">No se encontró resultados.</p>';
                 }
+
                 this.tbodyEstructura.innerHTML = html;
                 this.paginacionEstructura(pagina, totalPaginas, false);
             });
@@ -191,8 +194,8 @@ const app = new (function () {
                 let item = data.resultado;
                 let totalPaginas = data.totalPaginas;
                 let html = '';
-                
-                if ( item != '') {
+
+                if (item != '') {
                     for (let i = 0; i < item.length; i++) {
                         html += `
                             <tr class="h-16 border-b last:border-b-0 border-b-white-100">

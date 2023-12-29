@@ -78,7 +78,8 @@ class Area extends Connection
     public static function selectArea()
     {
         try {
-            $sql = 'SELECT area.id_area, area.detalle, area.estado, categoria.detalle, categoria.estado
+            $sql = 'SELECT area.id_area, area.detalle AS area_detalle, area.estado AS area_estado, 
+                            categoria.detalle AS categoria_detalle, categoria.estado AS categoria_estado
                     FROM area
                     INNER JOIN categoria ON area.id_categoria_fk = categoria.id_categoria
                     ORDER BY area.detalle ASC';
@@ -155,8 +156,8 @@ class Area extends Connection
             $sql = "UPDATE area SET estado=:estado
             WHERE id_area=:id_area
             AND (
-                id_area NOT IN (SELECT id_area_fk FROM estructura)
-                OR EXISTS ( SELECT 1 FROM estructura WHERE id_area_fk=:id_area AND estado = 'anulado' )
+                id_area NOT IN (SELECT id_area_fk FROM departamento)
+                OR EXISTS ( SELECT 1 FROM departamento WHERE id_area_fk=:id_area AND estado = 'anulado' )
             )";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_area', $data['id_area']);

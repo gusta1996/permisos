@@ -31,12 +31,22 @@ if ($userSession->userLoggedIn()) {
             <!-- Formulario Departamento -->
             <div class="p-4">
                 <form action="javascript:void(0);" onsubmit="app.guardarDepartamento()">
-                    <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-5">
+                    <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-7">
                         <!-- Detalle -->
-                        <div class="sm:col-span-4">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">Detalle:</label>
+                        <div class="sm:col-span-3">
+                            <label class="block text-sm font-medium leading-6 text-gray-900">Nuevo departamento:</label>
                             <div class="mt-2">
                                 <input type="text" required id="detalle-departamento" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                            </div>
+                        </div>
+
+                        <!-- Area -->
+                        <div class="sm:col-span-3">
+                            <label class="block text-sm font-medium leading-6 text-gray-900">Área al que pertenece:</label>
+                            <div class="mt-2">
+                                <select id="area-departamento" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                    <option value="" selected disabled>-- Selecciona --</option>
+                                </select>
                             </div>
                         </div>
 
@@ -49,6 +59,25 @@ if ($userSession->userLoggedIn()) {
 
             <!-- Mensaje de error -->
             <div id="error-departamento" class="hidden p-4">
+            </div>
+        </div>
+
+        <!-- Mensaje -->
+        <div class="flex gap-4 mb-4">
+            <div class="flex items-center gap-2 bg-green-200 rounded-md shadow-sm px-3 py-2 text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].f_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                    <circle cx="8" cy="8" r="8" />
+                </svg>Activo
+            </div>
+            <div class="flex items-center gap-2 bg-amber-200 rounded-md shadow-sm px-3 py-2 text-amber-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].f_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                    <circle cx="8" cy="8" r="8" />
+                </svg>Suspendido
+            </div>
+            <div class="flex items-center gap-2 bg-red-200 rounded-md shadow-sm px-3 py-2 text-red-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].f_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                    <circle cx="8" cy="8" r="8" />
+                </svg>Anulado
             </div>
         </div>
 
@@ -73,9 +102,10 @@ if ($userSession->userLoggedIn()) {
                     <thead>
                         <tr class="h-14 border-b border-b-slate-400">
                             <th class="font-medium pr-4">ID</th>
-                            <th class="font-medium pr-4">Detalle</th>
+                            <th class="font-medium pr-4">Departamento</th>
+                            <th class="font-medium pr-4">Área</th>
                             <th class="font-medium pr-4">Estado</th>
-                            <th class="font-medium pr-4 text-right">Opciones</th>
+                            <th class="font-medium text-right">Opciones</th>
                         </tr>
                     </thead>
                     <tbody id="tbodyDepartamento">
