@@ -39,21 +39,11 @@ if ($userSession->userLoggedIn()) {
             <div class="p-4">
                 <form action="javascript:void(0);" onsubmit="app.guardarEstructura()">
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
-                        <!-- Cargo -->
+                        <!-- Área -->
                         <div class="sm:col-span-2">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">Cargo</label>
+                            <label class="block text-sm font-medium leading-6 text-gray-900">Área:</label>
                             <div class="mt-2">
-                                <select id="cargo-estructura" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
-                                    <option value="" selected disabled>-- Selecciona --</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Sección -->
-                        <div class="sm:col-span-2">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">Sección</label>
-                            <div class="mt-2">
-                                <select id="seccion-estructura" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                <select id="area-estructura" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                     <option value="" selected disabled>-- Selecciona --</option>
                                 </select>
                             </div>
@@ -61,19 +51,29 @@ if ($userSession->userLoggedIn()) {
 
                         <!-- Departamento -->
                         <div class="sm:col-span-2">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">Departamento</label>
+                            <label class="block text-sm font-medium leading-6 text-gray-900">Departamento:</label>
                             <div class="mt-2">
-                                <select id="departamento-estructura" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                <select id="departamento-estructura" disabled required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                     <option value="" selected disabled>-- Selecciona --</option>
                                 </select>
                             </div>
                         </div>
 
-                        <!-- Área -->
+                        <!-- Sección -->
                         <div class="sm:col-span-2">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">Área</label>
+                            <label class="block text-sm font-medium leading-6 text-gray-900">Sección:</label>
                             <div class="mt-2">
-                                <select id="area-estructura" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                <select id="seccion-estructura" disabled required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                    <option value="" selected disabled>-- Selecciona --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Cargo -->
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium leading-6 text-gray-900">Cargo:</label>
+                            <div class="mt-2">
+                                <select id="cargo-estructura" disabled required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                     <option value="" selected disabled>-- Selecciona --</option>
                                 </select>
                             </div>
@@ -99,10 +99,10 @@ if ($userSession->userLoggedIn()) {
                     <!-- Tipo -->
                     <div class="w-64">
                         <select id="busqueda-tipo" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">
-                            <option value="cargo" selected>Cargo</option>
-                            <option value="seccion">Sección</option>
+                            <option value="area" selected>Área</option>
                             <option value="departamento">Departamento</option>
-                            <option value="area">Área</option>
+                            <option value="seccion">Sección</option>
+                            <option value="cargo">Cargo</option>
                         </select>
                     </div>
                 </div>
@@ -125,12 +125,12 @@ if ($userSession->userLoggedIn()) {
                     <thead>
                         <tr class="h-14 border-b border-b-slate-400">
                             <th class="font-medium pr-4">ID</th>
-                            <th class="font-medium pr-4">Cargo</th>
-                            <th class="font-medium pr-4">Sección</th>
-                            <th class="font-medium pr-4">Departamento</th>
                             <th class="font-medium pr-4">Área</th>
+                            <th class="font-medium pr-4">Departamento</th>
+                            <th class="font-medium pr-4">Sección</th>
+                            <th class="font-medium pr-4">Cargo</th>
                             <th class="font-medium pr-4">Estado</th>
-                            <th class="font-medium pr-4 text-right">Opciones</th>
+                            <th class="font-medium text-right">Opciones</th>
                         </tr>
                     </thead>
                     <tbody id="tbodyEstructura">

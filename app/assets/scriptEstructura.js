@@ -109,6 +109,50 @@ const app = new (function () {
             })
             .catch((error) => console.log(error));
     }
+    this.cargarSelect = () => {
+        this.selectArea();
+        console.log('Primer select cargado');
+/*        var selectArea = document.getElementById('select2-area-estructura-container');
+        selectArea.addEventListener('change', () => {
+            console.log('cargar segundo select');
+            this.departamento.disabled = false;
+            this.selectDepartamento();
+        }); */
+
+        // Selecciona el select2-area
+        //var select2Area = document.getElementById('select2-area-estructura-container');
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Selecciona el nodo que deseas observar
+            var targetNode = document.getElementById('select2-area-estructura-container');
+        
+            // Opciones de configuración del observador
+            var config = { childList: true, subtree: true, characterData: true };
+        
+            // Función de callback a ejecutar cuando ocurre una mutación
+            var callback = function(mutationsList, observer) {
+                for(var mutation of mutationsList) {
+                    if (mutation.type == 'characterData' || mutation.type == 'childList') {
+                        var textoNuevo = targetNode.innerText || targetNode.textContent;
+                        console.log('El texto de la etiqueta ha cambiado a: ' + textoNuevo);
+                    }
+                }
+            };
+        
+            // Crea una instancia de observador con la función de callback
+            var observer = new MutationObserver(callback);
+        
+            // Inicia la observación del nodo objetivo con la configuración dada
+            if(targetNode) {
+                observer.observe(targetNode, config);
+            } else {
+                console.log("El nodo objetivo no existe");
+            }
+        });
+        
+
+
+    }
     this.guardarEstructura = () => {
         // Esconder mensaje de error al guardar cada vez
         this.errorEstructura.classList.add('hidden');
@@ -396,8 +440,5 @@ const app = new (function () {
         modalEstructura.innerHTML = '';
     }
 });
+app.cargarSelect();
 app.listadoEstructura();
-app.selectCargo();
-app.selectSeccion();
-app.selectDepartamento();
-app.selectArea();
