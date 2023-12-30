@@ -34,20 +34,18 @@ const app = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    if (item.area_estado === 'activo') {
-                        // Capitalizar letras minusculas
-                        let area = item.area_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
-                        // Imprimir las opciones
-                        if (editarArea) {
-                            var seleted = 'area-id-' + item.id_area == editarArea.classList.item(0) ? 'selected' : '';
-                            editarArea.innerHTML += `
-                            <option ${seleted} value="${item.id_area}">${area}</option>
-                        `;
-                        } else {
-                            this.area.innerHTML += `
-                            <option value="${item.id_area}">${area}</option>
-                        `;
-                        }
+                    // Capitalizar letras minusculas
+                    let area = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    // Imprimir las opciones
+                    if (editarArea) {
+                        var seleted = 'area-id-' + item.id_area == editarArea.classList.item(0) ? 'selected' : '';
+                        editarArea.innerHTML += `
+                        <option ${seleted} value="${item.id_area}">${area}</option>
+                    `;
+                    } else {
+                        this.area.innerHTML += `
+                        <option value="${item.id_area}">${area}</option>
+                    `;
                     }
                 });
             })

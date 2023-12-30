@@ -75,11 +75,27 @@ class Departamento extends Connection
             echo $e->getMessage();
         }
     }
+    public static function selectDepartamentoIdArea($id_area)
+    {
+        try {
+            $sql = "SELECT * FROM departamento
+                    WHERE id_area_fk=:id_area AND estado = 'activo'
+                    ORDER BY detalle ASC";
+            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->bindParam(':id_area', $id_area);
+            $declaracion->execute();
+            $resultado = $declaracion->fetchAll();
+            return $resultado;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
     public static function selectDepartamento()
     {
         try {
-            $sql = 'SELECT * FROM departamento 
-                    ORDER BY detalle ASC';
+            $sql = "SELECT * FROM departamento 
+                    WHERE estado = 'activo'
+                    ORDER BY detalle ASC";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();

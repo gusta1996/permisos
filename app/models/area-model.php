@@ -78,11 +78,9 @@ class Area extends Connection
     public static function selectArea()
     {
         try {
-            $sql = 'SELECT area.id_area, area.detalle AS area_detalle, area.estado AS area_estado, 
-                            categoria.detalle AS categoria_detalle, categoria.estado AS categoria_estado
-                    FROM area
-                    INNER JOIN categoria ON area.id_categoria_fk = categoria.id_categoria
-                    ORDER BY area.detalle ASC';
+            $sql = "SELECT * FROM area 
+                    WHERE estado = 'activo'
+                    ORDER BY detalle ASC";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();

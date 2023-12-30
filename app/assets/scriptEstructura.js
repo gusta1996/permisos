@@ -9,51 +9,71 @@ const app = new (function () {
     this.busquedaTipo = document.getElementById('busqueda-tipo');
     this.paginacion = document.getElementById('paginacion');
 
-    this.selectCargo = () => {
-        var EditCargo = document.getElementById('editar-cargo-estructura');
-        fetch("../controllers/selectCargo.php")
-            .then((resultado) => resultado.json())
-            .then((data) => {
-                data.forEach(item => {
-                    if (item.estado === 'activo') {
-                        // Capitalizar letras minusculas
-                        let cargo = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
-                        // Imprimir las opciones
-                        if (EditCargo) {
-                            var seleted = 'cargo-id-' + item.id_cargo == EditCargo.classList.item(0) ? 'selected' : '';
-                            EditCargo.innerHTML += `
-                                <option ${seleted} value="${item.id_cargo}">${cargo}</option>
-                            `;
-                        } else {
-                            this.cargo.innerHTML += `
-                                <option value="${item.id_cargo}">${cargo}</option>
-                            `;
-                        }
-                    }
-                });
-            })
-            .catch((error) => console.log(error));
+    this.cargarSelect = () => {
+        // Jquery para trabajar con la biblioteca Select2
+        // variables
+        var selectArea = $('#area-estructura');
+        var selectDepartamento = $('#departamento-estructura');
+        var selectSeccion = $('#seccion-estructura');
+        var selectCargo = $('#cargo-estructura');
+        var clasesSelect = 'capitalize bg-white h-[38px] block !w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6';
+
+        /* SELECT AREA */
+        this.selectArea();
+        selectArea.select2(); // iniciar select2
+
+        /* SELECT DEPARTAMENTO */
+        selectArea.on('select2:select', function (e) {
+            // resetea opciones
+            selectSeccion.prop('disabled', true).trigger('change');
+            selectCargo.prop('disabled', true).trigger('change');
+            setTimeout(function() {
+                $('.select2-container--disabled').addClass('!bg-[#eeeeee]');
+            }, 0);
+            // agrega opciones
+            app.selectDepartamentoIdArea(selectArea.val());
+            selectDepartamento.select2(); // iniciar select2
+            $('.select2').addClass(clasesSelect); // agregar clases en select2
+        });
+
+        /* SELECT SECCION */
+        selectDepartamento.on('select2:select', function (e) {
+            // resetea opciones
+            selectCargo.prop('disabled', true).trigger('change');
+            setTimeout(function() {
+                $('.select2-container--disabled').addClass('!bg-[#eeeeee]');
+            }, 0);
+            // agrega opciones
+            app.selectSeccionIdDepartamento(selectDepartamento.val());
+            selectSeccion.select2(); // iniciar select2
+            $('.select2').addClass(clasesSelect); // agregar clases en select2
+        });
+
+        /* SELECT CARGO */
+        selectSeccion.on('select2:select', function (e) {
+            app.selectCargoIdSeccion(selectSeccion.val());
+            selectCargo.select2(); // iniciar select2
+            $('.select2').addClass(clasesSelect); // agregar clases en select2
+        });
     }
-    this.selectSeccion = () => {
-        var editarSeccion = document.getElementById('editar-seccion-estructura');
-        fetch("../controllers/selectSeccion.php")
+    this.selectArea = () => {
+        var editarArea = document.getElementById('editar-area-estructura');
+        fetch("../controllers/selectArea.php")
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    if (item.estado === 'activo') {
-                        // Capitalizar letras minusculas
-                        let seccion = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
-                        // Imprimir las opciones
-                        if (editarSeccion) {
-                            var seleted = 'seccion-id-' + item.id_seccion == editarSeccion.classList.item(0) ? 'selected' : '';
-                            editarSeccion.innerHTML += `
-                                <option ${seleted} value="${item.id_seccion}">${seccion}</option>
-                            `;
-                        } else {
-                            this.seccion.innerHTML += `
-                                <option value="${item.id_seccion}">${seccion}</option>
-                            `;
-                        }
+                    // Capitalizar letras minusculas
+                    let area = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    // Imprimir las opciones
+                    if (editarArea) {
+                        var seleted = 'area-id-' + item.id_area == editarArea.classList.item(0) ? 'selected' : '';
+                        editarArea.innerHTML += `
+                            <option ${seleted} value="${item.id_area}">${area}</option>
+                        `;
+                    } else {
+                        this.area.innerHTML += `
+                            <option value="${item.id_area}">${area}</option>
+                        `;
                     }
                 });
             })
@@ -65,93 +85,136 @@ const app = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    if (item.estado === 'activo') {
+                    // Capitalizar letras minusculas
+                    let departamento = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    // Imprimir las opciones
+                    var seleted = 'departamento-id-' + item.id_departamento == editarDepartamento.classList.item(0) ? 'selected' : '';
+                    editarDepartamento.innerHTML += `
+                        <option ${seleted} value="${item.id_departamento}">${departamento}</option>
+                    `;
+                });
+            })
+            .catch((error) => console.log(error));
+    }
+    this.selectDepartamentoIdArea = (id_area) => {
+        // habilita select de departamento
+        this.departamento.removeAttribute("disabled");
+        // reset opciones
+        this.seccion.innerHTML = '<option selected disabled>-- Selecciona --</option>';
+        this.cargo.innerHTML = '<option selected disabled>-- Selecciona --</option>';
+        // obtener las opciones
+        fetch("../controllers/selectDepartamento.php?id_area=" + id_area)
+            .then((resultado) => resultado.json())
+            .then((data) => {
+                // verifica si existen resultados
+                if (data.length == 0) {
+                    // no existe resultados
+                    this.departamento.innerHTML = `<option selected disabled>-- No existe resultados --</option>`;
+                } else {
+                    // reset opciones
+                    this.departamento.innerHTML = '<option selected disabled>-- Selecciona --</option>';
+                    // agregar opciones
+                    data.forEach(item => {
                         // Capitalizar letras minusculas
                         let departamento = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
                         // Imprimir las opciones
-                        if (editarDepartamento) {
-                            var seleted = 'departamento-id-' + item.id_departamento == editarDepartamento.classList.item(0) ? 'selected' : '';
-                            editarDepartamento.innerHTML += `
-                            <option ${seleted} value="${item.id_departamento}">${departamento}</option>
-                        `;
-                        } else {
-                            this.departamento.innerHTML += `
+                        this.departamento.innerHTML += `
                             <option value="${item.id_departamento}">${departamento}</option>
                         `;
-                        }
-                    }
-                });
+                    });
+                }
             })
             .catch((error) => console.log(error));
     }
-    this.selectArea = () => {
-        var editarArea = document.getElementById('editar-area-departamento');
-        fetch("../controllers/selectArea.php")
+    this.selectSeccion = () => {
+        var editarSeccion = document.getElementById('editar-seccion-estructura');
+        fetch("../controllers/selectSeccion.php")
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    if (item.area_estado === 'activo') {
-                        // Capitalizar letras minusculas
-                        let area = item.area_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
-                        // Imprimir las opciones
-                        if (editarArea) {
-                            var seleted = 'area-id-' + item.id_area == editarArea.classList.item(0) ? 'selected' : '';
-                            editarArea.innerHTML += `
-                            <option ${seleted} value="${item.id_area}">${area}</option>
-                        `;
-                        } else {
-                            this.area.innerHTML += `
-                            <option value="${item.id_area}">${area}</option>
-                        `;
-                        }
-                    }
+                    // Capitalizar letras minusculas
+                    let seccion = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    // Imprimir las opciones
+                    var seleted = 'seccion-id-' + item.id_seccion == editarSeccion.classList.item(0) ? 'selected' : '';
+                    editarSeccion.innerHTML += `
+                        <option ${seleted} value="${item.id_seccion}">${seccion}</option>
+                    `;
                 });
             })
             .catch((error) => console.log(error));
     }
-    this.cargarSelect = () => {
-        this.selectArea();
-        console.log('Primer select cargado');
-/*        var selectArea = document.getElementById('select2-area-estructura-container');
-        selectArea.addEventListener('change', () => {
-            console.log('cargar segundo select');
-            this.departamento.disabled = false;
-            this.selectDepartamento();
-        }); */
-
-        // Selecciona el select2-area
-        //var select2Area = document.getElementById('select2-area-estructura-container');
-
-        document.addEventListener('DOMContentLoaded', (event) => {
-            // Selecciona el nodo que deseas observar
-            var targetNode = document.getElementById('select2-area-estructura-container');
-        
-            // Opciones de configuración del observador
-            var config = { childList: true, subtree: true, characterData: true };
-        
-            // Función de callback a ejecutar cuando ocurre una mutación
-            var callback = function(mutationsList, observer) {
-                for(var mutation of mutationsList) {
-                    if (mutation.type == 'characterData' || mutation.type == 'childList') {
-                        var textoNuevo = targetNode.innerText || targetNode.textContent;
-                        console.log('El texto de la etiqueta ha cambiado a: ' + textoNuevo);
-                    }
+    this.selectSeccionIdDepartamento = (id_departamento) => {
+        // habilita select de departamento
+        this.seccion.removeAttribute("disabled");
+        // reset opciones
+        this.cargo.innerHTML = '<option selected disabled>-- Selecciona --</option>';
+        // obtener las opciones
+        fetch("../controllers/selectSeccion.php?id_departamento=" + id_departamento)
+            .then((resultado) => resultado.json())
+            .then((data) => {
+                // verifica si existen resultados
+                if (data.length == 0) {
+                    // no existe resultados
+                    this.seccion.innerHTML = `<option selected disabled>-- No existe resultados --</option>`;
+                } else {
+                    // reset opciones
+                    this.seccion.innerHTML = '<option selected disabled>-- Selecciona --</option>';
+                    // agregar opciones
+                    data.forEach(item => {
+                        // Capitalizar letras minusculas
+                        let seccion = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        // Imprimir las opciones
+                        this.seccion.innerHTML += `
+                            <option value="${item.id_seccion}">${seccion}</option>
+                        `;
+                    });
                 }
-            };
-        
-            // Crea una instancia de observador con la función de callback
-            var observer = new MutationObserver(callback);
-        
-            // Inicia la observación del nodo objetivo con la configuración dada
-            if(targetNode) {
-                observer.observe(targetNode, config);
-            } else {
-                console.log("El nodo objetivo no existe");
-            }
-        });
-        
-
-
+            })
+            .catch((error) => console.log(error));
+    }
+    this.selectCargo = () => {
+        var EditCargo = document.getElementById('editar-cargo-estructura');
+        fetch("../controllers/selectCargo.php")
+            .then((resultado) => resultado.json())
+            .then((data) => {
+                data.forEach(item => {
+                    // Capitalizar letras minusculas
+                    let cargo = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                    // Imprimir las opciones
+                    var seleted = 'cargo-id-' + item.id_cargo == EditCargo.classList.item(0) ? 'selected' : '';
+                    EditCargo.innerHTML += `
+                            <option ${seleted} value="${item.id_cargo}">${cargo}</option>
+                        `;
+                });
+            })
+            .catch((error) => console.log(error));
+    }
+    this.selectCargoIdSeccion = (id_seccion) => {
+        // habilita select de departamento
+        this.cargo.removeAttribute("disabled");
+        // obtener las opciones
+        fetch("../controllers/selectCargo.php?id_seccion=" + id_seccion)
+            .then((resultado) => resultado.json())
+            .then((data) => {
+                // verifica si existen resultados
+                if (data.length == 0) {
+                    // no existe resultados
+                    this.cargo.innerHTML = `<option selected disabled>-- No existe resultados --</option>`;
+                } else {
+                    // reset opciones
+                    this.cargo.innerHTML = '<option selected disabled>-- Selecciona --</option>';
+                    // agregar opciones
+                    data.forEach(item => {
+                        // Capitalizar letras minusculas
+                        let cargo = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        // Imprimir las opciones
+                        this.cargo.innerHTML += `
+                            <option value="${item.id_cargo}">${cargo}</option>
+                        `;
+                    });
+                }
+            })
+            .catch((error) => console.log(error));
     }
     this.guardarEstructura = () => {
         // Esconder mensaje de error al guardar cada vez
@@ -361,17 +424,10 @@ const app = new (function () {
                                             <label class="block text-sm font-medium leading-6 text-gray-900">ID:</label>
                                             <input type="text" id="editar-id-estructura" value="${data.id_estructura}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
-                                        <!-- Cargo -->
+                                        <!-- Área -->
                                         <div class="sm:col-span-2">
-                                            <label class="block text-sm font-medium leading-6 text-gray-900">Cargo</label>
-                                            <select id="editar-cargo-estructura" required class="cargo-id-${data.id_cargo_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
-                                                <option disabled>-- Selecciona --</option>
-                                            </select>
-                                        </div>
-                                        <!-- Sección -->
-                                        <div class="sm:col-span-2">
-                                            <label class="block text-sm font-medium leading-6 text-gray-900">Sección</label>
-                                            <select id="editar-seccion-estructura" required class="seccion-id-${data.id_seccion_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                            <label class="block text-sm font-medium leading-6 text-gray-900">Área</label>
+                                            <select id="editar-area-estructura" required class="area-id-${data.id_area_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
@@ -382,10 +438,17 @@ const app = new (function () {
                                                 <option disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
-                                        <!-- Área -->
+                                        <!-- Sección -->
                                         <div class="sm:col-span-2">
-                                            <label class="block text-sm font-medium leading-6 text-gray-900">Área</label>
-                                            <select id="editar-area-estructura" required class="area-id-${data.id_area_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                            <label class="block text-sm font-medium leading-6 text-gray-900">Sección</label>
+                                            <select id="editar-seccion-estructura" required class="seccion-id-${data.id_seccion_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                                <option disabled>-- Selecciona --</option>
+                                            </select>
+                                        </div>
+                                        <!-- Cargo -->
+                                        <div class="sm:col-span-2">
+                                            <label class="block text-sm font-medium leading-6 text-gray-900">Cargo</label>
+                                            <select id="editar-cargo-estructura" required class="cargo-id-${data.id_cargo_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
@@ -413,6 +476,12 @@ const app = new (function () {
                 this.selectSeccion();
                 this.selectDepartamento();
                 this.selectArea();
+                // Jquery para trabajar con la biblioteca Select2
+                $('#editar-area-estructura').select2();
+                $('#editar-departamento-estructura').select2();
+                $('#editar-seccion-estructura').select2();
+                $('#editar-cargo-estructura').select2();
+                $('.select2').addClass('capitalize bg-white h-[38px] block !w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6');
             })
             .catch((error) => console.log(error));
     }

@@ -75,11 +75,27 @@ class Seccion extends Connection
             echo $e->getMessage();
         }
     }
+    public static function selectSeccionIdDepartamento($id_departamento)
+    {
+        try {
+            $sql = "SELECT * FROM seccion
+                    WHERE id_departamento_fk=:id_departamento AND estado = 'activo'
+                    ORDER BY detalle ASC";
+            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->bindParam(':id_departamento', $id_departamento);
+            $declaracion->execute();
+            $resultado = $declaracion->fetchAll();
+            return $resultado;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
     public static function selectSeccion()
     {
         try {
-            $sql = 'SELECT * FROM seccion 
-                    ORDER BY detalle ASC';
+            $sql = "SELECT * FROM seccion 
+                    WHERE estado = 'activo'
+                    ORDER BY detalle ASC";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();

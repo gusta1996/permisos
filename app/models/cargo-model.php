@@ -75,10 +75,26 @@ class Cargo extends Connection
             echo $e->getMessage();
         }
     }
-    public static function selectCargo()
+    public static function selectCargoIdSeccion($id_seccion)
     {
         try {
             $sql = "SELECT * FROM cargo
+                    WHERE id_seccion_fk=:id_seccion AND estado = 'activo'
+                    ORDER BY detalle ASC";
+            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->bindParam(':id_seccion', $id_seccion);
+            $declaracion->execute();
+            $resultado = $declaracion->fetchAll();
+            return $resultado;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+    public static function selectCargo()
+    {
+        try {
+            $sql = "SELECT * FROM cargo 
+                    WHERE estado = 'activo'
                     ORDER BY detalle ASC";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();

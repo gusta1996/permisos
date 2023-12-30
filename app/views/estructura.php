@@ -43,7 +43,7 @@ if ($userSession->userLoggedIn()) {
                         <div class="sm:col-span-2">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Área:</label>
                             <div class="mt-2">
-                                <select id="area-estructura" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                <select id="area-estructura" required class="h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                     <option value="" selected disabled>-- Selecciona --</option>
                                 </select>
                             </div>
@@ -53,7 +53,7 @@ if ($userSession->userLoggedIn()) {
                         <div class="sm:col-span-2">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Departamento:</label>
                             <div class="mt-2">
-                                <select id="departamento-estructura" disabled required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                <select id="departamento-estructura" disabled required class="h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                     <option value="" selected disabled>-- Selecciona --</option>
                                 </select>
                             </div>
@@ -63,7 +63,7 @@ if ($userSession->userLoggedIn()) {
                         <div class="sm:col-span-2">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Sección:</label>
                             <div class="mt-2">
-                                <select id="seccion-estructura" disabled required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                <select id="seccion-estructura" disabled required class="h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                     <option value="" selected disabled>-- Selecciona --</option>
                                 </select>
                             </div>
@@ -73,7 +73,7 @@ if ($userSession->userLoggedIn()) {
                         <div class="sm:col-span-2">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Cargo:</label>
                             <div class="mt-2">
-                                <select id="cargo-estructura" disabled required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                <select id="cargo-estructura" disabled required class="h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                     <option value="" selected disabled>-- Selecciona --</option>
                                 </select>
                             </div>
