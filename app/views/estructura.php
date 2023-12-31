@@ -40,7 +40,7 @@ if ($userSession->userLoggedIn()) {
                 <form action="javascript:void(0);" onsubmit="app.guardarEstructura()">
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
                         <!-- Área -->
-                        <div class="sm:col-span-2">
+                        <div class="content-area sm:col-span-4">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Área:</label>
                             <div class="mt-2">
                                 <select id="area-estructura" required class="h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
@@ -50,7 +50,7 @@ if ($userSession->userLoggedIn()) {
                         </div>
 
                         <!-- Departamento -->
-                        <div class="sm:col-span-2">
+                        <div class="content-departamento hidden sm:col-span-4">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Departamento:</label>
                             <div class="mt-2">
                                 <select id="departamento-estructura" disabled required class="h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
@@ -60,7 +60,7 @@ if ($userSession->userLoggedIn()) {
                         </div>
 
                         <!-- Sección -->
-                        <div class="sm:col-span-2">
+                        <div class="content-seccion hidden sm:col-span-4">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Sección:</label>
                             <div class="mt-2">
                                 <select id="seccion-estructura" disabled required class="h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
@@ -70,7 +70,7 @@ if ($userSession->userLoggedIn()) {
                         </div>
 
                         <!-- Cargo -->
-                        <div class="sm:col-span-2">
+                        <div class="content-cargo hidden sm:col-span-4">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Cargo:</label>
                             <div class="mt-2">
                                 <select id="cargo-estructura" disabled required class="h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
@@ -80,7 +80,7 @@ if ($userSession->userLoggedIn()) {
                         </div>
 
                         <div class="sm:col-span-4 mt-auto">
-                            <button type="submit" class="w-full rounded-md bg-indigo-500 px-4 py-2 m-auto text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Crear</button>
+                            <button type="submit" disabled class="btn-guardar-estructura cursor-no-drop disabled:bg-slate-400 w-full rounded-md bg-indigo-500 px-4 py-2 m-auto text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Crear</button>
                         </div>
                     </div>
                 </form>

@@ -28,7 +28,16 @@ class Estructura extends Connection
             $declaracion->bindParam(':start', $start);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
-
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if (isset($item['area_detalle']) && isset($item['depa_detalle']) &&
+                    isset($item['seccion_detalle']) && isset($item['cargo_detalle']) ) {
+                    $resultado[$i]['area_detalle'] = ucfirst($item['area_detalle']);
+                    $resultado[$i]['depa_detalle'] = ucfirst($item['depa_detalle']);
+                    $resultado[$i]['seccion_detalle'] = ucfirst($item['seccion_detalle']);
+                    $resultado[$i]['cargo_detalle'] = ucfirst($item['cargo_detalle']);
+                }
+            }
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM estructura WHERE estructura.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
@@ -52,7 +61,6 @@ class Estructura extends Connection
             $limit = 10; // Número de registros a mostrar por página
             $page = isset($data['pagina']) ? $data['pagina'] : 1; // Si $data['page'] esta vacio, entonces es 1
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos
-
             // Hacer busqueda
             $sql = "SELECT estructura.id_estructura, estructura.estado AS estruc_estado, 
                 cargo.detalle AS cargo_detalle, cargo.estado AS cargo_estado,
@@ -72,7 +80,16 @@ class Estructura extends Connection
             $declaracion->bindParam(':start', $start);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
-
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if (isset($item['area_detalle']) && isset($item['depa_detalle']) &&
+                    isset($item['seccion_detalle']) && isset($item['cargo_detalle']) ) {
+                    $resultado[$i]['area_detalle'] = ucfirst($item['area_detalle']);
+                    $resultado[$i]['depa_detalle'] = ucfirst($item['depa_detalle']);
+                    $resultado[$i]['seccion_detalle'] = ucfirst($item['seccion_detalle']);
+                    $resultado[$i]['cargo_detalle'] = ucfirst($item['cargo_detalle']);
+                }
+            }
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) 
                         FROM estructura 
@@ -111,6 +128,16 @@ class Estructura extends Connection
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if (isset($item['area_detalle']) && isset($item['depa_detalle']) &&
+                    isset($item['seccion_detalle']) && isset($item['cargo_detalle']) ) {
+                    $resultado[$i]['area_detalle'] = ucfirst($item['area_detalle']);
+                    $resultado[$i]['depa_detalle'] = ucfirst($item['depa_detalle']);
+                    $resultado[$i]['seccion_detalle'] = ucfirst($item['seccion_detalle']);
+                    $resultado[$i]['cargo_detalle'] = ucfirst($item['cargo_detalle']);
+                }
+            }
             return $resultado;
         } catch (PDOException $e) {
             echo $e->getMessage();

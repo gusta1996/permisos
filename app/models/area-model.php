@@ -22,7 +22,13 @@ class Area extends Connection
             $declaracion->bindParam(':start', $start);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
-
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if (isset($item['area_detalle']) && isset($item['categoria_detalle'])) {
+                    $resultado[$i]['area_detalle'] = ucfirst($item['area_detalle']);
+                    $resultado[$i]['categoria_detalle'] = ucfirst($item['categoria_detalle']);
+                }
+            }
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM area WHERE area.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
@@ -58,7 +64,13 @@ class Area extends Connection
             $declaracion->bindParam(':start', $start);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
-
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if (isset($item['area_detalle']) && isset($item['categoria_detalle'])) {
+                    $resultado[$i]['area_detalle'] = ucfirst($item['area_detalle']);
+                    $resultado[$i]['categoria_detalle'] = ucfirst($item['categoria_detalle']);
+                }
+            }
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM area 
                         WHERE area.detalle ILIKE '%$busqueda%' AND area.estado != 'anulado'";
@@ -84,6 +96,12 @@ class Area extends Connection
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if (isset($item['detalle'])) {
+                    $resultado[$i]['detalle'] = ucfirst($item['detalle']);
+                }
+            }
             return $resultado;
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -97,6 +115,10 @@ class Area extends Connection
             $declaracion->bindParam(':id_area', $id_area);
             $declaracion->execute();
             $resultado = $declaracion->fetch();
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            if (isset($resultado['detalle'])) {
+                $resultado['detalle'] = ucfirst($resultado['detalle']);
+            }
             return $resultado;
         } catch (PDOException $e) {
             echo $e->getMessage();

@@ -16,44 +16,83 @@ const app = new (function () {
         var selectDepartamento = $('#departamento-estructura');
         var selectSeccion = $('#seccion-estructura');
         var selectCargo = $('#cargo-estructura');
-        var clasesSelect = 'capitalize bg-white h-[38px] block !w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6';
+        var clasesSelect = 'bg-white h-[38px] block !w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6';
 
-        /* SELECT AREA */
+        // Verificar si selectCargo está deshabilitado
+        function verificarCargo() {
+            if (selectCargo.prop('disabled')) {
+                // Si está deshabilitado, desactivar boton...
+                $('.btn-guardar-estructura').attr('disabled', 'disabled');
+                $('.btn-guardar-estructura').addClass('cursor-no-drop');
+            }
+        }
+        // Agregar clase para dar color de desabilitado
+        function agregarColorDesabilitado() {
+            $('.select2-container--disabled').addClass('!bg-[#eeeeee]');
+        }
+        // Agregar clases en select2
+        function agregarClasesSelect2() {
+            $('.select2').addClass(clasesSelect); // agregar clases en select2
+        }
+
+        /* Activar SELECT AREA */
         this.selectArea();
         selectArea.select2(); // iniciar select2
 
-        /* SELECT DEPARTAMENTO */
+        /* Activar SELECT DEPARTAMENTO */
         selectArea.on('select2:select', function (e) {
-            // resetea opciones
+            // desabilitar los futuros select al cambiar el select area
             selectSeccion.prop('disabled', true).trigger('change');
             selectCargo.prop('disabled', true).trigger('change');
-            setTimeout(function() {
-                $('.select2-container--disabled').addClass('!bg-[#eeeeee]');
-            }, 0);
-            // agrega opciones
+            // agregar opciones de departamento
             app.selectDepartamentoIdArea(selectArea.val());
-            selectDepartamento.select2(); // iniciar select2
-            $('.select2').addClass(clasesSelect); // agregar clases en select2
-        });
-
-        /* SELECT SECCION */
-        selectDepartamento.on('select2:select', function (e) {
-            // resetea opciones
-            selectCargo.prop('disabled', true).trigger('change');
-            setTimeout(function() {
-                $('.select2-container--disabled').addClass('!bg-[#eeeeee]');
+            selectDepartamento.select2();
+            // funciones necesarias
+            setTimeout(function () {
+                agregarClasesSelect2();
+                agregarColorDesabilitado();
+                verificarCargo();
             }, 0);
-            // agrega opciones
-            app.selectSeccionIdDepartamento(selectDepartamento.val());
-            selectSeccion.select2(); // iniciar select2
-            $('.select2').addClass(clasesSelect); // agregar clases en select2
+            // Mostrar select de departamento
+            $('.content-departamento').removeClass('hidden');
         });
 
-        /* SELECT CARGO */
+        /* Activar SELECT SECCION */
+        selectDepartamento.on('select2:select', function (e) {
+            // desabilitar los futuros select al cambiar el select departamento
+            selectCargo.prop('disabled', true).trigger('change');
+            // agrega opciones de seccion
+            app.selectSeccionIdDepartamento(selectDepartamento.val());
+            selectSeccion.select2();
+            // funciones necesarias
+            setTimeout(function () {
+                agregarClasesSelect2();
+                agregarColorDesabilitado();
+                verificarCargo();
+            }, 0);
+            // Mostrar select de seccion
+            $('.content-seccion').removeClass('hidden');
+        });
+
+        /* Activar SELECT CARGO */
         selectSeccion.on('select2:select', function (e) {
+            // desabilitar los futuros select al cambiar el select seccion
             app.selectCargoIdSeccion(selectSeccion.val());
-            selectCargo.select2(); // iniciar select2
-            $('.select2').addClass(clasesSelect); // agregar clases en select2
+            selectCargo.select2();
+            // funciones necesarias
+            setTimeout(function () {
+                agregarClasesSelect2();
+                verificarCargo();
+            }, 0);
+            // Mostrar select de cargo
+            $('.content-cargo').removeClass('hidden');
+        });
+
+        /* Activar boton guardar */
+        selectCargo.on('select2:select', function (e) {
+            // Activar boton al selecionar cargo
+            $('.btn-guardar-estructura').removeAttr('disabled');
+            $('.btn-guardar-estructura').removeClass('cursor-no-drop');
         });
     }
     this.selectArea = () => {
@@ -62,17 +101,15 @@ const app = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    // Capitalizar letras minusculas
-                    let area = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
                     // Imprimir las opciones
                     if (editarArea) {
                         var seleted = 'area-id-' + item.id_area == editarArea.classList.item(0) ? 'selected' : '';
                         editarArea.innerHTML += `
-                            <option ${seleted} value="${item.id_area}">${area}</option>
+                            <option ${seleted} value="${item.id_area}">${item.detalle}</option>
                         `;
                     } else {
                         this.area.innerHTML += `
-                            <option value="${item.id_area}">${area}</option>
+                            <option value="${item.id_area}">${item.detalle}</option>
                         `;
                     }
                 });
@@ -85,12 +122,10 @@ const app = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    // Capitalizar letras minusculas
-                    let departamento = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
                     // Imprimir las opciones
                     var seleted = 'departamento-id-' + item.id_departamento == editarDepartamento.classList.item(0) ? 'selected' : '';
                     editarDepartamento.innerHTML += `
-                        <option ${seleted} value="${item.id_departamento}">${departamento}</option>
+                        <option ${seleted} value="${item.id_departamento}">${item.detalle}</option>
                     `;
                 });
             })
@@ -115,11 +150,9 @@ const app = new (function () {
                     this.departamento.innerHTML = '<option selected disabled>-- Selecciona --</option>';
                     // agregar opciones
                     data.forEach(item => {
-                        // Capitalizar letras minusculas
-                        let departamento = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
                         // Imprimir las opciones
                         this.departamento.innerHTML += `
-                            <option value="${item.id_departamento}">${departamento}</option>
+                            <option value="${item.id_departamento}">${item.detalle}</option>
                         `;
                     });
                 }
@@ -132,12 +165,10 @@ const app = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    // Capitalizar letras minusculas
-                    let seccion = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
                     // Imprimir las opciones
                     var seleted = 'seccion-id-' + item.id_seccion == editarSeccion.classList.item(0) ? 'selected' : '';
                     editarSeccion.innerHTML += `
-                        <option ${seleted} value="${item.id_seccion}">${seccion}</option>
+                        <option ${seleted} value="${item.id_seccion}">${item.detalle}</option>
                     `;
                 });
             })
@@ -161,11 +192,9 @@ const app = new (function () {
                     this.seccion.innerHTML = '<option selected disabled>-- Selecciona --</option>';
                     // agregar opciones
                     data.forEach(item => {
-                        // Capitalizar letras minusculas
-                        let seccion = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
                         // Imprimir las opciones
                         this.seccion.innerHTML += `
-                            <option value="${item.id_seccion}">${seccion}</option>
+                            <option value="${item.id_seccion}">${item.detalle}</option>
                         `;
                     });
                 }
@@ -178,12 +207,10 @@ const app = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    // Capitalizar letras minusculas
-                    let cargo = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
                     // Imprimir las opciones
                     var seleted = 'cargo-id-' + item.id_cargo == EditCargo.classList.item(0) ? 'selected' : '';
                     EditCargo.innerHTML += `
-                            <option ${seleted} value="${item.id_cargo}">${cargo}</option>
+                            <option ${seleted} value="${item.id_cargo}">${item.detalle}</option>
                         `;
                 });
             })
@@ -205,11 +232,9 @@ const app = new (function () {
                     this.cargo.innerHTML = '<option selected disabled>-- Selecciona --</option>';
                     // agregar opciones
                     data.forEach(item => {
-                        // Capitalizar letras minusculas
-                        let cargo = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
                         // Imprimir las opciones
                         this.cargo.innerHTML += `
-                            <option value="${item.id_cargo}">${cargo}</option>
+                            <option value="${item.id_cargo}">${item.detalle}</option>
                         `;
                     });
                 }
@@ -255,11 +280,11 @@ const app = new (function () {
                     for (let i = 0; i < item.length; i++) {
                         html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
-                            <td class="text-slate-700 pr-4">${item[i].id_estructura}</td>
-                            <td class="capitalize pr-4 ${item[i].cargo_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].cargo_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].cargo_detalle}</td>
-                            <td class="capitalize pr-4 ${item[i].seccion_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].seccion_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].seccion_detalle}</td>
-                            <td class="capitalize pr-4 ${item[i].depa_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].depa_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].depa_detalle}</td>
-                            <td class="capitalize pr-4 ${item[i].area_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].area_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].area_detalle}</td>
+                            <td class="pr-4">${item[i].id_estructura}</td>
+                            <td class="pr-4 ${item[i].area_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].area_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].area_detalle}</td>
+                            <td class="pr-4 ${item[i].depa_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].depa_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].depa_detalle}</td>
+                            <td class="pr-4 ${item[i].seccion_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].seccion_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].seccion_detalle}</td>
+                            <td class="pr-4 ${item[i].cargo_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].cargo_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].cargo_detalle}</td>
                             <td class="font-medium capitalize pr-4 ${item[i].estruc_estado == 'activo' ? 'text-green-600' : ''}${item[i].estruc_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].estruc_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].estruc_estado}</td>
                             <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
                                 <button onclick="app.editarEstructura(${item[i].id_estructura})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
@@ -306,11 +331,11 @@ const app = new (function () {
                     for (let i = 0; i < item.length; i++) {
                         html += `
                             <tr class="h-16 border-b last:border-b-0 border-b-white-100">
-                                <td class="text-slate-700 pr-4">${item[i].id_estructura}</td>
-                                <td class="capitalize pr-4 ${item[i].cargo_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].cargo_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].cargo_detalle}</td>
-                                <td class="capitalize pr-4 ${item[i].seccion_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].seccion_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].seccion_detalle}</td>
-                                <td class="capitalize pr-4 ${item[i].depa_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].depa_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].depa_detalle}</td>
-                                <td class="capitalize pr-4 ${item[i].area_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].area_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].area_detalle}</td>
+                                <td class="pr-4">${item[i].id_estructura}</td>
+                                <td class="pr-4 ${item[i].area_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].area_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].area_detalle}</td>
+                                <td class="pr-4 ${item[i].depa_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].depa_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].depa_detalle}</td>
+                                <td class="pr-4 ${item[i].seccion_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].seccion_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].seccion_detalle}</td>
+                                <td class="pr-4 ${item[i].cargo_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].cargo_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].cargo_detalle}</td>
                                 <td class="font-medium capitalize pr-4 ${item[i].estruc_estado == 'activo' ? 'text-green-600' : ''}${item[i].estruc_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].estruc_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].estruc_estado}</td>
                                 <td class="flex justify-end flex-row items-center gap-4 h-14 w-fit ml-auto">
                                     <button onclick="app.editarEstructura(${item[i].id_estructura})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
@@ -472,16 +497,17 @@ const app = new (function () {
                     </div>
                 </div>
                 `;
-                this.selectCargo();
-                this.selectSeccion();
-                this.selectDepartamento();
                 this.selectArea();
+                this.selectDepartamento();
+                this.selectSeccion();
+                this.selectCargo();
                 // Jquery para trabajar con la biblioteca Select2
                 $('#editar-area-estructura').select2();
                 $('#editar-departamento-estructura').select2();
                 $('#editar-seccion-estructura').select2();
                 $('#editar-cargo-estructura').select2();
-                $('.select2').addClass('capitalize bg-white h-[38px] block !w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6');
+                $('#editar-estado-estructura').select2();
+                $('.select2').addClass('bg-white h-[38px] block !w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6');
             })
             .catch((error) => console.log(error));
     }

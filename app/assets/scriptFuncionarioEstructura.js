@@ -12,7 +12,7 @@ const app = new (function () {
     this.paginacion = document.getElementById('paginacion');
     this.btnRegistros = document.getElementById('btn-registros');
     this.registrosPermisos = document.getElementById('registros-permisos');
-    
+
     this.verContratoEstructura = () => {
         var id_funcionario = this.funcionario.value;
         // Vaciar todo para una nueva consulta
@@ -73,7 +73,7 @@ const app = new (function () {
                 });
             })
             .catch((error) => console.log(error));
-            
+
         // Efecto de carga 0.5 segundo
         setTimeout(function () {
             // Quitar icono de carga
@@ -170,7 +170,7 @@ const app = new (function () {
         fetch("../controllers/actualizarFuncionarioEstructura.php", { method: "POST", body: formFuncionarioEstructura })
             .then((resultado) => resultado.json())
             .then((data) => {
-                if ( data != true ) {
+                if (data != true) {
                     // Mostrar mensaje de 'No se ha realizado cambios'
                     this.mensajeNoGuardado.classList.remove('hidden');
                     this.mensajeNoGuardado.innerHTML = `
@@ -178,7 +178,7 @@ const app = new (function () {
                     `;
                 } else {
                     // Guardado con exito
-                    window.location.href = '../views/cargos-asignados.php';   
+                    window.location.href = '../views/cargos-asignados.php';
                 }
             })
             .catch((error) => console.log(error));
@@ -208,8 +208,9 @@ const app = new (function () {
                 let totalPaginas = data.totalPaginas;
 
                 let html = '';
-                for (let i = 0; i < item.length; i++) {
-                    html += `
+                if (item != '') {
+                    for (let i = 0; i < item.length; i++) {
+                        html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="text-slate-700 pr-4">${item[i].id_funcionario_estructura}</td>
                             <td class="capitalize pr-4">
@@ -224,7 +225,11 @@ const app = new (function () {
                             <td class="font-medium capitalize ${item[i].fe_estado == 'activo' ? 'text-green-600' : ''}${item[i].fe_estado == 'suspendido' ? 'text-amber-400' : ''} pr-4">${item[i].fe_estado}</td>
                         </tr>
                     `;
+                    }
+                } else {
+                    html += '<p class="w-full mt-5">No se encontró resultados.</p>';
                 }
+
                 this.tbodyFuncionarioEstructura.innerHTML = html;
                 this.paginacionFuncionarioEstructura(pagina, totalPaginas, false);
             });

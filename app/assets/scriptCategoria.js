@@ -22,8 +22,8 @@ const app = new (function () {
                         html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="pr-4">${item[i].id_categoria}</td>
-                            <td class="capitalize pr-4">${item[i].detalle}</td>
-                            <td class="font-medium capitalize ${item[i].estado == 'activo' ? 'text-green-600' : ''}${item[i].estado == 'suspendido' ? 'text-amber-600' : ''}${item[i].estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].estado}</td>
+                            <td class="pr-4">${item[i].detalle}</td>
+                            <td class="capitalize font-medium ${item[i].estado == 'activo' ? 'text-green-600' : ''}${item[i].estado == 'suspendido' ? 'text-amber-600' : ''}${item[i].estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].estado}</td>
                             <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
                                 <button onclick="app.editarCategoria(${item[i].id_categoria})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -69,8 +69,8 @@ const app = new (function () {
                         html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="pr-4">${item[i].id_categoria}</td>
-                            <td class="capitalize pr-4">${item[i].detalle}</td>
-                            <td class="font-medium capitalize ${item[i].estado == 'activo' ? 'text-green-600' : ''}${item[i].estado == 'suspendido' ? 'text-amber-600' : ''}${item[i].estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].estado}</td>
+                            <td class="pr-4">${item[i].detalle}</td>
+                            <td class="capitalize font-medium ${item[i].estado == 'activo' ? 'text-green-600' : ''}${item[i].estado == 'suspendido' ? 'text-amber-600' : ''}${item[i].estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].estado}</td>
                             <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
                                 <button onclick="app.editarCategoria(${item[i].id_categoria})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -202,7 +202,7 @@ const app = new (function () {
                                         <!-- Detalle -->
                                         <div class="sm:col-span-3">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Detalle:</label>
-                                            <input type="text" id="editar-detalle-categoria" value="${data.detalle}" class="block capitalize w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                            <input type="text" id="editar-detalle-categoria" value="${data.detalle}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Estado -->
                                         <div class="sm:col-span-3">

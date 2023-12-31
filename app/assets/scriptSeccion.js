@@ -34,20 +34,16 @@ const app = new (function () {
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    if (item.estado === 'activo') {
-                        // Capitalizar letras minusculas
-                        let departamento = item.detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
-                        // Imprimir las opciones
-                        if (editarDepartamento) {
-                            var seleted = 'departamento-id-' + item.id_departamento == editarDepartamento.classList.item(0) ? 'selected' : '';
-                            editarDepartamento.innerHTML += `
-                            <option ${seleted} value="${item.id_departamento}">${departamento}</option>
-                        `;
-                        } else {
-                            this.departamento.innerHTML += `
-                            <option value="${item.id_departamento}">${departamento}</option>
-                        `;
-                        }
+                    // Imprimir las opciones
+                    if (editarDepartamento) {
+                        var seleted = 'departamento-id-' + item.id_departamento == editarDepartamento.classList.item(0) ? 'selected' : '';
+                        editarDepartamento.innerHTML += `
+                        <option ${seleted} value="${item.id_departamento}">${item.detalle}</option>
+                    `;
+                    } else {
+                        this.departamento.innerHTML += `
+                        <option value="${item.id_departamento}">${item.detalle}</option>
+                    `;
                     }
                 });
             })
@@ -68,9 +64,9 @@ const app = new (function () {
                     for (let i = 0; i < item.length; i++) {
                         html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
-                            <td class="text-slate-700 pr-4">${item[i].id_seccion}</td>
-                            <td class="capitalize text-slate-700 pr-4">${item[i].seccion_detalle}</td>
-                            <td class="capitalize pr-4">
+                            <td class="pr-4">${item[i].id_seccion}</td>
+                            <td class="pr-4">${item[i].seccion_detalle}</td>
+                            <td class="pr-4">
                                 <div class="flex items-center gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].departamento_estado == 'activo' ? 'text-green-600' : ''}${item[i].departamento_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].departamento_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
                                         <circle cx="8" cy="8" r="8"/>
@@ -122,9 +118,9 @@ const app = new (function () {
                     for (let i = 0; i < item.length; i++) {
                         html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
-                            <td class="text-slate-700 pr-4">${item[i].id_seccion}</td>
-                            <td class="capitalize text-slate-700 pr-4">${item[i].seccion_detalle}</td>
-                            <td class="capitalize pr-4">
+                            <td class="pr-4">${item[i].id_seccion}</td>
+                            <td class="pr-4">${item[i].seccion_detalle}</td>
+                            <td class="pr-4">
                                 <div class="flex items-center gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].departamento_estado == 'activo' ? 'text-green-600' : ''}${item[i].departamento_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].departamento_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
                                         <circle cx="8" cy="8" r="8"/>
@@ -243,12 +239,12 @@ const app = new (function () {
                                         <!-- Sección -->
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Sección:</label>
-                                            <input type="text" id="editar-detalle-seccion" value="${data.detalle}" class="capitalize block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                            <input type="text" id="editar-detalle-seccion" value="${data.detalle}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Departamento -->
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Departamento:</label>
-                                            <select id="editar-departamento-seccion" required class="departamento-id-${data.id_departamento_fk} h-[38px] capitalize block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                            <select id="editar-departamento-seccion" required class="departamento-id-${data.id_departamento_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
@@ -273,6 +269,10 @@ const app = new (function () {
                 </div>
                 `;
                 this.selectDepartamento();
+                // Jquery para trabajar con la biblioteca Select2
+                $('#editar-departamento-seccion').select2();
+                $('#editar-estado-seccion').select2();
+                $('.select2').addClass('bg-white h-[38px] block !w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6');
             })
             .catch((error) => console.log(error));
     }

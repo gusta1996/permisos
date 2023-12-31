@@ -12,15 +12,16 @@ class funcionarioEstructura extends Connection
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos  
             // Consulta para obtener los datos
             $sql = "SELECT funcionario_estructura.id_funcionario_estructura, funcionario_estructura.estado AS fe_estado,
-                    funcionario.nombres, funcionario.apellidos, funcionario.estado AS f_estado,
-                    contrato.detalle AS contrato_detalle, contrato.estado AS c_estado,
-                    estructura.id_estructura, estructura.estado AS e_estado,
-                    cargo.detalle AS cargo_detalle
+                        funcionario.nombres, funcionario.apellidos, funcionario.estado AS f_estado,
+                        contrato.detalle AS contrato_detalle, contrato.estado AS c_estado,
+                        estructura.id_estructura, estructura.estado AS e_estado,
+                        cargo.detalle AS cargo_detalle
                     FROM funcionario_estructura
                     INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
                     INNER JOIN contrato ON funcionario_estructura.id_contrato_fk = contrato.id_contrato
                     INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
                     INNER JOIN cargo ON estructura.id_cargo_fk = cargo.id_cargo
+                    WHERE funcionario.estado != 'anulado'
                     ORDER BY id_funcionario_estructura DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -30,7 +31,9 @@ class funcionarioEstructura extends Connection
             $resultado = $declaracion->fetchAll();
 
             // Consulta para obtener el número total de registros
-            $sqlTotal = "SELECT COUNT(*) FROM funcionario_estructura";
+            $sqlTotal = "SELECT COUNT(*) FROM funcionario_estructura
+                        INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                        WHERE funcionario.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -64,7 +67,7 @@ class funcionarioEstructura extends Connection
                     INNER JOIN contrato ON funcionario_estructura.id_contrato_fk = contrato.id_contrato
                     INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
                     INNER JOIN cargo ON estructura.id_cargo_fk = cargo.id_cargo
-                    WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%'
+                    WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%' AND funcionario.estado != 'anulado'
                     ORDER BY id_funcionario_estructura DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -80,7 +83,7 @@ class funcionarioEstructura extends Connection
                         INNER JOIN contrato ON funcionario_estructura.id_contrato_fk = contrato.id_contrato
                         INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
                         INNER JOIN cargo ON estructura.id_cargo_fk = cargo.id_cargo
-                        WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%'";
+                        WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%' AND funcionario.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();

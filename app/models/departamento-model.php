@@ -22,7 +22,13 @@ class Departamento extends Connection
             $declaracion->bindParam(':start', $start);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
-
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if (isset($item['departamento_detalle']) && isset($item['area_detalle'])) {
+                    $resultado[$i]['departamento_detalle'] = ucfirst($item['departamento_detalle']);
+                    $resultado[$i]['area_detalle'] = ucfirst($item['area_detalle']);
+                }
+            }
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM departamento WHERE departamento.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
@@ -58,7 +64,12 @@ class Departamento extends Connection
             $declaracion->bindParam(':start', $start);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
-
+            foreach ($resultado as $i => $item) {
+                if (isset($item['departamento_detalle']) && isset($item['area_detalle'])) {
+                    $resultado[$i]['departamento_detalle'] = ucfirst($item['departamento_detalle']);
+                    $resultado[$i]['area_detalle'] = ucfirst($item['area_detalle']);
+                }
+            }
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM departamento 
                         WHERE departamento.detalle ILIKE '%$busqueda%' AND departamento.estado != 'anulado'";
@@ -85,6 +96,12 @@ class Departamento extends Connection
             $declaracion->bindParam(':id_area', $id_area);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if (isset($item['detalle'])) {
+                    $resultado[$i]['detalle'] = ucfirst($item['detalle']);
+                }
+            }
             return $resultado;
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -99,6 +116,12 @@ class Departamento extends Connection
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if (isset($item['detalle'])) {
+                    $resultado[$i]['detalle'] = ucfirst($item['detalle']);
+                }
+            }
             return $resultado;
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -112,6 +135,10 @@ class Departamento extends Connection
             $declaracion->bindParam(':id_departamento', $id_departamento);
             $declaracion->execute();
             $resultado = $declaracion->fetch();
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            if (isset($resultado['detalle'])) {
+                $resultado['detalle'] = ucfirst($resultado['detalle']);
+            }
             return $resultado;
         } catch (PDOException $e) {
             echo $e->getMessage();
