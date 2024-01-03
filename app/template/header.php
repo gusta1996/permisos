@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,6 +29,10 @@
 </head>
 
 <body class="user-<?php echo $user->getRol(); ?> text-sm">
+
+    <div id="notificacionContent" class="fixed z-50 flex flex-col gap-4 right-8 bottom-8 max-w-96 w-full">
+    </div>
+
     <div class="flex min-h-screen bg-slate-100">
         <?php require '../template/navegacion.php'; ?>
 

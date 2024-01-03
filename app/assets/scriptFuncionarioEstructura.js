@@ -1,4 +1,4 @@
-const app = new (function () {
+const appFuncionarioEstructura = new (function () {
     this.tbodyFuncionarioEstructura = document.getElementById('tbodyFuncionarioEstructura');
     this.funcionario = document.getElementById('funcionario-funcionarioEstructura');
     this.iconoCarga = document.getElementById('icono-carga');
@@ -283,7 +283,7 @@ const app = new (function () {
             // Paginacion para la lista
             if (pagina_actual > 1) {
                 html += `
-                    <a href="javascript:app.listadoFuncionarioEstructura(${pagina_actual - 1})" class="btn-anterior border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Anterior</a>
+                    <a href="javascript:appFuncionarioEstructura.listadoFuncionarioEstructura(${pagina_actual - 1})" class="btn-anterior border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Anterior</a>
                 `;
             }
             if (total_paginas > 1) {
@@ -295,14 +295,14 @@ const app = new (function () {
             }
             if (pagina_actual < total_paginas) {
                 html += `
-                    <a href="javascript:app.listadoFuncionarioEstructura(${pagina_actual + 1})" class="btn-siguiente border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Siguiente</a>
+                    <a href="javascript:appFuncionarioEstructura.listadoFuncionarioEstructura(${pagina_actual + 1})" class="btn-siguiente border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Siguiente</a>
                 `;
             }
         } else {
             // Paginacion para la busqueda en la lista
             if (pagina_actual > 1) {
                 html += `
-                    <a href="javascript:app.busquedaFuncionarioEstructura(${pagina_actual - 1})" class="btn-anterior border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Anterior</a>
+                    <a href="javascript:appFuncionarioEstructura.busquedaFuncionarioEstructura(${pagina_actual - 1})" class="btn-anterior border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Anterior</a>
                 `;
             }
             if (total_paginas > 1) {
@@ -314,12 +314,12 @@ const app = new (function () {
             }
             if (pagina_actual < total_paginas) {
                 html += `
-                    <a href="javascript:app.busquedaFuncionarioEstructura(${pagina_actual + 1})" class="btn-siguiente border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Siguiente</a>
+                    <a href="javascript:appFuncionarioEstructura.busquedaFuncionarioEstructura(${pagina_actual + 1})" class="btn-siguiente border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Siguiente</a>
                 `;
             }
         }
         this.paginacion.innerHTML = html;
     }
 });
-app.listadoFuncionarioEstructura();
-app.selectFuncionarios();
+appFuncionarioEstructura.listadoFuncionarioEstructura();
+appFuncionarioEstructura.selectFuncionarios();

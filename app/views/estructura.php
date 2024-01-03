@@ -37,7 +37,7 @@ if ($userSession->userLoggedIn()) {
 
             <!-- Formulario Estructura -->
             <div class="p-4">
-                <form action="javascript:void(0);" onsubmit="app.guardarEstructura()">
+                <form action="javascript:void(0);" onsubmit="appEstructura.guardarEstructura()">
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
                         <!-- Área -->
                         <div class="content-area sm:col-span-4">
@@ -108,7 +108,7 @@ if ($userSession->userLoggedIn()) {
                 </div>
 
                 <!-- Busqueda -->
-                <form action="javascript:void(0);" oninput="app.busquedaEstructura()">
+                <form action="javascript:void(0);" oninput="appEstructura.busquedaEstructura()">
                     <div class="relative mb-1">
                         <div class="absolute flex items-center h-full text-gray-500 pl-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">

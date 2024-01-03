@@ -30,7 +30,7 @@ if ($userSession->userLoggedIn()) {
 
             <!-- Formulario Cargo -->
             <div class="p-4">
-                <form action="javascript:void(0);" onsubmit="app.guardarCargo()">
+                <form action="javascript:void(0);" onsubmit="appCargo.guardarCargo()">
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-7">
                         <!-- Cargo -->
                         <div class="sm:col-span-3">
@@ -85,7 +85,7 @@ if ($userSession->userLoggedIn()) {
             <!-- Titulo -->
             <div class="border-b border-gray-900/10 p-4">
                 <h2 class="text-lg font-semibold leading-7 text-gray-900 mb-2">Buscar cargo</h2>
-                <form action="javascript:void(0);" oninput="app.busquedaCargo()">
+                <form action="javascript:void(0);" oninput="appCargo.busquedaCargo()">
                     <div class="relative mb-1">
                         <div class="absolute flex items-center h-full text-gray-500 pl-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">

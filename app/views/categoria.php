@@ -30,7 +30,7 @@ if ($userSession->userLoggedIn()) {
 
             <!-- Formulario Categoria -->
             <div class="p-4">
-                <form action="javascript:void(0);" onsubmit="app.guardarCategoria()">
+                <form action="javascript:void(0);" onsubmit="appCategoria.guardarCategoria()">
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-5">
                         <!-- Detalle -->
                         <div class="sm:col-span-4">
@@ -56,7 +56,7 @@ if ($userSession->userLoggedIn()) {
             <!-- Titulo -->
             <div class="border-b border-gray-900/10 p-4">
                 <h2 class="text-lg font-semibold leading-7 text-gray-900 mb-2">Buscar categoría</h2>
-                <form action="javascript:void(0);" oninput="app.busquedaCategoria()">
+                <form action="javascript:void(0);" oninput="appCategoria.busquedaCategoria()">
                     <div class="relative mb-1">
                         <div class="absolute flex items-center h-full text-gray-500 pl-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -95,7 +95,7 @@ if ($userSession->userLoggedIn()) {
 
         <script src="../assets/scriptCategoria.js"></script>
 
-        <?php
+<?php
         require '../template/footer.php';
     } else {
         // Si usuario es estandar o autorizador, redicciona a home

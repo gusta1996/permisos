@@ -31,7 +31,7 @@ if ($userSession->userLoggedIn()) {
 
             <div class="px-4 py-6">
                 <!-- Busqueda de funcionario -->
-                <form action="javascript:void(0);" onsubmit="app.verContratoEstructura()" class="flex flex-wrap sm:flex-nowrap sm:flex-row justify-between items-center gap-4">
+                <form action="javascript:void(0);" onsubmit="appFuncionarioEstructura.verContratoEstructura()" class="flex flex-wrap sm:flex-nowrap sm:flex-row justify-between items-center gap-4">
                     <label class="w-full sm:w-auto flex-initial text-sm font-medium leading-6 text-gray-900">Nombre:</label>
                     <select id="funcionario-funcionarioEstructura" required class="selectBuscador h-[38px] w-full sm:w-auto flex-auto rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                         <option value="" selected disabled>-- Selecciona --</option>
@@ -43,7 +43,7 @@ if ($userSession->userLoggedIn()) {
                 <div id="icono-carga" class="hidden animate-spin flex justify-center py-4 mt-6"></div>
 
                 <!-- Formulario contratos y cargos -->
-                <form id="ver-guardar-contratoEstructura" action="javascript:void(0);" onsubmit="app.actualizarContratoEstructura()" class="hidden bg-slate-100 p-4 mt-6 rounded-md border">
+                <form id="ver-guardar-contratoEstructura" action="javascript:void(0);" onsubmit="appFuncionarioEstructura.actualizarContratoEstructura()" class="hidden bg-slate-100 p-4 mt-6 rounded-md border">
                     <h3 class="text-center mb-4 text-base font-semibold leading-7 text-gray-900">Información ocupacional</h3>
                     <div class="mb-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <!-- Funcionario -->
@@ -64,7 +64,7 @@ if ($userSession->userLoggedIn()) {
         </div>
 
         <!-- Boton ver Registros -->
-        <a id="btn-registros" href="javascript:app.btnVerRegistros();" class="inline-block rounded-md shadow-sm bg-indigo-500 px-3 py-2 mb-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Ver registros</a>
+        <a id="btn-registros" href="javascript:appFuncionarioEstructura.btnVerRegistros();" class="inline-block rounded-md shadow-sm bg-indigo-500 px-3 py-2 mb-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Ver registros</a>
 
         <!-- Registros de contratos y cargos -->
         <div id="registros-permisos" class="hidden">
@@ -103,7 +103,7 @@ if ($userSession->userLoggedIn()) {
                         </div>
                     </div>
                     <!-- Barra de busqueda -->
-                    <form action="javascript:void(0);" oninput="app.busquedaFuncionarioEstructura()">
+                    <form action="javascript:void(0);" oninput="appFuncionarioEstructura.busquedaFuncionarioEstructura()">
                         <div class="relative mb-1">
                             <div class="absolute flex items-center h-full text-gray-500 pl-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
