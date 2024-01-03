@@ -41,7 +41,7 @@ const appCategoria = new (function () {
                     `;
                     }
                 } else {
-                    html += '<p class="w-full mt-5">No se encontró resultados.</p>';
+                    html += '<tr class="h-16"><td colspan="4">No se encontró resultados.</td></tr>';
                 }
                 
                 this.tbodyCategoria.innerHTML = html;
@@ -88,7 +88,7 @@ const appCategoria = new (function () {
                     `;
                     }
                 } else {
-                    html += '<p class="w-full mt-5">No se encontró resultados.</p>';
+                    html += '<tr class="h-16"><td colspan="4">No se encontró resultados.</td></tr>';
                 }
 
                 this.tbodyCategoria.innerHTML = html;

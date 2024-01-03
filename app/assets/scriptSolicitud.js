@@ -26,8 +26,9 @@ const appSolicitud = new (function () {
                 let totalPaginas = data.totalPaginas;
 
                 let html = '';
-                for (let i = 0; i < item.length; i++) {
-                    html += `
+                if (item != '') {
+                    for (let i = 0; i < item.length; i++) {
+                        html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_fk}</td>
                             <td class="text-slate-700 pr-4">${item[i].numero}</td>
@@ -62,7 +63,11 @@ const appSolicitud = new (function () {
                             </td>
                         </tr>
                     `;
+                    }
+                } else {
+                    html += '<tr class="h-16"><td colspan="6">No se encontró resultados.</td></tr>';
                 }
+
                 this.tbodySolicitud.innerHTML = html;
                 this.paginacionSolicitud(pagina, totalPaginas, false);
             });
@@ -79,8 +84,9 @@ const appSolicitud = new (function () {
                 let totalPaginas = data.totalPaginas;
 
                 let html = '';
-                for (let i = 0; i < item.length; i++) {
-                    html += `
+                if (item != '') {
+                    for (let i = 0; i < item.length; i++) {
+                        html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_fk}</td>
                             <td class="text-slate-700 pr-4">${item[i].numero}</td>
@@ -106,6 +112,9 @@ const appSolicitud = new (function () {
                             </td>
                         </tr>
                     `;
+                    }
+                } else {
+                    html += '<tr class="h-16"><td colspan="5">No se encontró resultados.</td></tr>';
                 }
                 this.tbodySolicitud.innerHTML = html;
                 this.paginacionSolicitud(pagina, totalPaginas, false);
@@ -126,8 +135,9 @@ const appSolicitud = new (function () {
                 // Datos de la lista y total de paginas
                 let item = data.resultado;
                 let totalPaginas = data.totalPaginas;
-                let html = '';
                 var listadoSolicitud = this.tablaCompleta ? 'editarSolicitudCompleta' : 'editarSolicitudSimple';
+
+                let html = '';
                 if (item != '') {
                     for (let i = 0; i < item.length; i++) {
                         html += `
@@ -167,7 +177,7 @@ const appSolicitud = new (function () {
                         `;
                     }
                 } else {
-                    html += '<p class="w-full my-5">No se encontró resultados.</p>';
+                    html += '<tr class="h-16"><td colspan="6">No se encontró resultados.</td></tr>';
                 }
 
                 this.tbodySolicitud.innerHTML = html;

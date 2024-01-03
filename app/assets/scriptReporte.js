@@ -19,13 +19,14 @@ const appReporte = new (function () {
         let totalPaginas = data.totalPaginas;
 
         let html = '';
-        for (let i = 0; i < item.length; i++) {
-          let salida = new Date(`${item[i].fecha_salida} ${item[i].hora_salida}`);
-          let entrada = new Date(`${item[i].fecha_entrada} ${item[i].hora_entrada}`);
-          let diferenciaTiempo = Math.abs(salida - entrada);
-          let dias = Math.floor(diferenciaTiempo / (1000 * 60 * 60 * 24));
-          let horas = Math.floor((diferenciaTiempo / (1000 * 60 * 60)) % 24);
-          html += `
+        if (item != '') {
+          for (let i = 0; i < item.length; i++) {
+            let salida = new Date(`${item[i].fecha_salida} ${item[i].hora_salida}`);
+            let entrada = new Date(`${item[i].fecha_entrada} ${item[i].hora_entrada}`);
+            let diferenciaTiempo = Math.abs(salida - entrada);
+            let dias = Math.floor(diferenciaTiempo / (1000 * 60 * 60 * 24));
+            let horas = Math.floor((diferenciaTiempo / (1000 * 60 * 60)) % 24);
+            html += `
                   <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                       <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
                       <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
@@ -45,7 +46,11 @@ const appReporte = new (function () {
                       <td class="font-medium capitalize ${item[i].fs_estado == 'aprobado' ? 'text-green-600' : ''}${item[i].fs_estado == 'anulado' ? 'text-red-600' : ''}${item[i].fs_estado == 'pendiente' ? 'text-amber-600' : ''}">${item[i].fs_estado}</td>
                     </tr>
                   `;
+          }
+        } else {
+          html += '<tr class="h-16"><td colspan="8">No se encontró resultados.</td></tr>';
         }
+
         this.tbodyReporte.innerHTML = html;
         this.paginacionReporte(pagina, totalPaginas, false);
       });
@@ -65,8 +70,8 @@ const appReporte = new (function () {
         // Datos de la lista y total de paginas
         let item = data.resultado;
         let totalPaginas = data.totalPaginas;
-        let html = '';
 
+        let html = '';
         if (item != '') {
           for (let i = 0; i < item.length; i++) {
             let salida = new Date(`${item[i].fecha_salida} ${item[i].hora_salida}`);
@@ -96,7 +101,7 @@ const appReporte = new (function () {
               `;
           }
         } else {
-          html += '<p class="w-full my-5">No se encontró resultados.</p>';
+          html += '<tr class="h-16"><td colspan="8">No se encontró resultados.</td></tr>';
         }
 
         this.tbodyReporte.innerHTML = html;

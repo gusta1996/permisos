@@ -92,7 +92,7 @@ const appCargo = new (function () {
                     `;
                     }
                 } else {
-                    html += '<p class="w-full mt-5">No se encontró resultados.</p>';
+                    html += '<tr class="h-16"><td colspan="5">No se encontró resultados.</td></tr>';
                 }
 
                 this.tbodyCargo.innerHTML = html;
@@ -146,7 +146,7 @@ const appCargo = new (function () {
                         `;
                     }
                 } else {
-                    html += '<p class="w-full mt-5">No se encontró resultados.</p>';
+                    html += '<tr class="h-16"><td colspan="5">No se encontró resultados.</td></tr>';
                 }
 
                 this.tbodyCargo.innerHTML = html;

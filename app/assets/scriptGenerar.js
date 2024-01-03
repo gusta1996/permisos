@@ -13,15 +13,16 @@ const appGenerar = new (function () {
     // al cargar la pagina, la variable pagina es igual 1
     var pagina = !pagina ? 1 : pagina;
     fetch("../controllers/listadoGenerarPDF.php?page=" + pagina)
-        .then(response => response.json())
-        .then(data => {
-            // Datos de la lista y total de paginas
-            let item = data.resultado;
-            let totalPaginas = data.totalPaginas;
+      .then(response => response.json())
+      .then(data => {
+        // Datos de la lista y total de paginas
+        let item = data.resultado;
+        let totalPaginas = data.totalPaginas;
 
-            let html = '';
-            for (let i = 0; i < item.length; i++) {
-                html += `
+        let html = '';
+        if (item != '') {
+          for (let i = 0; i < item.length; i++) {
+            html += `
                 <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                     <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
                     <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
@@ -44,25 +45,30 @@ const appGenerar = new (function () {
                     </td>
                 </tr>
                 `;
-            }
-            this.tbodyGenerar.innerHTML = html;
-            this.paginacionGenerarPDF(pagina, totalPaginas, false);
-        });
+          }
+        } else {
+          html += '<tr class="h-16"><td colspan="5">No se encontró resultados.</td></tr>';
+        }
+
+        this.tbodyGenerar.innerHTML = html;
+        this.paginacionGenerarPDF(pagina, totalPaginas, false);
+      });
   }
   this.listadoGenerarSimple = (pagina) => {
     // al cargar la pagina, la variable pagina es igual 1
     var pagina = !pagina ? 1 : pagina;
     var cuentaIdFuncionario = this.cuentaIdFuncionario.innerHTML;
     fetch("../controllers/listadoGenerarPDF.php?page=" + pagina + "&id=" + cuentaIdFuncionario)
-        .then(response => response.json())
-        .then(data => {
-            // Datos de la lista y total de paginas
-            let item = data.resultado;
-            let totalPaginas = data.totalPaginas;
+      .then(response => response.json())
+      .then(data => {
+        // Datos de la lista y total de paginas
+        let item = data.resultado;
+        let totalPaginas = data.totalPaginas;
 
-            let html = '';
-            for (let i = 0; i < item.length; i++) {
-                html += `
+        let html = '';
+        if (item != '') {
+          for (let i = 0; i < item.length; i++) {
+            html += `
                 <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                     <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
                     <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
@@ -77,31 +83,35 @@ const appGenerar = new (function () {
                     </td>
                 </tr>
                 `;
-            }
-            this.tbodyGenerar.innerHTML = html;
-            this.paginacionGenerarPDF(pagina, totalPaginas, false);
-        });
+          }
+        } else {
+          html += '<tr class="h-16"><td colspan="5">No se encontró resultados.</td></tr>';
+        }
+
+        this.tbodyGenerar.innerHTML = html;
+        this.paginacionGenerarPDF(pagina, totalPaginas, false);
+      });
   }
   this.busquedaGenerarPDF = (pagina) => {
-      // al cargar la pagina, la variable pagina es igual 1
-      var pagina = !pagina ? 1 : pagina;
-      // Si existe texto de busqueda, buscar
-      var text = this.busqueda.value;
-      var formBusqueda = new FormData();
-      formBusqueda.append('busqueda', text);
-      formBusqueda.append('tipo', this.busquedaTipo.value);
-      formBusqueda.append('pagina', pagina);
-      fetch("../controllers/busquedaGenerarPDF.php", { method: "POST", body: formBusqueda })
-          .then(response => response.json())
-          .then(data => {
-              // Datos de la lista y total de paginas
-              let item = data.resultado;
-              let totalPaginas = data.totalPaginas;
-              let html = '';
+    // al cargar la pagina, la variable pagina es igual 1
+    var pagina = !pagina ? 1 : pagina;
+    // Si existe texto de busqueda, buscar
+    var text = this.busqueda.value;
+    var formBusqueda = new FormData();
+    formBusqueda.append('busqueda', text);
+    formBusqueda.append('tipo', this.busquedaTipo.value);
+    formBusqueda.append('pagina', pagina);
+    fetch("../controllers/busquedaGenerarPDF.php", { method: "POST", body: formBusqueda })
+      .then(response => response.json())
+      .then(data => {
+        // Datos de la lista y total de paginas
+        let item = data.resultado;
+        let totalPaginas = data.totalPaginas;
 
-              if (item != '') {
-                  for (let i = 0; i < item.length; i++) {
-                      html += `
+        let html = '';
+        if (item != '') {
+          for (let i = 0; i < item.length; i++) {
+            html += `
                       <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                           <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
                           <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
@@ -124,58 +134,58 @@ const appGenerar = new (function () {
                           </td>
                       </tr>
                       `;
-                  }
-              } else {
-                  html += '<p class="w-full my-5">No se encontró resultados.</p>';
-              }
+          }
+        } else {
+          html += '<tr class="h-16"><td colspan="5">No se encontró resultados.</td></tr>';
+        }
 
-              this.tbodyGenerar.innerHTML = html;
-              this.paginacionGenerarPDF(pagina, totalPaginas, true);
-          });
+        this.tbodyGenerar.innerHTML = html;
+        this.paginacionGenerarPDF(pagina, totalPaginas, true);
+      });
   }
   this.paginacionGenerarPDF = (pagina_actual, total_paginas, buscador) => {
-      let html = '';
-      var listadoGenerar = this.tablaCompleta ? 'listadoGenerarCompleta' : 'listadoGenerarSimple';
-      if (buscador == false) {
-          // Paginacion para la lista
-          if (pagina_actual > 1) {
-              html += `
+    let html = '';
+    var listadoGenerar = this.tablaCompleta ? 'listadoGenerarCompleta' : 'listadoGenerarSimple';
+    if (buscador == false) {
+      // Paginacion para la lista
+      if (pagina_actual > 1) {
+        html += `
                   <a href="javascript:appGenerar.${listadoGenerar}(${pagina_actual - 1})" class="btn-anterior border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Anterior</a>
               `;
-          }
-          if (total_paginas > 1) {
-              html += `
+      }
+      if (total_paginas > 1) {
+        html += `
                   <div class="pagina-actual grow">
                       <p class="font-medium m-0 text-slate-700">Pagina <b>${pagina_actual}</b> de <b>${total_paginas}</b></p>
                   </div>
               `;
-          }
-          if (pagina_actual < total_paginas) {
-              html += `
+      }
+      if (pagina_actual < total_paginas) {
+        html += `
                   <a href="javascript:appGenerar.${listadoGenerar}(${pagina_actual + 1})" class="btn-siguiente border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Siguiente</a>
               `;
-          }
-      } else {
-          // Paginacion para la busqueda en la lista
-          if (pagina_actual > 1) {
-              html += `
+      }
+    } else {
+      // Paginacion para la busqueda en la lista
+      if (pagina_actual > 1) {
+        html += `
                   <a href="javascript:appGenerar.busquedaGenerarPDF(${pagina_actual - 1})" class="btn-anterior border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Anterior</a>
               `;
-          }
-          if (total_paginas > 1) {
-              html += `
+      }
+      if (total_paginas > 1) {
+        html += `
                   <div class="pagina-actual grow">
                       <p class="font-medium m-0 text-slate-700">Pagina <b>${pagina_actual}</b> de <b>${total_paginas}</b></p>
                   </div>
               `;
-          }
-          if (pagina_actual < total_paginas) {
-              html += `
+      }
+      if (pagina_actual < total_paginas) {
+        html += `
                   <a href="javascript:appGenerar.busquedaGenerarPDF(${pagina_actual + 1})" class="btn-siguiente border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Siguiente</a>
               `;
-          }
       }
-      this.paginacion.innerHTML = html;
+    }
+    this.paginacion.innerHTML = html;
   }
   this.formatearNumero = (numero, longitud) => {
     return String(numero).padStart(longitud, '0');
@@ -200,9 +210,9 @@ const appGenerar = new (function () {
       html2canvas: {
         scale: scale,
       },
-      callback: function(doc) {
+      callback: function (doc) {
         // Descarga PDF
-        doc.save("solicitud_permiso_"+numeroPermiso+".pdf");
+        doc.save("solicitud_permiso_" + numeroPermiso + ".pdf");
         // Quita el icono "Cargando"
         btnDescargar.innerHTML = `
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
@@ -356,7 +366,7 @@ const appGenerar = new (function () {
 var tablaCompleta = document.getElementById('tabla-completa');
 var tablaSimple = document.getElementById('tabla-simple');
 if (tablaCompleta) {
-    appGenerar.listadoGenerarCompleta();
+  appGenerar.listadoGenerarCompleta();
 } else if (tablaSimple) {
-    appGenerar.listadoGenerarSimple();
+  appGenerar.listadoGenerarSimple();
 }

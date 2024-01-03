@@ -31,8 +31,9 @@ const appFuncionarios = new (function () {
                 let totalPaginas = data.totalPaginas;
 
                 let html = '';
-                for (let i = 0; i < item.length; i++) {
-                    let botones = `
+                if (item != '') {
+                    for (let i = 0; i < item.length; i++) {
+                        let botones = `
                         <button onclick="appFuncionarios.editarFuncionarios(${item[i].id_funcionario})" title="Editar" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
@@ -45,7 +46,7 @@ const appFuncionarios = new (function () {
                             </svg>
                         </button>
                     `;
-                    html += `
+                        html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="pr-4">${item[i].id_funcionario}</td>
                             <td class="pr-4 capitalize leading-6">
@@ -73,6 +74,9 @@ const appFuncionarios = new (function () {
                             </td>
                         </tr>
                     `;
+                    }
+                } else {
+                    html += '<tr class="h-16"><td colspan="8">No se encontró resultados.</td></tr>';
                 }
                 this.tbodyFuncionarios.innerHTML = html;
                 this.paginacionFuncionarios(pagina, totalPaginas, false);
@@ -93,8 +97,8 @@ const appFuncionarios = new (function () {
                 // Datos de la lista y total de paginas
                 let item = data.resultado;
                 let totalPaginas = data.totalPaginas;
-                let html = '';
 
+                let html = '';
                 if (item != '') {
                     for (let i = 0; i < item.length; i++) {
                         let botones = `
@@ -140,7 +144,7 @@ const appFuncionarios = new (function () {
                         `;
                     }
                 } else {
-                    html += '<p class="w-full my-5">No se encontró resultados.</p>';
+                    html += '<tr class="h-16"><td colspan="8">No se encontró resultados.</td></tr>';
                 }
 
                 this.tbodyFuncionarios.innerHTML = html;

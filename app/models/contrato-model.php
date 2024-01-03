@@ -20,7 +20,13 @@ class Contrato extends Connection
             $declaracion->bindParam(':start', $start);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
-
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if (isset($item['detalle']) && isset($item['tipo'])) {
+                    $resultado[$i]['detalle'] = ucfirst($item['detalle']);
+                    $resultado[$i]['tipo'] = ucfirst($item['tipo']);
+                }
+            }
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM contrato WHERE contrato.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
@@ -54,7 +60,13 @@ class Contrato extends Connection
             $declaracion->bindParam(':start', $start);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
-
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if (isset($item['detalle']) && isset($item['tipo'])) {
+                    $resultado[$i]['detalle'] = ucfirst($item['detalle']);
+                    $resultado[$i]['tipo'] = ucfirst($item['tipo']);
+                }
+            }
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM contrato 
                         WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'";
@@ -79,6 +91,12 @@ class Contrato extends Connection
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if (isset($item['detalle'])) {
+                    $resultado[$i]['detalle'] = ucfirst($item['detalle']);
+                }
+            }
             return $resultado;
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -92,6 +110,11 @@ class Contrato extends Connection
             $declaracion->bindParam(':id_contrato', $id_contrato);
             $declaracion->execute();
             $resultado = $declaracion->fetch();
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            if (isset($resultado['detalle']) && isset($resultado['tipo'])) {
+                $resultado['detalle'] = ucfirst($resultado['detalle']);
+                $resultado['tipo'] = ucfirst($resultado['tipo']);
+            }
             return $resultado;
         } catch (PDOException $e) {
             echo $e->getMessage();
