@@ -26,7 +26,7 @@ if ($userSession->userLoggedIn()) {
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
                 <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
             </svg>
-            <p>¿Que es Estructura? Es la funcion laboral que se le otorga a cada funcionario.</p>
+            <p>¿Que es Estructura? Es la funcion laboral que se le otorga a cada funcionario. Se conforma por un área, departamento, sección y cargo.</p>
         </div>
 
         <div class="bg-white rounded-md shadow-sm mb-6">
@@ -88,6 +88,25 @@ if ($userSession->userLoggedIn()) {
 
             <!-- Mensaje de error -->
             <div id="error-estructura" class="hidden p-4">
+            </div>
+        </div>
+
+        <!-- Mensaje -->
+        <div class="flex gap-4 mb-4">
+            <div class="flex items-center gap-2 bg-green-200 rounded-md shadow-sm px-3 py-2 text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].f_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                    <circle cx="8" cy="8" r="8" />
+                </svg>Activo
+            </div>
+            <div class="flex items-center gap-2 bg-amber-200 rounded-md shadow-sm px-3 py-2 text-amber-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].f_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                    <circle cx="8" cy="8" r="8" />
+                </svg>Suspendido
+            </div>
+            <div class="flex items-center gap-2 bg-red-200 rounded-md shadow-sm px-3 py-2 text-red-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].f_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                    <circle cx="8" cy="8" r="8" />
+                </svg>Anulado
             </div>
         </div>
 

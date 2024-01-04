@@ -32,7 +32,7 @@
                     <div class="hidden col-span-full">
                         <label class="block text-sm font-medium leading-6 text-gray-900">Funcionario:</label>
                         <div class="mt-2">
-                            <input type="num" id="cuenta-id-funcionario-solicitud" required class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                            <input type="num" id="cuenta-id-funcionario-solicitud" disabled class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                         </div>
                     </div>
                 <?php endif; ?>
@@ -100,6 +100,9 @@
                         <textarea id="observacion-solicitud" rows="3" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"></textarea>
                     </div>
                 </div>
+
+                <!-- Mensaje error -->
+                <div id="mensaje-error" class="hidden col-span-full"></div>
             </div>
 
             <div class="mt-6 flex items-center justify-end gap-x-6">

@@ -11,6 +11,7 @@ const appSolicitud = new (function () {
     this.horaEntradaSolicitud = document.getElementById('hora-entrada-solicitud');
     this.observacionSolicitud = document.getElementById('observacion-solicitud');
     this.razonSolicitud = document.querySelectorAll('input[type="radio"][name="razon-solicitud"]');
+    this.mensajeError = document.getElementById('mensaje-error');
     this.busqueda = document.getElementById('busqueda-solicitud');
     this.busquedaTipo = document.getElementById('busqueda-tipo');
     this.paginacion = document.getElementById('paginacion');
@@ -250,21 +251,42 @@ const appSolicitud = new (function () {
         fetch("../controllers/verFuncionarioEstructura.php", { method: "POST", body: formFE })
             .then((resultado) => resultado.json())
             .then((data) => {
-                this.CuentaIdfuncionarioSolicitud.value = data['id_funcionario_estructura'];
+                if (data['id_funcionario_estructura']) {
+                    this.CuentaIdfuncionarioSolicitud.value = data['id_funcionario_estructura'];
+                } else {
+                    this.CuentaIdfuncionarioSolicitud.value = null;
+                }
             })
             .catch((error) => console.log(error));
     }
     this.guardarSolicitud = () => {
+        // obtener la id_funcionario_estructura
+        if (this.funcionarioSolicitud) {
+            // enviar el id_funcionario_estructura (para administrador y autorizador)
+            this.idFuncionarioSolicitud = this.funcionarioSolicitud;
+
+        } else if (this.CuentaIdfuncionarioSolicitud) {
+            // comprobar que el usuario tiene un funcionario_estructura asignado
+            if (this.CuentaIdfuncionarioSolicitud.value == '') {
+                // Si el usuario no tiene id_funcionario_estructura mostrar mensaje y cancela la ejecucion
+                this.mensajeError.innerHTML = '';
+                // Mostrar mensaje
+                this.mensajeError.classList.remove('hidden');
+                this.mensajeError.innerHTML = `
+                    <p class="font-medium rounded-md p-4 bg-red-100">Ustéd no tiene un cargo asignado, hable con el departamento de sistemas</p>
+                `;
+                return;
+            } else {
+                // Si el usuario tiene id_funcionario_estructura ...
+                // enviar el id_funcionario_estructura (para usuario estandar)
+                this.idFuncionarioSolicitud = this.CuentaIdfuncionarioSolicitud;
+            }
+
+        }
         // La fecha de salida debe ser anterior o igual a la fecha entrada
         if (this.fechaSalidaSolicitud.value > this.fechaEntradaSolicitud.value) {
             alert('¡La fecha de salida debe ser anterior o igual a la fecha entrada!');
-            return
-        }
-        // obtener la id_funcionario_estructura
-        if (this.funcionarioSolicitud) {
-            this.idFuncionarioSolicitud = this.funcionarioSolicitud;
-        } else if (this.CuentaIdfuncionarioSolicitud) {
-            this.idFuncionarioSolicitud = this.CuentaIdfuncionarioSolicitud;
+            return;
         }
         var formSolicitud = new FormData();
         formSolicitud.append('id_funcionario_estructura', this.idFuncionarioSolicitud.value);
@@ -319,8 +341,10 @@ const appSolicitud = new (function () {
             .then((respuesta) => respuesta.json())
             .then((data) => {
                 if (this.tablaCompleta) {
+                    app.notificacion('¡Solicitud actualizada!', 'Se ha actualizado una solicitud.', 'actualizar');
                     this.listadoSolicitudCompleta();
                 } else if (this.tablaSimple) {
+                    app.notificacion('¡Solicitud actualizada!', 'Se ha actualizado tu solicitud.', 'actualizar');
                     this.listadoSolicitudSimple();
                 }
                 this.cerrarModalSolicitud();
@@ -544,11 +568,8 @@ const appSolicitud = new (function () {
         fetch("../controllers/aprobarFuncionarioSolicitud.php", { method: "POST", body: formSolicitud })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                if (this.tablaCompleta) {
-                    this.listadoSolicitudCompleta();
-                } else if (this.tablaSimple) {
-                    this.listadoSolicitudSimple();
-                }
+                app.notificacion('¡Solicitud aprobada!', 'Haz aprobado una solicitud.', 'guardar');
+                this.listadoSolicitudCompleta();
                 this.busqueda.value = null;
             })
             .catch((error) => alert('¡Error! ' + error));
@@ -564,11 +585,8 @@ const appSolicitud = new (function () {
                     if (data.estado != 'anulado') {
                         alert('¡No se pudo anular, esta solicitud está siendo usada!');
                     }
-                    if (this.tablaCompleta) {
-                        this.listadoSolicitudCompleta();
-                    } else if (this.tablaSimple) {
-                        this.listadoSolicitudSimple();
-                    }
+                    app.notificacion('¡Solicitud eliminada!', 'Se ha eliminado una solicitud.', 'eliminar');
+                    this.listadoSolicitudCompleta();
                     this.busqueda.value = null;
                 })
                 .catch((error) => alert('¡Error! ' + error));
@@ -597,6 +615,5 @@ var cuenta_IdFS = document.getElementById('cuenta-id-funcionario-solicitud');
 if (select_IdFS) {
     appSolicitud.selectFuncionarioEstructura();
 } else if (cuenta_IdFS) {
-    console.log('sd');
     appSolicitud.idFuncionarioEstructura();
 }

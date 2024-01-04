@@ -335,6 +335,7 @@ const appFuncionarios = new (function () {
             .then((respuesta) => respuesta.json())
             .then((data) => {
                 if (data == true) {
+                    app.notificacion('¡Funcionario actualizado!', 'Se ha actualizado un funcionario.', 'actualizar');
                     this.listadoFuncionarios();
                     this.cerrarModalFuncionarios();
                 } else {
@@ -466,6 +467,7 @@ const appFuncionarios = new (function () {
                     if (data.f_estado != 'anulado') {
                         alert('¡No se pudo anular, este funcionario tiene un cargo asignado!')
                     }
+                    app.notificacion('¡Funcionario eliminado!', 'Se ha eliminado un funcionario.', 'eliminar');
                     this.listadoFuncionarios();
                     this.busqueda.value = null;
                 })

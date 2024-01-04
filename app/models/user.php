@@ -16,6 +16,7 @@ class User extends Connection
     private $u_estado;
     private $f_estado;
     private $rol;
+    private $idFuncionarioEstructura;
 
     public function userExists($user, $pass)
     {
@@ -35,6 +36,7 @@ class User extends Connection
     }
     public function setUser($user)
     {
+        // consulta tabla usurio, funcionario y rol
         $sql = 'SELECT  usuario.id_usuario, usuario.nick, usuario.estado AS u_estado,
                         funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos, funcionario.cedula,
                         funcionario.telefono, funcionario.direccion, funcionario.email,
@@ -44,12 +46,11 @@ class User extends Connection
                 INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario
                 INNER JOIN rol ON usuario.id_rol_fk = rol.id_rol
                 WHERE usuario.nick=:user';
+        $usuario = $this->getConnection()->prepare($sql);
+        $usuario->bindParam(':user', $user);
+        $usuario->execute();
 
-        $declaracion = $this->getConnection()->prepare($sql);
-        $declaracion->bindParam(':user', $user);
-        $declaracion->execute();
-
-        foreach ($declaracion as $currentUser) {
+        foreach ($usuario as $currentUser) {
             $this->idUser = $currentUser['id_usuario'];
             $this->idFuncionario = $currentUser['id_funcionario'];
             $this->username = $currentUser['nick'];
@@ -69,6 +70,23 @@ class User extends Connection
             $this->u_estado = $currentUser['u_estado'];
             $this->f_estado = $currentUser['f_estado'];
             $this->rol = $currentUser['rol_detalle'];
+        }
+
+        // consulta tabla funcionario_estructura
+        $sql = "SELECT funcionario_estructura.id_funcionario_estructura
+                FROM funcionario_estructura 
+                WHERE funcionario_estructura.id_funcionario_fk=:id_funcionario
+                AND funcionario_estructura.estado = 'activo'
+                LIMIT 1";
+        $funcionario_estructura = $this->getConnection()->prepare($sql);
+        $funcionario_estructura->bindParam(':id_funcionario', $this->idFuncionario);
+        $funcionario_estructura->execute();
+
+        if ($funcionario_estructura->rowCount() > 0) {
+            $funcionario_estructura = $funcionario_estructura->fetch();
+            $this->idFuncionarioEstructura = $funcionario_estructura['id_funcionario_estructura'];
+        } else {
+            $this->idFuncionarioEstructura = 'sdsd';
         }
     }
     public function getImagen()
@@ -122,5 +140,9 @@ class User extends Connection
     public function getRol()
     {
         return $this->rol;
+    }
+    public function getIdFuncionarioEstructura()
+    {
+        return $this->idFuncionarioEstructura;
     }
 }

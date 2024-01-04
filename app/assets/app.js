@@ -57,11 +57,11 @@ const app = new (function () {
         // cerrar
         if (notificacionID) {
             // animacion
-            notificacionID.classList.add('transform', 'ease-out', 'duration-700', 'translate-x-full', 'opacity-0');
+            notificacionID.classList.add('transform', 'ease-out', 'duration-1000', 'translate-x-full', 'opacity-0');
             // esperar 1 segundos para que la animacion termine
             setTimeout(() => {
                 notificacionID.remove();
-            }, 1000);
+            }, 700);
         }
     }
     this.abrirMenu = () => {

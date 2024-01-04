@@ -86,8 +86,9 @@ class Contrato extends Connection
     public static function selectContrato()
     {
         try {
-            $sql = 'SELECT * FROM contrato 
-                    ORDER BY detalle ASC';
+            $sql = "SELECT * FROM contrato 
+                    WHERE estado = 'activo'
+                    ORDER BY detalle ASC";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();

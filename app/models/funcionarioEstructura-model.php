@@ -15,7 +15,7 @@ class funcionarioEstructura extends Connection
                         funcionario.nombres, funcionario.apellidos, funcionario.estado AS f_estado,
                         contrato.detalle AS contrato_detalle, contrato.estado AS c_estado,
                         estructura.id_estructura, estructura.estado AS e_estado,
-                        cargo.detalle AS cargo_detalle
+                        cargo.detalle AS cargo_detalle, cargo.estado AS cargo_estado
                     FROM funcionario_estructura
                     INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
                     INNER JOIN contrato ON funcionario_estructura.id_contrato_fk = contrato.id_contrato
@@ -177,29 +177,43 @@ class funcionarioEstructura extends Connection
     public static function guardarFuncionarioEstructura($data)
     {
         try {
-            // Comprobar que los datos ingresados no sean los mismos que ya existen
-            $sql = 'SELECT * 
+            // Comprobar si el id_funcionario ya existe (al menos 1)
+            $sql = 'SELECT id_funcionario_fk
                     FROM funcionario_estructura 
                     WHERE id_funcionario_fk=:id_funcionario
-                    ORDER BY id_funcionario_estructura DESC
                     LIMIT 1';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
             $declaracion->execute();
-            $resultado = $declaracion->fetch();
-            if ($data['id_contrato'] == $resultado['id_contrato_fk'] && $data['id_estructura'] == $resultado['id_estructura_fk']) {
-                $resultado = 'No se ha realizado cambios';
-                return $resultado;
-            }
 
-            // Actualizar el último registro con el mismo id_funcionario estado="activo" a estado="suspendido"
-            $updateSql = "UPDATE funcionario_estructura
-                      SET estado = 'suspendido'
-                      WHERE id_funcionario_fk=:id_funcionario
-                      AND estado = 'activo'";
-            $updateDeclaracion = Connection::getConnection()->prepare($updateSql);
-            $updateDeclaracion->bindParam(':id_funcionario', $data['id_funcionario']);
-            $updateDeclaracion->execute();
+            // Si el id_funcionario ya existe (al menos 1)...
+            if ($declaracion->rowCount() > 0) {
+                // Comprobar que los datos ingresados no sean igual al ultimo segun funcionario
+                $sql = 'SELECT * 
+                    FROM funcionario_estructura 
+                    WHERE id_funcionario_fk=:id_funcionario
+                    ORDER BY id_funcionario_estructura DESC
+                    LIMIT 1';
+                $declaracion = Connection::getConnection()->prepare($sql);
+                $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
+                $declaracion->execute();
+                $resultado = $declaracion->fetch();
+
+                if ($data['id_contrato'] == $resultado['id_contrato_fk'] && $data['id_estructura'] == $resultado['id_estructura_fk']) {
+                    // Si el registro ya existe, mostrar mensaje
+                    $resultado = 'No se ha realizado cambios';
+                    return $resultado;
+                }
+
+                // Actualizar el último registro con el mismo id_funcionario estado="activo" a estado="suspendido"
+                $updateSql = "UPDATE funcionario_estructura
+                        SET estado = 'suspendido'
+                        WHERE id_funcionario_fk=:id_funcionario
+                        AND estado = 'activo'";
+                $updateDeclaracion = Connection::getConnection()->prepare($updateSql);
+                $updateDeclaracion->bindParam(':id_funcionario', $data['id_funcionario']);
+                $updateDeclaracion->execute();
+            }
 
             // Insertar un nuevo registro
             $sql = 'INSERT INTO funcionario_estructura (id_funcionario_fk, id_contrato_fk, id_estructura_fk, estado)

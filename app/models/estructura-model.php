@@ -124,6 +124,7 @@ class Estructura extends Connection
                     INNER JOIN seccion ON estructura.id_seccion_fk = seccion.id_seccion
                     INNER JOIN departamento ON estructura.id_departamento_fk = departamento.id_departamento
                     INNER JOIN area ON estructura.id_area_fk = area.id_area
+                    WHERE estructura.estado = 'activo'
                     ORDER BY cargo.detalle ASC";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
