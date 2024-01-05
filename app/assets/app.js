@@ -33,10 +33,10 @@ const app = new (function () {
         }();
         // crear notificacion (titulo, texto)
         this.notificacionContent.innerHTML += `
-            <div id="id-notificacion-${id_notificacion}" class="flex items-center justify-between gap-4 w-full p-4 bg-white border border-slate-200 shadow-md rounded-md">
+            <div id="id-notificacion-${id_notificacion}" class="flex items-center justify-between gap-4 w-full p-4 bg-white border border-slate-200 shadow-md rounded-md transform translate-x-full opacity-0">
                 <div>${icono}</div>
                 <div class="flex-1">
-                    <h3 class="font-semibold">${titulo}</h3>
+                ${id_notificacion}<h3 class="font-semibold">${titulo}</h3>
                     <p class="text-slate-500 mt-2">${texto}</p>
                 </div>
                 <button onclick="app.cerrarNotificacion(${id_notificacion})" class="p-2">
@@ -46,6 +46,11 @@ const app = new (function () {
                 </button>
             </div>
         `;
+        // animacion de apertura
+        setTimeout(() => {
+            document.getElementById('id-notificacion-' + id_notificacion).classList.remove('translate-x-full', 'opacity-0');
+            document.getElementById('id-notificacion-' + id_notificacion).classList.add('ease-in', 'duration-200', 'translate-x-0', 'opacity-100');
+        }, 100);
         // cerrar notificacion despues de 10 segundos
         setTimeout(() => {
             this.cerrarNotificacion(id_notificacion);
@@ -57,7 +62,8 @@ const app = new (function () {
         // cerrar
         if (notificacionID) {
             // animacion
-            notificacionID.classList.add('transform', 'ease-out', 'duration-1000', 'translate-x-full', 'opacity-0');
+            notificacionID.classList.remove('ease-in', 'duration-200', 'translate-x-0', 'opacity-100');
+            notificacionID.classList.add('ease-out', 'duration-1000', 'translate-x-full', 'opacity-0');
             // esperar 1 segundos para que la animacion termine
             setTimeout(() => {
                 notificacionID.remove();
