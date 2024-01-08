@@ -20,7 +20,10 @@
                     <!-- Nombres Funcionario -->
                     <div class="col-span-full">
                         <label class="block text-sm font-medium leading-6 text-gray-900">Funcionario:</label>
-                        <p class="text-xs leading-6 text-gray-600">Únicamente se incluyen funcionarios con cargos asignados.</p pr-4>
+                        <p class="text-xs leading-6 text-gray-600">
+                            Esta lista incluye únicamente a los funcionarios que tienen un cargo asignado. 
+                            Si no encuentras al funcionario que buscas, por favor, <a href="./asignar-cargo.php" class="text-indigo-600 font-semibold">asigna un cargo</a> a dicho funcionario.
+                        </p>
                         <div class="mt-2">
                             <select id="select-id-funcionario-solicitud" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                 <option value="" selected disabled>-- Selecciona --</option>

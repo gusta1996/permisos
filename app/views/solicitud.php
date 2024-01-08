@@ -14,12 +14,12 @@ if ($userSession->userLoggedIn()) {
 
     if (!isset($_GET['page'])) {
         // Titulo, header, contenido
-        $title = 'Solicitudes';
+        $title = 'Solicitudes de permisos';
         require '../template/header.php';
         require './page/solicitud-index.php';
     } elseif ($_GET['page'] == 'crear') {
         // Titulo, header, contenido
-        $title = 'Solicitudes - Crear nueva solicitud';
+        $title = 'Crear nueva solicitud - Solicitudes de permisos';
         require '../template/header.php';
         require './page/solicitud-crear.php';
     } else {

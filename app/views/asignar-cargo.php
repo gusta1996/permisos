@@ -19,13 +19,13 @@ if ($userSession->userLoggedIn()) {
             // Titulo, header, contenido
             $title = 'Contratos y cargos';
             require '../template/header.php';
-            require './page/cargos-asignados-index.php';
+            require './page/asignar-cargo-index.php';
     
         } elseif ($_GET['page'] == 'registro') {
             // Titulo, header, contenido
             $title = 'Registros de contratos y cargos';
             require '../template/header.php';
-            require './page/cargos-asignados-registro.php';
+            require './page/asignar-cargos-registro.php';
     
         } 
 
