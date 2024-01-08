@@ -42,13 +42,13 @@ const appEstructura = new (function () {
         /* Activar SELECT DEPARTAMENTO */
         selectArea.on('select2:select', function (e) {
             // resetear opciones (seccion, cargo)
-            selectSeccion.empty().append('<option selected disabled>-- Selecciona --</option>');
-            selectCargo.empty().append('<option selected disabled>-- Selecciona --</option>');
+            selectSeccion.empty().append('<option value selected disabled>-- Selecciona --</option>');
+            selectCargo.empty().append('<option value selected disabled>-- Selecciona --</option>');
             // desabilitar select (seccion, cargo)
             selectSeccion.prop('disabled', true).trigger('change');
             selectCargo.prop('disabled', true).trigger('change');
             // agregar opciones (departamento)
-            appEstructura.selectDepartamentoIdArea(selectArea.val());
+            appEstructura.selectDepartamento(selectArea.val());
             // iniciar select2
             selectDepartamento.select2();
             // funciones necesarias
@@ -64,11 +64,11 @@ const appEstructura = new (function () {
         /* Activar SELECT SECCION */
         selectDepartamento.on('select2:select', function (e) {
             // resetear opciones (cargo)
-            selectCargo.empty().append('<option selected disabled>-- Selecciona --</option>');
+            selectCargo.empty().append('<option value selected disabled>-- Selecciona --</option>');
             // desabilitar select (cargo)
             selectCargo.prop('disabled', true).trigger('change');
             // agregar opciones (seccion)
-            appEstructura.selectSeccionIdDepartamento(selectDepartamento.val());
+            appEstructura.selectSeccion(selectDepartamento.val());
             // iniciar select2
             selectSeccion.select2();
             // funciones necesarias
@@ -84,7 +84,7 @@ const appEstructura = new (function () {
         /* Activar SELECT CARGO */
         selectSeccion.on('select2:select', function (e) {
             // agregar opciones (cargo)
-            appEstructura.selectCargoIdSeccion(selectSeccion.val());
+            appEstructura.selectCargo(selectSeccion.val());
             // iniciar select2
             selectCargo.select2();
             // funciones necesarias
@@ -103,145 +103,252 @@ const appEstructura = new (function () {
             $('.btn-guardar-estructura').removeClass('cursor-no-drop');
         });
     }
-    this.selectArea = () => {
-        var editarArea = document.getElementById('editar-area-estructura');
-        fetch("../controllers/selectArea.php")
+    this.cargarSelectEditar = async () => {
+        // Jquery para trabajar con la biblioteca Select2
+        // variables
+        var selectArea = $('#editar-area-estructura');
+        var selectDepartamento = $('#editar-departamento-estructura');
+        var selectSeccion = $('#editar-seccion-estructura');
+        var selectCargo = $('#editar-cargo-estructura');
+        var clasesSelect = 'bg-white h-[38px] block !w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6';
+
+        // Agregar clase para dar color de desabilitado
+        function agregarColorDesabilitado() {
+            $('.select2-container--disabled').addClass('!bg-[#eeeeee]');
+        }
+        // Agregar clases en select2
+        function agregarClasesSelect2() {
+            $('.select2').addClass(clasesSelect); // agregar clases en select2
+        }
+
+        /* Activar SELECT AREA */
+        await this.selectArea();
+        selectArea.select2(); // iniciar select2
+
+        /* Activar SELECT DEPARTAMENTO */
+        await this.selectDepartamento(selectArea.val()); // agregar opciones
+        selectDepartamento.select2(); // iniciar select2
+
+        /* Activar SELECT SECCION */
+        await this.selectSeccion(selectDepartamento.val()); // agregar opciones
+        selectSeccion.select2(); // iniciar select2
+
+        /* Activar SELECT CARGO */
+        await this.selectCargo(selectSeccion.val()); // agregar opciones
+        selectCargo.select2(); // iniciar select2
+
+        // agrega las clases a select 2
+        agregarClasesSelect2();
+
+        /* Recarga SELECT DEPARTAMENTO */
+        selectArea.on('select2:select', function (e) {
+            // resetear opciones (seccion, cargo)
+            selectSeccion.empty().append('<option value selected disabled>-- Selecciona --</option>');
+            selectCargo.empty().append('<option value selected disabled>-- Selecciona --</option>');
+            // desabilitar select (seccion, cargo)
+            selectSeccion.prop('disabled', true).trigger('change');
+            selectCargo.prop('disabled', true).trigger('change');
+            // agregar opciones (departamento)
+            appEstructura.selectDepartamento(selectArea.val());
+            // funciones necesarias
+            setTimeout(function () {
+                agregarClasesSelect2();
+                agregarColorDesabilitado();
+            }, 0);
+        });
+
+        /* Recarga SELECT SECCION */
+        selectDepartamento.on('select2:select', function (e) {
+            // resetear opciones (cargo)
+            selectCargo.empty().append('<option value selected disabled>-- Selecciona --</option>');
+            // desabilitar select (cargo)
+            selectCargo.prop('disabled', true).trigger('change');
+            // agregar opciones (seccion)
+            appEstructura.selectSeccion(selectDepartamento.val());
+            // iniciar select2
+            selectSeccion.select2();
+            // funciones necesarias
+            setTimeout(function () {
+                agregarClasesSelect2();
+                agregarColorDesabilitado();
+            }, 0);
+        });
+
+        /* Recarga SELECT CARGO */
+        selectSeccion.on('select2:select', function (e) {
+            // agregar opciones (cargo)
+            appEstructura.selectCargo(selectSeccion.val());
+            // iniciar select2
+            selectCargo.select2();
+            // funciones necesarias
+            setTimeout(function () {
+                agregarClasesSelect2();
+            }, 0);
+        });
+    }
+    this.selectArea = async () => {
+        let select;
+        // verifica que select se esta usando (para editar o guardar)
+        if (document.getElementById('editar-area-estructura')) {
+            // se usa el select para editar seccion
+            select = document.getElementById('editar-area-estructura');
+        } else {
+            // se usa el select para guardar seccion
+            select = this.area;
+        }
+        await fetch("../controllers/selectArea.php")
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
-                    // Imprimir las opciones
-                    if (editarArea) {
-                        var seleted = 'area-id-' + item.id_area == editarArea.classList.item(0) ? 'selected' : '';
-                        editarArea.innerHTML += `
-                            <option ${seleted} value="${item.id_area}">${item.detalle}</option>
-                        `;
+                    // NECESARIO: volver a verificar que select se esta usando (para editar o guardar) antes de agregar las opciones
+                    if (document.getElementById('editar-area-estructura')) {
+                        var seleted = 'area-id-' + item.id_area == select.classList.item(0) ? 'selected' : '';
+                        select.innerHTML += `<option ${seleted} value="${item.id_area}">${item.detalle}</option>`;
                     } else {
-                        this.area.innerHTML += `
-                            <option value="${item.id_area}">${item.detalle}</option>
-                        `;
+                        select.innerHTML += `<option value="${item.id_area}">${item.detalle}</option>`;
                     }
                 });
             })
             .catch((error) => console.log(error));
     }
-    this.selectDepartamento = () => {
-        var editarDepartamento = document.getElementById('editar-departamento-estructura');
-        fetch("../controllers/selectDepartamento.php")
-            .then((resultado) => resultado.json())
-            .then((data) => {
-                data.forEach(item => {
-                    // Imprimir las opciones
-                    var seleted = 'departamento-id-' + item.id_departamento == editarDepartamento.classList.item(0) ? 'selected' : '';
-                    editarDepartamento.innerHTML += `
-                        <option ${seleted} value="${item.id_departamento}">${item.detalle}</option>
-                    `;
-                });
-            })
-            .catch((error) => console.log(error));
-    }
-    this.selectDepartamentoIdArea = (id_area) => {
+    this.selectDepartamento = async (id_area) => {
+        let select;
+        // verifica que select se esta usando (para editar o guardar)
+        if (document.getElementById('editar-departamento-estructura')) {
+            // se usa el select para editar seccion
+            select = document.getElementById('editar-departamento-estructura');
+        } else {
+            // se usa el select para guardar seccion
+            select = this.departamento;
+        }
         // habilita select de departamento
-        this.departamento.removeAttribute("disabled");
+        select.removeAttribute("disabled");
         // obtener las opciones
-        fetch("../controllers/selectDepartamento.php?id_area=" + id_area)
+        await fetch("../controllers/selectDepartamento.php?id_area=" + id_area)
             .then((resultado) => resultado.json())
             .then((data) => {
                 // verifica si existen resultados
                 if (data.length == 0) {
                     // no existe resultados
-                    this.departamento.innerHTML = `<option selected disabled>-- No existe resultados --</option>`;
+                    select.innerHTML = `<option value selected disabled>-- No existe resultados --</option>`;
                 } else {
                     // reset opciones
-                    this.departamento.innerHTML = '<option selected disabled>-- Selecciona --</option>';
+                    select.innerHTML = '<option value selected disabled>-- Selecciona --</option>';
                     // agregar opciones
                     data.forEach(item => {
-                        // Imprimir las opciones
-                        this.departamento.innerHTML += `
-                            <option value="${item.id_departamento}">${item.detalle}</option>
-                        `;
+                        // NECESARIO: volver a verificar que select se esta usando (para editar o guardar) antes de agregar las opciones
+                        if (document.getElementById('editar-departamento-estructura')) {
+                            var seleted = 'departamento-id-' + item.id_departamento == select.classList.item(0) ? 'selected' : '';
+                            select.innerHTML += `<option ${seleted} value="${item.id_departamento}">${item.detalle}</option>`;
+                        } else {
+                            select.innerHTML += `<option value="${item.id_departamento}">${item.detalle}</option>`;
+                        }
                     });
+                    // NECESARIO: verificar si se esta usando select para editar, esto activara el select seccion
+                    if (document.getElementById('editar-departamento-estructura')) {
+                        // quitar clase !bg-[#eeeeee]
+                        $('#editar-departamento-estructura').next().removeClass('!bg-[#eeeeee]');
+                        // desabilitar select (cargo)
+                        $('#editar-cargo-estructura').prop('disabled', true).trigger('change');
+                        /* recarga SELECT SECCION */
+                        if (select.value) {
+                            this.selectSeccion(select.value); // agregar opciones
+                            // quitar clase !bg-[#eeeeee]
+                            $('#editar-seccion-estructura').next().removeClass('!bg-[#eeeeee]');
+                            $('#editar-cargo-estructura').next().removeClass('!bg-[#eeeeee]');
+                        }
+                    }
+                }
+            })
+            .catch((error) => console.log(error));
+
+    }
+    this.selectSeccion = async (id_departamento) => {
+        let select;
+        // verifica que select se esta usando (para editar o guardar)
+        if (document.getElementById('editar-seccion-estructura')) {
+            // se usa el select para editar seccion
+            select = document.getElementById('editar-seccion-estructura');
+        } else {
+            // se usa el select para guardar seccion
+            select = this.seccion;
+        }
+        // habilita select de seccion
+        select.removeAttribute("disabled");
+        // obtener las opciones
+        await fetch("../controllers/selectSeccion.php?id_departamento=" + id_departamento)
+            .then((resultado) => resultado.json())
+            .then((data) => {
+                // verifica si existen resultados
+                if (data.length == 0) {
+                    // no existe resultados
+                    select.innerHTML = `<option value selected disabled>-- No existe resultados --</option>`;
+                } else {
+                    // reset opciones
+                    select.innerHTML = '<option value selected disabled>-- Selecciona --</option>';
+                    // agregar opciones
+                    data.forEach(item => {
+                        // NECESARIO: volver a verificar que select se esta usando (para editar o guardar) antes de agregar las opciones
+                        if (document.getElementById('editar-seccion-estructura')) {
+                            var seleted = 'seccion-id-' + item.id_seccion == select.classList.item(0) ? 'selected' : '';
+                            select.innerHTML += `<option ${seleted} value="${item.id_seccion}">${item.detalle}</option>`;
+                        } else {
+                            select.innerHTML += `<option value="${item.id_seccion}">${item.detalle}</option>`;
+                        }
+                    });
+                    // NECESARIO: verificar si se esta usando select para editar, esto activara el select cargo
+                    if (document.getElementById('editar-seccion-estructura')) {
+                        // quitar clase !bg-[#eeeeee]
+                        $('#editar-seccion-estructura').next().removeClass('!bg-[#eeeeee]');
+                        /* recarga SELECT CARGO */
+                        if (select.value) {
+                            this.selectCargo(select.value); // agregar opciones
+                            // quitar clase !bg-[#eeeeee]
+                            $('#editar-cargo-estructura').next().removeClass('!bg-[#eeeeee]');
+                        }
+                    }
                 }
             })
             .catch((error) => console.log(error));
     }
-    this.selectSeccion = () => {
-        var editarSeccion = document.getElementById('editar-seccion-estructura');
-        fetch("../controllers/selectSeccion.php")
-            .then((resultado) => resultado.json())
-            .then((data) => {
-                data.forEach(item => {
-                    // Imprimir las opciones
-                    var seleted = 'seccion-id-' + item.id_seccion == editarSeccion.classList.item(0) ? 'selected' : '';
-                    editarSeccion.innerHTML += `
-                        <option ${seleted} value="${item.id_seccion}">${item.detalle}</option>
-                    `;
-                });
-            })
-            .catch((error) => console.log(error));
-    }
-    this.selectSeccionIdDepartamento = (id_departamento) => {
-        // habilita select de departamento
-        this.seccion.removeAttribute("disabled");
-        // reset opciones
-        this.cargo.innerHTML = '<option selected disabled>-- Selecciona --</option>';
+    this.selectCargo = async (id_seccion) => {
+        let select;
+        // verifica que select se esta usando (para editar o guardar)
+        if (document.getElementById('editar-cargo-estructura')) {
+            // se usa el select para editar cargo
+            select = document.getElementById('editar-cargo-estructura');
+        } else {
+            // se usa el select para guardar cargo
+            select = this.cargo;
+        }
+        // habilita select de cargo
+        select.removeAttribute("disabled");
         // obtener las opciones
-        fetch("../controllers/selectSeccion.php?id_departamento=" + id_departamento)
+        await fetch("../controllers/selectCargo.php?id_seccion=" + id_seccion)
             .then((resultado) => resultado.json())
             .then((data) => {
                 // verifica si existen resultados
                 if (data.length == 0) {
                     // no existe resultados
-                    this.seccion.innerHTML = `<option selected disabled>-- No existe resultados --</option>`;
+                    select.innerHTML = `<option value selected disabled>-- No existe resultados --</option>`;
                 } else {
                     // reset opciones
-                    this.seccion.innerHTML = '<option selected disabled>-- Selecciona --</option>';
+                    select.innerHTML = '<option value selected disabled>-- Selecciona --</option>';
                     // agregar opciones
                     data.forEach(item => {
-                        // Imprimir las opciones
-                        this.seccion.innerHTML += `
-                            <option value="${item.id_seccion}">${item.detalle}</option>
-                        `;
+                        // NECESARIO: volver a verificar que select se esta usando (para editar o guardar) antes de agregar las opciones
+                        if (document.getElementById('editar-cargo-estructura')) {
+                            var seleted = 'cargo-id-' + item.id_cargo == select.classList.item(0) ? 'selected' : '';
+                            select.innerHTML += `<option ${seleted} value="${item.id_cargo}">${item.detalle}</option>`;
+                        } else {
+                            select.innerHTML += `<option value="${item.id_cargo}">${item.detalle}</option>`;
+                        }
                     });
-                }
-            })
-            .catch((error) => console.log(error));
-    }
-    this.selectCargo = () => {
-        var EditCargo = document.getElementById('editar-cargo-estructura');
-        fetch("../controllers/selectCargo.php")
-            .then((resultado) => resultado.json())
-            .then((data) => {
-                data.forEach(item => {
-                    // Imprimir las opciones
-                    var seleted = 'cargo-id-' + item.id_cargo == EditCargo.classList.item(0) ? 'selected' : '';
-                    EditCargo.innerHTML += `
-                            <option ${seleted} value="${item.id_cargo}">${item.detalle}</option>
-                        `;
-                });
-            })
-            .catch((error) => console.log(error));
-    }
-    this.selectCargoIdSeccion = (id_seccion) => {
-        // habilita select de departamento
-        this.cargo.removeAttribute("disabled");
-        // obtener las opciones
-        fetch("../controllers/selectCargo.php?id_seccion=" + id_seccion)
-            .then((resultado) => resultado.json())
-            .then((data) => {
-                // verifica si existen resultados
-                if (data.length == 0) {
-                    // no existe resultados
-                    this.cargo.innerHTML = `<option selected disabled>-- No existe resultados --</option>`;
-                } else {
-                    // reset opciones
-                    this.cargo.innerHTML = '<option selected disabled>-- Selecciona --</option>';
-                    // agregar opciones
-                    data.forEach(item => {
-                        // Imprimir las opciones
-                        this.cargo.innerHTML += `
-                            <option value="${item.id_cargo}">${item.detalle}</option>
-                        `;
-                    });
+                    // NECESARIO: verificar si se esta usando select para editar, esto quitará la clase que le dá un colo innecesario segun sea necesario
+                    if (document.getElementById('editar-cargo-estructura')) {
+                        // quitar clase !bg-[#eeeeee]
+                        $('#editar-cargo-estructura').next().removeClass('!bg-[#eeeeee]');
+                    }
                 }
             })
             .catch((error) => console.log(error));
@@ -460,28 +567,28 @@ const appEstructura = new (function () {
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Área</label>
                                             <select id="editar-area-estructura" required class="area-id-${data.id_area_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
-                                                <option disabled>-- Selecciona --</option>
+                                                <option ${data.area_estado != 'activo' ? 'value selected ' : ''}disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
                                         <!-- Departamento -->
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Departamento</label>
                                             <select id="editar-departamento-estructura" required class="departamento-id-${data.id_departamento_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
-                                                <option disabled>-- Selecciona --</option>
+                                                <option ${data.depa_estado != 'activo' ? 'value selected ' : ''}disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
                                         <!-- Sección -->
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Sección</label>
                                             <select id="editar-seccion-estructura" required class="seccion-id-${data.id_seccion_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
-                                                <option disabled>-- Selecciona --</option>
+                                                <option ${data.seccion_estado != 'activo' ? 'value selected ' : ''}disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
                                         <!-- Cargo -->
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Cargo</label>
                                             <select id="editar-cargo-estructura" required class="cargo-id-${data.id_cargo_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
-                                                <option disabled>-- Selecciona --</option>
+                                                <option ${data.cargo_estado != 'activo' ? 'value selected ' : ''}disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
                                         <!-- Estado -->
@@ -504,17 +611,7 @@ const appEstructura = new (function () {
                     </div>
                 </div>
                 `;
-                this.selectArea();
-                this.selectDepartamento();
-                this.selectSeccion();
-                this.selectCargo();
-                // Jquery para trabajar con la biblioteca Select2
-                $('#editar-area-estructura').select2();
-                $('#editar-departamento-estructura').select2();
-                $('#editar-seccion-estructura').select2();
-                $('#editar-cargo-estructura').select2();
-                $('#editar-estado-estructura').select2();
-                $('.select2').addClass('bg-white h-[38px] block !w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6');
+                this.cargarSelectEditar();
             })
             .catch((error) => console.log(error));
     }
@@ -548,13 +645,13 @@ const appEstructura = new (function () {
         // Selecion null y desabilita seleccion
         selectArea.val(null).trigger('change');
         // resetear opciones y desabilitar
-        selectDepartamento.empty().append('<option selected disabled>-- Selecciona --</option>');
+        selectDepartamento.empty().append('<option value selected disabled>-- Selecciona --</option>');
         selectDepartamento.prop('disabled', true).trigger('change');
         // resetear opciones y desabilitar
-        selectSeccion.empty().append('<option selected disabled>-- Selecciona --</option>');
+        selectSeccion.empty().append('<option value selected disabled>-- Selecciona --</option>');
         selectSeccion.prop('disabled', true).trigger('change');
         // resetear opciones y desabilitar
-        selectCargo.empty().append('<option selected disabled>-- Selecciona --</option>');
+        selectCargo.empty().append('<option value selected disabled>-- Selecciona --</option>');
         selectCargo.prop('disabled', true).trigger('change');
         // agrega color de desabilitado
         setTimeout(function () {

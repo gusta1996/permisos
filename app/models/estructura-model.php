@@ -147,7 +147,18 @@ class Estructura extends Connection
     public static function obtenerEstructura($id_estructura)
     {
         try {
-            $sql = 'SELECT * FROM estructura WHERE id_estructura=:id_estructura';
+            $sql = 'SELECT estructura.id_estructura, 
+                        estructura.id_area_fk, estructura.id_departamento_fk, estructura.id_seccion_fk, estructura.id_cargo_fk, 
+                        area.estado AS area_estado,
+                        departamento.estado AS depa_estado,
+                        seccion.estado AS seccion_estado,
+                        cargo.estado AS cargo_estado
+                    FROM estructura 
+                    INNER JOIN area on estructura.id_area_fk = area.id_area
+                    INNER JOIN departamento ON estructura.id_departamento_fk = departamento.id_departamento
+                    INNER JOIN seccion ON estructura.id_seccion_fk = seccion.id_seccion
+                    INNER JOIN cargo ON estructura.id_cargo_fk = cargo.id_cargo
+                    WHERE id_estructura=:id_estructura';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_estructura', $id_estructura);
             $declaracion->execute();
@@ -196,7 +207,27 @@ class Estructura extends Connection
     public static function actualizarEstructura($data)
     {
         try {
-            $sql = 'UPDATE estructura SET id_cargo_fk=:cargo, id_seccion_fk=:seccion, id_departamento_fk=:departamento, id_area_fk=:area, estado=:estado
+            // Consulta que no existe un estructura (activo) igual
+            $sql = 'SELECT id_cargo_fk, id_seccion_fk, id_departamento_fk, id_area_fk, estado
+                    FROM estructura
+                    WHERE id_cargo_fk=:cargo AND id_seccion_fk=:seccion 
+                    AND id_departamento_fk=:departamento AND id_area_fk=:area AND estado=:estado';
+            $compruebaEstructura = Connection::getConnection()->prepare($sql);
+            $compruebaEstructura->bindParam(':cargo', $data['cargo']);
+            $compruebaEstructura->bindParam(':seccion', $data['seccion']);
+            $compruebaEstructura->bindParam(':departamento', $data['departamento']);
+            $compruebaEstructura->bindParam(':area', $data['area']);
+            $compruebaEstructura->bindParam(':estado', $data['estado']);
+            $compruebaEstructura->execute();
+
+            if ($compruebaEstructura->rowCount() > 0) {
+                // Si existe duplicados retorna mensajes
+                $comprobacion = "Ya existe una estructura activa igual a esta.";
+                return $comprobacion;
+            }
+
+            $sql = 'UPDATE estructura
+                    SET id_cargo_fk=:cargo, id_seccion_fk=:seccion, id_departamento_fk=:departamento, id_area_fk=:area, estado=:estado
                     WHERE id_estructura=:id_estructura';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_estructura', $data['id_estructura']);
