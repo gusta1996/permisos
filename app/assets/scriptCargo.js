@@ -197,6 +197,11 @@ const appCargo = new (function () {
         this.paginacion.innerHTML = html;
     }
     this.actualizarCargo = () => {
+        // Esconder mensaje de error al guardar cada vez
+        var editarErrorCargo = document.getElementById('editar-error-cargo');
+        editarErrorCargo.classList.add('hidden');
+        editarErrorCargo.innerHTML = '';
+        // Enviar formulario para la consulta
         var formCargo = new FormData();
         var editarId_Cargo = document.getElementById('editar-id-cargo');
         var editarDetalle = document.getElementById('editar-detalle-cargo');
@@ -209,10 +214,16 @@ const appCargo = new (function () {
         fetch("../controllers/actualizarCargo.php", { method: "POST", body: formCargo })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                app.notificacion('¡Cargo actualizado!', 'Se ha actualizado un cargo.', 'actualizar');
-                this.listadoCargo();
-                this.cerrarModalCargo();
-                this.busqueda.value = null;
+                if (data == true) {
+                    app.notificacion('¡Cargo actualizado!', 'Se ha actualizado un cargo.', 'actualizar');
+                    this.listadoCargo();
+                    this.cerrarModalCargo();
+                    this.busqueda.value = null;
+                } else {
+                    // Mostrar mensaje de error al guardar
+                    editarErrorCargo.classList.remove('hidden');
+                    editarErrorCargo.innerHTML += '<p class="font-medium rounded-md p-4 bg-red-100">' + data + '</p>';
+                }
             })
             .catch((error) => console.log(error));
     }
@@ -258,6 +269,9 @@ const appCargo = new (function () {
                                                 <option ${data.estado === 'activo' ? 'selected' : ''}>Activo</option>
                                                 <option ${data.estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
                                             </select>
+                                        </div>
+                                        <!-- Mensaje error -->
+                                        <div id="editar-error-cargo" class="hidden sm:col-span-6">
                                         </div>
                                     </div>
                                 </div>

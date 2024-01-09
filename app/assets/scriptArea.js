@@ -197,6 +197,11 @@ const appArea = new (function () {
         this.paginacion.innerHTML = html;
     }
     this.actualizarArea = () => {
+        // Esconder mensaje de error al guardar cada vez
+        var editarErrorArea = document.getElementById('editar-error-area');
+        editarErrorArea.classList.add('hidden');
+        editarErrorArea.innerHTML = '';
+        // Enviar formulario para la consulta
         var formArea = new FormData();
         var editarId_Area = document.getElementById('editar-id-area');
         var editarDetalle = document.getElementById('editar-detalle-area');
@@ -209,10 +214,16 @@ const appArea = new (function () {
         fetch("../controllers/actualizarArea.php", { method: "POST", body: formArea })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                app.notificacion('¡Área actualizada!', 'Se ha actualizado una área.', 'actualizar');
-                this.listadoArea();
-                this.cerrarModalArea();
-                this.busqueda.value = null;
+                if (data == true) {
+                    app.notificacion('¡Área actualizada!', 'Se ha actualizado una área.', 'actualizar');
+                    this.listadoArea();
+                    this.cerrarModalArea();
+                    this.busqueda.value = null;
+                } else {
+                    // Mostrar mensaje de error al guardar
+                    editarErrorArea.classList.remove('hidden');
+                    editarErrorArea.innerHTML += '<p class="font-medium rounded-md p-4 bg-red-100">' + data + '</p>';
+                }
             })
             .catch((error) => console.log(error));
     }
@@ -258,6 +269,9 @@ const appArea = new (function () {
                                                 <option ${data.estado === 'activo' ? 'selected' : ''}>Activo</option>
                                                 <option ${data.estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
                                             </select>
+                                        </div>
+                                        <!-- Mensaje error -->
+                                        <div id="editar-error-area" class="hidden sm:col-span-6">
                                         </div>
                                     </div>
                                 </div>

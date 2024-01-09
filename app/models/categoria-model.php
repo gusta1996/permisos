@@ -149,6 +149,23 @@ class Categoria extends Connection
     public static function actualizarCategoria($data)
     {
         try {
+            // Consulta que no existe una categoria (activo) igual
+            $sql = "SELECT detalle, estado 
+                    FROM categoria
+                    WHERE id_categoria!=:id_categoria 
+                    AND detalle=:detalle AND estado=:estado";
+            $compruebaCategoria = Connection::getConnection()->prepare($sql);
+            $compruebaCategoria->bindParam(':id_categoria', $data['id_categoria']);
+            $compruebaCategoria->bindParam(':detalle', $data['detalle']);
+            $compruebaCategoria->bindParam(':estado', $data['estado']);
+            $compruebaCategoria->execute();
+            
+            if ($compruebaCategoria->rowCount() > 0) {
+                // Si existe duplicados retorna mensajes
+                $comprobacion = "Ya existe una categoria activa igual a esta.";
+                return $comprobacion;
+            }
+
             $sql = 'UPDATE categoria SET detalle=:detalle, estado=:estado 
                     WHERE id_categoria=:id_categoria';
             $declaracion = Connection::getConnection()->prepare($sql);

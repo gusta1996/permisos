@@ -518,6 +518,11 @@ const appEstructura = new (function () {
         this.paginacion.innerHTML = html;
     }
     this.actualizarEstructura = () => {
+        // Esconder mensaje de error al guardar cada vez
+        var editarError = document.getElementById('editar-error-estructura');
+        editarError.classList.add('hidden');
+        editarError.innerHTML = '';
+        // Enviar formulario para la consulta
         var formEstructura = new FormData();
         var editarIdEstructura = document.getElementById('editar-id-estructura');
         var editarCargo = document.getElementById('editar-cargo-estructura');
@@ -534,10 +539,17 @@ const appEstructura = new (function () {
         fetch("../controllers/actualizarEstructura.php", { method: "POST", body: formEstructura })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                app.notificacion('¡Estructura actualizada!', 'Se ha actualizado una estructura.', 'actualizar');
-                this.listadoEstructura();
-                this.cerrarModalEstructura();
-                this.busqueda.value = null;
+                if (data == true) {
+                    app.notificacion('¡Estructura actualizada!', 'Se ha actualizado una estructura.', 'actualizar');
+                    this.listadoEstructura();
+                    this.cerrarModalEstructura();
+                    this.busqueda.value = null;
+                } else {
+                    // Mostrar mensaje de error al guardar
+                    editarError.classList.remove('hidden');
+                    editarError.innerHTML += '<p class="font-medium rounded-md p-4 bg-red-100">' + data + '</p>';
+        
+                }
             })
             .catch((error) => console.log(error));
     }
@@ -594,11 +606,14 @@ const appEstructura = new (function () {
                                         <!-- Estado -->
                                         <div class="sm:col-span-4">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Estado:</label>
-                                            <select id="editar-estado-estructura" required class="h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                            <select id="editar-estado-estructura" value="${data.estructura_estado}" required class="h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
-                                                <option ${data.estado === 'activo' ? 'selected' : ''}>Activo</option>
-                                                <option ${data.estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
+                                                <option ${data.estructura_estado === 'activo' ? 'selected' : ''}>Activo</option>
+                                                <option ${data.estructura_estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
                                             </select>
+                                        </div>
+                                        <!-- Mensaje de error -->
+                                        <div id="editar-error-estructura" class="hidden sm:col-span-4">
                                         </div>
                                     </div>
                                 </div>

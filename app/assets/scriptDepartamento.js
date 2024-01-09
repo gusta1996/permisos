@@ -197,6 +197,11 @@ const appDepartamento = new (function () {
         this.paginacion.innerHTML = html;
     }
     this.actualizarDepartamento = () => {
+        // Esconder mensaje de error al guardar cada vez
+        var editarErrorDepa = document.getElementById('editar-error-departamento');
+        editarErrorDepa.classList.add('hidden');
+        editarErrorDepa.innerHTML = '';
+        // Enviar formulario para la consulta
         var formDepartamento = new FormData();
         var editarId_Departamento = document.getElementById('editar-id-departamento');
         var editarDetalle = document.getElementById('editar-detalle-departamento');
@@ -209,10 +214,16 @@ const appDepartamento = new (function () {
         fetch("../controllers/actualizarDepartamento.php", { method: "POST", body: formDepartamento })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                app.notificacion('¡Departamento actualizado!', 'Se ha actualizado un departamento.', 'actualizar');
-                this.listadoDepartamento();
-                this.cerrarModalDepartamento();
-                this.busqueda.value = null;
+                if (data == true) {
+                    app.notificacion('¡Departamento actualizado!', 'Se ha actualizado un departamento.', 'actualizar');
+                    this.listadoDepartamento();
+                    this.cerrarModalDepartamento();
+                    this.busqueda.value = null;
+                } else {
+                    // Mostrar mensaje de error al guardar
+                    editarErrorDepa.classList.remove('hidden');
+                    editarErrorDepa.innerHTML += '<p class="font-medium rounded-md p-4 bg-red-100">' + data + '</p>';
+                }
             })
             .catch((error) => console.log(error));
     }
@@ -258,6 +269,9 @@ const appDepartamento = new (function () {
                                                 <option ${data.estado === 'activo' ? 'selected' : ''}>Activo</option>
                                                 <option ${data.estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
                                             </select>
+                                        </div>
+                                        <!-- Mensaje error -->
+                                        <div id="editar-error-departamento" class="hidden sm:col-span-6">
                                         </div>
                                     </div>
                                 </div>

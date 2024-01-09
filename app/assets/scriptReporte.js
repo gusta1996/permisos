@@ -3,7 +3,8 @@ const appReporte = new (function () {
   this.selecReporteMes = document.getElementById('selec-reporte-mes');
   this.btnReportePDF = document.getElementById('btn-reporte-pdf');
   this.reporteMensual = document.getElementById('reporte-mensual');
-  this.selectMeses = document.getElementById('select-meses');
+  this.selectMes = document.getElementById('select-mes');
+  this.selectAno = document.getElementById('select-ano');
   this.busqueda = document.getElementById('busqueda-reporte');
   this.busquedaTipo = document.getElementById('busqueda-tipo');
   this.paginacion = document.getElementById('paginacion');
@@ -151,13 +152,16 @@ const appReporte = new (function () {
     }
     this.paginacion.innerHTML = html;
   }
-  this.selectMesDescarga = () => {
-    fetch("../controllers/selectMesDescarga.php")
+  this.selectFechaDescarga = () => {
+    fetch("../controllers/selectFechaDescarga.php")
       .then((resultado) => resultado.json())
       .then((data) => {
         data.forEach((item) => {
-          this.selectMeses.innerHTML += `
-          <option value="${item.ano}-${item.mesnumero}">${item.mes} ${item.ano}</option>
+          this.selectMes.innerHTML += `
+            <option value="${item.mesnumero}">${item.mes}</option>
+          `;
+          this.selectAno.innerHTML += `
+            <option value="${item.ano}">${item.ano}</option>
           `;
         })
       })
@@ -194,40 +198,50 @@ const appReporte = new (function () {
        </svg> Guardar o imprimir
      </button>
    `;
-    // Enviar fecha_mes para perticion de datos
+    // Enviar mes y año para peticion de datos
     let formReportePDF = new FormData();
-    formReportePDF.append('fecha_mes', this.selectMeses.value);
+    formReportePDF.append('fecha_mes', this.selectMes.value);
+    formReportePDF.append('fecha_ano', this.selectAno.value);
     fetch("../controllers/reporteMensualPDF.php", { method: "POST", body: formReportePDF })
       .then((resultado) => resultado.json())
       .then((data) => {
-        let fechaMes = this.convierteFormatoFecha(this.selectMeses.value);
+        let fechaMesAno = this.convierteFormatoFecha(this.selectAno.value + '-' + this.selectMes.value);
         let filas = '';
-        data.forEach(item => {
-          let salida = new Date(`${item.fecha_salida} ${item.hora_salida}`);
-          let entrada = new Date(`${item.fecha_entrada} ${item.hora_entrada}`);
-          let diferenciaTiempo = Math.abs(salida - entrada);
-          let dias = Math.floor(diferenciaTiempo / (1000 * 60 * 60 * 24));
-          let horas = Math.floor((diferenciaTiempo / (1000 * 60 * 60)) % 24);
+        console.log(data);
+        if (data.length > 0) {
+          data.forEach(item => {
+            let salida = new Date(`${item.fecha_salida} ${item.hora_salida}`);
+            let entrada = new Date(`${item.fecha_entrada} ${item.hora_entrada}`);
+            let diferenciaTiempo = Math.abs(salida - entrada);
+            let dias = Math.floor(diferenciaTiempo / (1000 * 60 * 60 * 24));
+            let horas = Math.floor((diferenciaTiempo / (1000 * 60 * 60)) % 24);
+            filas += `
+              <tr class="h-16 border-b last:border-b-0 border-b-white-100">
+                  <td id="numero-solicitud" class="text-slate-700">${item.numero}</td>
+                  <td class="text-slate-700 pr-4 capitalize leading-5">
+                      <div>
+                          ${item.apellidos} ${item.nombres}
+                      </div>
+                      <div>
+                          CI: ${item.cedula}
+                      </div>
+                  </td>
+                  <td class="text-slate-700 pr-4 capitalize">${item.razon}</td>
+                  <td class="text-slate-700 pr-4 whitespace-nowrap">${item.fecha}</td>
+                  <td class="text-slate-700 pr-4 whitespace-nowrap">${item.fecha_salida}</td>
+                  <td class="text-slate-700 pr-4 whitespace-nowrap">${item.fecha_entrada}</td>
+                  <td class="text-slate-700 pr-4">${dias} días y ${horas} horas</td>
+                  <td class="font-medium capitalize ${item.fs_estado == 'aprobado' ? 'text-green-600' : ''}${item.fs_estado == 'anulado' ? 'text-red-600' : ''}${item.fs_estado == 'pendiente' ? 'text-amber-600' : ''}">${item.fs_estado}</td>
+                </tr>
+              `;
+          });
+        } else {
           filas += `
-            <tr class="h-16 border-b last:border-b-0 border-b-white-100">
-                <td id="numero-solicitud" class="text-slate-700">${item.numero}</td>
-                <td class="text-slate-700 pr-4 capitalize leading-5">
-                    <div>
-                        ${item.apellidos} ${item.nombres}
-                    </div>
-                    <div>
-                        CI: ${item.cedula}
-                    </div>
-                </td>
-                <td class="text-slate-700 pr-4 capitalize">${item.razon}</td>
-                <td class="text-slate-700 pr-4 whitespace-nowrap">${item.fecha}</td>
-                <td class="text-slate-700 pr-4 whitespace-nowrap">${item.fecha_salida}</td>
-                <td class="text-slate-700 pr-4 whitespace-nowrap">${item.fecha_entrada}</td>
-                <td class="text-slate-700 pr-4">${dias} días y ${horas} horas</td>
-                <td class="font-medium capitalize ${item.fs_estado == 'aprobado' ? 'text-green-600' : ''}${item.fs_estado == 'anulado' ? 'text-red-600' : ''}${item.fs_estado == 'pendiente' ? 'text-amber-600' : ''}">${item.fs_estado}</td>
-              </tr>
-            `;
-        });
+            <tr class="h-16">
+              <td colspan="8">No se encontró resultados.</td>
+            </tr>
+          `;
+        }
         thead = `
           <tr class="h-16 border-b border-b-slate-400">
             <th class="hidden font-medium pr-4">ID</th>
@@ -258,7 +272,7 @@ const appReporte = new (function () {
               <div class="w-full bg-gray-100 p-2 rounded-md mb-4">
                 <h1 class="text-lg font-bold text-center">Reporte de solicitudes de permisos del G.A.D. El Guabo – Municipio de El Guabo</h1>
               </div>
-              <p class="mb-4"><b>Fecha:</b>  ${fechaMes}</p>
+              <p class="mb-4"><b>Fecha:</b>  ${fechaMesAno}</p>
               ${table}
             </div>
           </div>
@@ -278,5 +292,5 @@ if (tbodyReporte) {
   appReporte.listadoReporte();
 } else if (selecReporteMes) {
   // Solo existe en: reporte-descargar.php
-  appReporte.selectMesDescarga();
+  appReporte.selectFechaDescarga();
 }

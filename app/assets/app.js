@@ -8,7 +8,7 @@ const app = new (function () {
         // crea id de notificacion
         var id_notificacion = this.notificacionContent.childElementCount;
         // escoge icono
-        var icono = function() {
+        var icono = function () {
             switch (icono) {
                 case 'guardar':
                     return `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-green-600 bi bi-check-circle" viewBox="0 0 16 16">
@@ -32,42 +32,44 @@ const app = new (function () {
             }
         }();
         // crear notificacion (titulo, texto)
-        this.notificacionContent.innerHTML += `
-            <div id="id-notificacion-${id_notificacion}" class="flex items-center justify-between gap-4 w-full p-4 bg-white border border-slate-200 shadow-md rounded-md transform translate-x-full opacity-0">
-                <div>${icono}</div>
-                <div class="flex-1">
-                ${id_notificacion}<h3 class="font-semibold">${titulo}</h3>
-                    <p class="text-slate-500 mt-2">${texto}</p>
-                </div>
-                <button onclick="app.cerrarNotificacion(${id_notificacion})" class="p-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
-                    </svg>
-                </button>
+        var notificacion = document.createElement('div');
+        notificacion.className = "flex items-center justify-between gap-4 w-full p-4 bg-white border border-slate-200 shadow-md rounded-md transform translate-x-full opacity-0";
+        notificacion.innerHTML = `
+            <div>${icono}</div>
+            <div class="flex-1">
+            <h3 class="font-semibold">${titulo}</h3>
+                <p class="text-slate-500 mt-2">${texto}</p>
             </div>
+            <button class="p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                </svg>
+            </button>
         `;
+        notificacion.querySelector('button').addEventListener('click', () => this.cerrarNotificacion(notificacion));
+        this.notificacionContent.appendChild(notificacion);
         // animacion de apertura
         setTimeout(() => {
-            document.getElementById('id-notificacion-' + id_notificacion).classList.remove('translate-x-full', 'opacity-0');
-            document.getElementById('id-notificacion-' + id_notificacion).classList.add('ease-in', 'duration-200', 'translate-x-0', 'opacity-100');
+            notificacion.classList.remove('translate-x-full', 'opacity-0');
+            notificacion.classList.add('ease-in', 'duration-200', 'translate-x-0', 'opacity-100');
         }, 100);
         // cerrar notificacion despues de 10 segundos
         setTimeout(() => {
-            this.cerrarNotificacion(id_notificacion);
+            if (this.notificacionContent.contains(notificacion)) {
+                this.cerrarNotificacion(notificacion);
+            }
         }, 10000);
     }
-    this.cerrarNotificacion = (id_notificacion) => {
-        // identifica el id de la notificacion
-        var notificacionID = document.getElementById('id-notificacion-' + id_notificacion);
+    this.cerrarNotificacion = (notificacion) => {
         // cerrar
-        if (notificacionID) {
+        if (notificacion && this.notificacionContent.contains(notificacion)) {
             // animacion
-            notificacionID.classList.remove('ease-in', 'duration-200', 'translate-x-0', 'opacity-100');
-            notificacionID.classList.add('ease-out', 'duration-1000', 'translate-x-full', 'opacity-0');
+            notificacion.classList.remove('ease-in', 'duration-200', 'translate-x-0', 'opacity-100');
+            notificacion.classList.add('ease-out', 'duration-1000', 'translate-x-full', 'opacity-0');
             // esperar 1 segundos para que la animacion termine
             setTimeout(() => {
-                notificacionID.remove();
-            }, 700);
+                notificacion.remove();
+            }, 1000);
         }
     }
     this.abrirMenu = () => {

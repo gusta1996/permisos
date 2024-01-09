@@ -25,7 +25,7 @@ if ($userSession->userLoggedIn()) {
             // Titulo, header, contenido
             $title = 'Registros de contratos y cargos';
             require '../template/header.php';
-            require './page/asignar-cargos-registro.php';
+            require './page/asignar-cargo-registro.php';
     
         } 
 

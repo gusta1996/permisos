@@ -178,7 +178,26 @@ class Seccion extends Connection
     public static function actualizarSeccion($data)
     {
         try {
-            $sql = 'UPDATE seccion SET detalle=:detalle, estado=:estado, id_departamento_fk=:departamento 
+            // Consulta que no existe una seccion (activo) igual
+            $sql = "SELECT detalle, estado, id_departamento_fk 
+                    FROM seccion
+                    WHERE id_seccion!=:id_seccion 
+                    AND detalle=:detalle AND id_departamento_fk=:departamento AND estado=:estado";
+            $compruebaSeccion = Connection::getConnection()->prepare($sql);
+            $compruebaSeccion->bindParam(':id_seccion', $data['id_seccion']);
+            $compruebaSeccion->bindParam(':detalle', $data['detalle']);
+            $compruebaSeccion->bindParam(':estado', $data['estado']);
+            $compruebaSeccion->bindParam(':departamento', $data['departamento']);
+            $compruebaSeccion->execute();
+            
+            if ($compruebaSeccion->rowCount() > 0) {
+                // Si existe duplicados retorna mensajes
+                $comprobacion = "Ya existe una seccion activa igual a esta.";
+                return $comprobacion;
+            }
+
+            $sql = 'UPDATE seccion 
+                    SET detalle=:detalle, estado=:estado, id_departamento_fk=:departamento 
                     WHERE id_seccion=:id_seccion';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_seccion', $data['id_seccion']);

@@ -349,16 +349,22 @@ class funcionarioSolicitud extends Connection
         }
     }
     // Extraer meses con años de los registros de solicitudes
-    public static function selectMesDescarga()
+    public static function selectFechaDescarga()
     {
         try {
-            $sql = "SELECT DISTINCT lower(TO_CHAR(fecha, 'TMMonth')) AS mes, EXTRACT(YEAR FROM fecha) AS ano,
+            $sql = "SELECT DISTINCT TO_CHAR(fecha, 'TMMonth') AS mes, EXTRACT(YEAR FROM fecha) AS ano,
                     LPAD(CAST(EXTRACT(MONTH FROM fecha) AS TEXT), 2, '0') AS mesnumero
                     FROM solicitud
                     ORDER BY ano DESC, mesNumero DESC";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if ( isset($item['mes']) ) {
+                    $resultado[$i]['mes'] = ucfirst($item['mes']);
+                }
+            }
             return $resultado;
         } catch (PDOException $e) {
             echo $e->getMessage();
@@ -379,10 +385,11 @@ class funcionarioSolicitud extends Connection
                     INNER JOIN razon ON solicitud.id_razon_fk = razon.id_razon
                     INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
                     INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
-                    WHERE TO_CHAR(solicitud.fecha, 'YYYY-MM')=:fecha_mes
+                    WHERE TO_CHAR(solicitud.fecha, 'MM')=:fecha_mes AND TO_CHAR(solicitud.fecha, 'YYYY')=:fecha_ano
                     ORDER BY funcionario_solicitud.id_funcionario_solicitud DESC";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':fecha_mes', $data['fecha_mes']);
+            $declaracion->bindParam(':fecha_ano', $data['fecha_ano']);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
             return $resultado;

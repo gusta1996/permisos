@@ -153,7 +153,27 @@ class Contrato extends Connection
     public static function actualizarContrato($data)
     {
         try {
-            $sql = 'UPDATE contrato SET detalle=:detalle, tipo=:tipo, estado=:estado WHERE id_contrato=:id_contrato';
+            // Consulta que no existe un contrato (activo) igual
+            $sql = "SELECT detalle, tipo, estado 
+                    FROM contrato
+                    WHERE id_contrato!=:id_contrato 
+                    AND detalle=:detalle AND tipo=:tipo AND estado=:estado";
+            $compruebaContrato = Connection::getConnection()->prepare($sql);
+            $compruebaContrato->bindParam(':id_contrato', $data['id_contrato']);
+            $compruebaContrato->bindParam(':detalle', $data['detalle']);
+            $compruebaContrato->bindParam(':tipo', $data['tipo']);
+            $compruebaContrato->bindParam(':estado', $data['estado']);
+            $compruebaContrato->execute();
+            
+            if ($compruebaContrato->rowCount() > 0) {
+                // Si existe duplicados retorna mensajes
+                $comprobacion = "Ya existe un contrato activo igual a este.";
+                return $comprobacion;
+            }
+
+            $sql = 'UPDATE contrato 
+                    SET detalle=:detalle, tipo=:tipo, estado=:estado 
+                    WHERE id_contrato=:id_contrato';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_contrato', $data['id_contrato']);
             $declaracion->bindParam(':detalle', $data['detalle']);

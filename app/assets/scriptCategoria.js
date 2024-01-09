@@ -161,6 +161,11 @@ const appCategoria = new (function () {
             .catch((error) => console.log(error));
     }
     this.actualizarCategoria = () => {
+        // Esconder mensaje de error al guardar cada vez
+        var editarErrorCategoria = document.getElementById('editar-error-categoria');
+        editarErrorCategoria.classList.add('hidden');
+        editarErrorCategoria.innerHTML = '';
+        // Enviar formulario para la consulta
         var formCategoria = new FormData();
         var editarId_Categoria = document.getElementById('editar-id-categoria');
         var editarDetalle = document.getElementById('editar-detalle-categoria');
@@ -171,10 +176,16 @@ const appCategoria = new (function () {
         fetch("../controllers/actualizarCategoria.php", { method: "POST", body: formCategoria })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                app.notificacion('¡Categoría actualizada!', 'Se ha actualizado una categoría.', 'actualizar');
-                this.listadoCategoria();
-                this.cerrarModalCategoria();
-                this.busqueda.value = null;
+                if (data == true) {
+                    app.notificacion('¡Categoría actualizada!', 'Se ha actualizado una categoría.', 'actualizar');
+                    this.listadoCategoria();
+                    this.cerrarModalCategoria();
+                    this.busqueda.value = null;
+                } else {
+                    // Mostrar mensaje de error al guardar
+                    editarErrorCategoria.classList.remove('hidden');
+                    editarErrorCategoria.innerHTML += '<p class="font-medium rounded-md p-4 bg-red-100">' + data + '</p>';
+                }
             })
             .catch((error) => console.log(error));
     }
@@ -213,6 +224,9 @@ const appCategoria = new (function () {
                                                 <option ${data.estado === 'activo' ? 'selected' : ''}>Activo</option>
                                                 <option ${data.estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
                                             </select>
+                                        </div>
+                                        <!-- Mensaje error -->
+                                        <div id="editar-error-categoria" class="hidden sm:col-span-6">
                                         </div>
                                     </div>
                                 </div>

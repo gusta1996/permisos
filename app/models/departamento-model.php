@@ -177,6 +177,24 @@ class Departamento extends Connection
     public static function actualizarDepartamento($data)
     {
         try {
+            // Consulta que no existe un departamento (activo) igual
+            $sql = "SELECT detalle, estado, id_area_fk 
+                    FROM departamento
+                    WHERE id_departamento!=:id_departamento 
+                    AND detalle=:detalle AND id_area_fk=:area AND estado=:estado";
+            $compruebaDepa = Connection::getConnection()->prepare($sql);
+            $compruebaDepa->bindParam(':id_departamento', $data['id_departamento']);
+            $compruebaDepa->bindParam(':detalle', $data['detalle']);
+            $compruebaDepa->bindParam(':estado', $data['estado']);
+            $compruebaDepa->bindParam(':area', $data['area']);
+            $compruebaDepa->execute();
+            
+            if ($compruebaDepa->rowCount() > 0) {
+                // Si existe duplicados retorna mensajes
+                $comprobacion = "Ya existe un departamento activo igual a este.";
+                return $comprobacion;
+            }
+
             $sql = 'UPDATE departamento SET detalle=:detalle, estado=:estado, id_area_fk=:area 
                     WHERE id_departamento=:id_departamento';
             $declaracion = Connection::getConnection()->prepare($sql);

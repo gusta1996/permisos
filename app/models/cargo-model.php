@@ -178,7 +178,26 @@ class Cargo extends Connection
     public static function actualizarCargo($data)
     {
         try {
-            $sql = 'UPDATE cargo SET detalle=:detalle, estado=:estado, id_seccion_fk=:seccion 
+            // Consulta que no existe un cargo (activo) igual
+            $sql = "SELECT detalle, estado, id_seccion_fk 
+                    FROM cargo
+                    WHERE id_cargo!=:id_cargo 
+                    AND detalle=:detalle AND id_seccion_fk=:seccion AND estado=:estado";
+            $compruebaCargo = Connection::getConnection()->prepare($sql);
+            $compruebaCargo->bindParam(':id_cargo', $data['id_cargo']);
+            $compruebaCargo->bindParam(':detalle', $data['detalle']);
+            $compruebaCargo->bindParam(':seccion', $data['seccion']);
+            $compruebaCargo->bindParam(':estado', $data['estado']);
+            $compruebaCargo->execute();
+            
+            if ($compruebaCargo->rowCount() > 0) {
+                // Si existe duplicados retorna mensajes
+                $comprobacion = "Ya existe un cargo activo igual a este.";
+                return $comprobacion;
+            }
+
+            $sql = 'UPDATE cargo 
+                    SET detalle=:detalle, estado=:estado, id_seccion_fk=:seccion 
                     WHERE id_cargo=:id_cargo';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_cargo', $data['id_cargo']);

@@ -29,7 +29,13 @@ class funcionarioEstructura extends Connection
             $declaracion->bindParam(':start', $start);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
-
+            // Convertir la primera letra a mayúsculas, solo campo detalle
+            foreach ($resultado as $i => $item) {
+                if (isset($item['contrato_detalle']) && isset($item['cargo_detalle']) ) {
+                    $resultado[$i]['contrato_detalle'] = ucfirst($item['contrato_detalle']);
+                    $resultado[$i]['cargo_detalle'] = ucfirst($item['cargo_detalle']);
+                }
+            }
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM funcionario_estructura
                         INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
@@ -159,21 +165,6 @@ class funcionarioEstructura extends Connection
             echo $e->getMessage();
         }
     }
-    /* No estoy ocupando
-    public static function obtenerIdFuncionarioEstructura($id_funcionario)
-    {
-        try {
-            $sql = 'SELECT id_funcionario_estructura FROM funcionario_estructura WHERE id_funcionario_fk=:id_funcionario';
-            $declaracion = Connection::getConnection()->prepare($sql);
-            $declaracion->bindParam(':id_funcionario', $id_funcionario);
-            $declaracion->execute();
-            $resultado = $declaracion->fetch();
-            return $resultado;
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-    */
     public static function guardarFuncionarioEstructura($data)
     {
         try {

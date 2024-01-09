@@ -157,6 +157,24 @@ class Area extends Connection
     public static function actualizarArea($data)
     {
         try {
+            // Consulta que no existe un area (activo) igual
+            $sql = "SELECT detalle, estado , id_categoria_fk
+                    FROM area
+                    WHERE id_area!=:id_area 
+                    AND detalle=:detalle AND id_categoria_fk=:categoria AND estado=:estado";
+            $compruebaArea = Connection::getConnection()->prepare($sql);
+            $compruebaArea->bindParam(':id_area', $data['id_area']);
+            $compruebaArea->bindParam(':detalle', $data['detalle']);
+            $compruebaArea->bindParam(':estado', $data['estado']);
+            $compruebaArea->bindParam(':categoria', $data['categoria']);
+            $compruebaArea->execute();
+            
+            if ($compruebaArea->rowCount() > 0) {
+                // Si existe duplicados retorna mensajes
+                $comprobacion = "Ya existe una area activa igual a esta.";
+                return $comprobacion;
+            }
+
             $sql = 'UPDATE area SET detalle=:detalle, estado=:estado, id_categoria_fk=:categoria
                     WHERE id_area=:id_area';
             $declaracion = Connection::getConnection()->prepare($sql);

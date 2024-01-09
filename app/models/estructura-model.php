@@ -147,7 +147,7 @@ class Estructura extends Connection
     public static function obtenerEstructura($id_estructura)
     {
         try {
-            $sql = 'SELECT estructura.id_estructura, 
+            $sql = 'SELECT estructura.id_estructura, estructura.estado AS estructura_estado, 
                         estructura.id_area_fk, estructura.id_departamento_fk, estructura.id_seccion_fk, estructura.id_cargo_fk, 
                         area.estado AS area_estado,
                         departamento.estado AS depa_estado,
@@ -208,11 +208,12 @@ class Estructura extends Connection
     {
         try {
             // Consulta que no existe un estructura (activo) igual
-            $sql = 'SELECT id_cargo_fk, id_seccion_fk, id_departamento_fk, id_area_fk, estado
+            $sql = "SELECT id_cargo_fk, id_seccion_fk, id_departamento_fk, id_area_fk, estado
                     FROM estructura
-                    WHERE id_cargo_fk=:cargo AND id_seccion_fk=:seccion 
-                    AND id_departamento_fk=:departamento AND id_area_fk=:area AND estado=:estado';
+                    WHERE id_estructura!=:id_estructura AND id_cargo_fk=:cargo AND id_seccion_fk=:seccion 
+                    AND id_departamento_fk=:departamento AND id_area_fk=:area AND estado=:estado";
             $compruebaEstructura = Connection::getConnection()->prepare($sql);
+            $compruebaEstructura->bindParam(':id_estructura', $data['id_estructura']);
             $compruebaEstructura->bindParam(':cargo', $data['cargo']);
             $compruebaEstructura->bindParam(':seccion', $data['seccion']);
             $compruebaEstructura->bindParam(':departamento', $data['departamento']);

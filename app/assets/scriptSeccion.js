@@ -197,6 +197,11 @@ const appSeccion = new (function () {
         this.paginacion.innerHTML = html;
     }
     this.actualizarSeccion = () => {
+        // Esconder mensaje de error al guardar cada vez
+        var editarErrorSeccion = document.getElementById('editar-error-seccion');
+        editarErrorSeccion.classList.add('hidden');
+        editarErrorSeccion.innerHTML = '';
+        // Enviar formulario para la consulta
         var formSeccion = new FormData();
         var editarId_Seccion = document.getElementById('editar-id-seccion');
         var editarDetalle = document.getElementById('editar-detalle-seccion');
@@ -209,10 +214,16 @@ const appSeccion = new (function () {
         fetch("../controllers/actualizarSeccion.php", { method: "POST", body: formSeccion })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                app.notificacion('¡Sección actualizada!', 'Se ha actualizado una seccion.', 'actualizar');
-                this.listadoSeccion();
-                this.cerrarModalSeccion();
-                this.busqueda.value = null;
+                if (data == true) {
+                    app.notificacion('¡Sección actualizada!', 'Se ha actualizado una seccion.', 'actualizar');
+                    this.listadoSeccion();
+                    this.cerrarModalSeccion();
+                    this.busqueda.value = null;
+                } else {
+                    // Mostrar mensaje de error al guardar
+                    editarErrorSeccion.classList.remove('hidden');
+                    editarErrorSeccion.innerHTML += '<p class="font-medium rounded-md p-4 bg-red-100">' + data + '</p>';
+                }
             })
             .catch((error) => console.log(error));
     }
@@ -258,6 +269,9 @@ const appSeccion = new (function () {
                                                 <option ${data.estado === 'activo' ? 'selected' : ''}>Activo</option>
                                                 <option ${data.estado === 'suspendido' ? 'selected' : ''}>Suspendido</option>
                                             </select>
+                                        </div>
+                                        <!-- Mensaje error -->
+                                        <div id="editar-error-seccion" class="hidden sm:col-span-6">
                                         </div>
                                     </div>
                                 </div>
