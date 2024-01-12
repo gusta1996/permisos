@@ -1,9 +1,9 @@
 <?php
 require '../config/connection.php';
 
-class Categoria extends Connection
+class Proceso extends Connection
 {
-    public static function mostrarCategorias($page)
+    public static function mostrarProcesos($page)
     {
         try {
             $limit = 10; // Número de registros a mostrar por página
@@ -11,9 +11,9 @@ class Categoria extends Connection
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos  
             // Consulta para obtener los datos
             $sql = "SELECT *
-                    FROM categoria
-                    WHERE categoria.estado != 'anulado'
-                    ORDER BY id_categoria DESC
+                    FROM proceso
+                    WHERE proceso.estado != 'anulado'
+                    ORDER BY id_proceso DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':limit', $limit);
@@ -27,7 +27,7 @@ class Categoria extends Connection
                 }
             }
             // Consulta para obtener el número total de registros
-            $sqlTotal = "SELECT COUNT(*) FROM categoria WHERE categoria.estado != 'anulado'";
+            $sqlTotal = "SELECT COUNT(*) FROM proceso WHERE proceso.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
@@ -41,7 +41,7 @@ class Categoria extends Connection
             echo $e->getMessage();
         }
     }
-    public static function busquedaCategoria($data)
+    public static function busquedaProceso($data)
     {
         try {
             $busqueda = $data['busqueda'];
@@ -50,9 +50,9 @@ class Categoria extends Connection
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos
             // Hacer busqueda
             $sql = "SELECT *
-                    FROM categoria
+                    FROM proceso
                     WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'
-                    ORDER BY id_categoria DESC
+                    ORDER BY id_proceso DESC
                     LIMIT :limit OFFSET :start";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':limit', $limit);
@@ -66,7 +66,7 @@ class Categoria extends Connection
                 }
             }
             // Consulta para obtener el número total de registros
-            $sqlTotal = "SELECT COUNT(*) FROM categoria 
+            $sqlTotal = "SELECT COUNT(*) FROM proceso 
                         WHERE detalle ILIKE '%$busqueda%' AND estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
@@ -81,10 +81,10 @@ class Categoria extends Connection
             echo $e->getMessage();
         }
     }
-    public static function selectCategoria()
+    public static function selectProceso()
     {
         try {
-            $sql = "SELECT * FROM categoria 
+            $sql = "SELECT * FROM proceso 
                     WHERE estado = 'activo'
                     ORDER BY detalle ASC";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -101,12 +101,12 @@ class Categoria extends Connection
             echo $e->getMessage();
         }
     }
-    public static function obtenerCategoria($id_categoria)
+    public static function obtenerProceso($id_proceso)
     {
         try {
-            $sql = 'SELECT * FROM categoria WHERE id_categoria=:id_categoria';
+            $sql = 'SELECT * FROM proceso WHERE id_proceso=:id_proceso';
             $declaracion = Connection::getConnection()->prepare($sql);
-            $declaracion->bindParam(':id_categoria', $id_categoria);
+            $declaracion->bindParam(':id_proceso', $id_proceso);
             $declaracion->execute();
             $resultado = $declaracion->fetch();
             // Convertir la primera letra a mayúsculas, solo campo detalle
@@ -118,25 +118,25 @@ class Categoria extends Connection
             echo $e->getMessage();
         }
     }
-    public static function guardarCategoria($data)
+    public static function guardarProceso($data)
     {
         try {
-            // Consulta que no existe un categoria (activo) igual
+            // Consulta que no existe un proceso (activo) igual
             $sql = 'SELECT detalle, estado
-                    FROM categoria
+                    FROM proceso
                     WHERE detalle=:detalle AND estado=:estado';
-            $compruebaCategoria = Connection::getConnection()->prepare($sql);
-            $compruebaCategoria->bindParam(':detalle', $data['detalle']);
-            $compruebaCategoria->bindParam(':estado', $data['estado']);
-            $compruebaCategoria->execute();
+            $compruebaProceso = Connection::getConnection()->prepare($sql);
+            $compruebaProceso->bindParam(':detalle', $data['detalle']);
+            $compruebaProceso->bindParam(':estado', $data['estado']);
+            $compruebaProceso->execute();
 
-            if ($compruebaCategoria->rowCount() > 0) {
+            if ($compruebaProceso->rowCount() > 0) {
                 // Si existe duplicados retorna mensajes
-                $comprobacion = "Ya existe una categoria activa con este nombre.";
+                $comprobacion = "Ya existe una proceso activa con este nombre.";
                 return $comprobacion;
             }
 
-            $sql = 'INSERT INTO categoria (detalle, estado) VALUES (:detalle, :estado)';
+            $sql = 'INSERT INTO proceso (detalle, estado) VALUES (:detalle, :estado)';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':detalle', $data['detalle']);
             $declaracion->bindParam(':estado', $data['estado']);
@@ -146,30 +146,30 @@ class Categoria extends Connection
             echo $e->getMessage();
         }
     }
-    public static function actualizarCategoria($data)
+    public static function actualizarProceso($data)
     {
         try {
-            // Consulta que no existe una categoria (activo) igual
+            // Consulta que no existe una proceso (activo) igual
             $sql = "SELECT detalle, estado 
-                    FROM categoria
-                    WHERE id_categoria!=:id_categoria 
+                    FROM proceso
+                    WHERE id_proceso!=:id_proceso 
                     AND detalle=:detalle AND estado=:estado";
-            $compruebaCategoria = Connection::getConnection()->prepare($sql);
-            $compruebaCategoria->bindParam(':id_categoria', $data['id_categoria']);
-            $compruebaCategoria->bindParam(':detalle', $data['detalle']);
-            $compruebaCategoria->bindParam(':estado', $data['estado']);
-            $compruebaCategoria->execute();
+            $compruebaProceso = Connection::getConnection()->prepare($sql);
+            $compruebaProceso->bindParam(':id_proceso', $data['id_proceso']);
+            $compruebaProceso->bindParam(':detalle', $data['detalle']);
+            $compruebaProceso->bindParam(':estado', $data['estado']);
+            $compruebaProceso->execute();
             
-            if ($compruebaCategoria->rowCount() > 0) {
+            if ($compruebaProceso->rowCount() > 0) {
                 // Si existe duplicados retorna mensajes
-                $comprobacion = "Ya existe una categoria activa igual a esta.";
+                $comprobacion = "Ya existe una proceso activa igual a esta.";
                 return $comprobacion;
             }
 
-            $sql = 'UPDATE categoria SET detalle=:detalle, estado=:estado 
-                    WHERE id_categoria=:id_categoria';
+            $sql = 'UPDATE proceso SET detalle=:detalle, estado=:estado 
+                    WHERE id_proceso=:id_proceso';
             $declaracion = Connection::getConnection()->prepare($sql);
-            $declaracion->bindParam(':id_categoria', $data['id_categoria']);
+            $declaracion->bindParam(':id_proceso', $data['id_proceso']);
             $declaracion->bindParam(':detalle', $data['detalle']);
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
@@ -178,22 +178,22 @@ class Categoria extends Connection
             echo $e->getMessage();
         }
     }
-    public static function eliminarCategoria($data)
+    public static function eliminarProceso($data)
     {
         try {
-            $sql = "UPDATE categoria SET estado=:estado
-            WHERE id_categoria=:id_categoria
+            $sql = "UPDATE proceso SET estado=:estado
+            WHERE id_proceso=:id_proceso
             AND (
-                id_categoria NOT IN (SELECT id_categoria_fk FROM area)
-                OR EXISTS ( SELECT 1 FROM area WHERE id_categoria_fk=:id_categoria AND estado = 'anulado' )
+                id_proceso NOT IN (SELECT id_proceso_fk FROM direccion)
+                OR EXISTS ( SELECT 1 FROM direccion WHERE id_proceso_fk=:id_proceso AND estado = 'anulado' )
             )";
             $declaracion = Connection::getConnection()->prepare($sql);
-            $declaracion->bindParam(':id_categoria', $data['id_categoria']);
+            $declaracion->bindParam(':id_proceso', $data['id_proceso']);
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
 
-            $dataCategoria = Categoria::obtenerCategoria($data['id_categoria']);
-            return $dataCategoria;
+            $dataProceso = Proceso::obtenerProceso($data['id_proceso']);
+            return $dataProceso;
         } catch (Exception $e) {
             echo $e->getMessage();
         }

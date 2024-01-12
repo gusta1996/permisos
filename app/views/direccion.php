@@ -14,7 +14,7 @@ if ($userSession->userLoggedIn()) {
 
     if ($administrador) {
         // Acceso solo para administrador
-        $title = 'Áreas';
+        $title = 'Dirección';
         require '../template/header.php';
 ?>
 
@@ -25,26 +25,26 @@ if ($userSession->userLoggedIn()) {
         <div class="bg-white rounded-md shadow-sm mb-6">
             <!-- Titulo -->
             <div class="border-b border-gray-900/10 p-4">
-                <h2 class="text-lg font-semibold leading-7 text-gray-900">Agregar área</h2>
+                <h2 class="text-lg font-semibold leading-7 text-gray-900">Agregar dirección</h2>
             </div>
 
-            <!-- Formulario Area -->
+            <!-- Formulario Direccion -->
             <div class="p-4">
-                <form action="javascript:void(0);" onsubmit="appArea.guardarArea()">
+                <form action="javascript:void(0);" onsubmit="appDireccion.guardarDireccion()">
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-7">
                         <!-- Detalle -->
                         <div class="sm:col-span-3">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">Nueva área:</label>
+                            <label class="block text-sm font-medium leading-6 text-gray-900">Nueva dirección:</label>
                             <div class="mt-2">
-                                <input type="text" required id="detalle-area" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                <input type="text" required id="detalle-direccion" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                             </div>
                         </div>
 
-                        <!-- Categoria -->
+                        <!-- proceso -->
                         <div class="sm:col-span-3">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">Categoría a la que pertenece:</label>
+                            <label class="block text-sm font-medium leading-6 text-gray-900">Proceso al que pertenece:</label>
                             <div class="mt-2">
-                                <select id="categoria-area" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                <select id="proceso-direccion" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                     <option value="" selected disabled>-- Selecciona --</option>
                                 </select>
                             </div>
@@ -58,7 +58,7 @@ if ($userSession->userLoggedIn()) {
             </div>
 
             <!-- Mensaje de error -->
-            <div id="error-area" class="hidden p-4">
+            <div id="error-direccion" class="hidden p-4">
             </div>
         </div>
 
@@ -84,31 +84,31 @@ if ($userSession->userLoggedIn()) {
         <div class="bg-white rounded-md shadow-sm mb-6">
             <!-- Titulo -->
             <div class="border-b border-gray-900/10 p-4">
-                <h2 class="text-lg font-semibold leading-7 text-gray-900 mb-2">Buscar área</h2>
-                <form action="javascript:void(0);" oninput="appArea.busquedaArea()">
+                <h2 class="text-lg font-semibold leading-7 text-gray-900 mb-2">Buscar dirección</h2>
+                <form action="javascript:void(0);" oninput="appDireccion.busquedaDireccion()">
                     <div class="relative mb-1">
                         <div class="absolute flex items-center h-full text-gray-500 pl-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                             </svg>
                         </div>
-                        <input type="search" id="busqueda-area" placeholder="Búsqueda..." class="block w-full rounded-md border-0 py-3 pl-10 pr-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm">
+                        <input type="search" id="busqueda-direccion" placeholder="Búsqueda..." class="block w-full rounded-md border-0 py-3 pl-10 pr-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm">
                     </div>
                 </form>
             </div>
             <div class="p-4 rounded-md mb-4">
-                <!-- Tabla Area -->
+                <!-- Tabla Direccion -->
                 <table class="w-full text-xs md:text-sm text-left">
                     <thead>
                         <tr class="h-16 border-b border-b-slate-400">
                             <th class="font-medium pr-4">ID</th>
-                            <th class="font-medium pr-4">Área</th>
-                            <th class="font-medium pr-4">Categoría</th>
+                            <th class="font-medium pr-4">Dirección</th>
+                            <th class="font-medium pr-4">Proceso</th>
                             <th class="font-medium pr-4">Estado</th>
                             <th class="font-medium text-right">Opciones</th>
                         </tr>
                     </thead>
-                    <tbody id="tbodyArea">
+                    <tbody id="tbodyDireccion">
 
                     </tbody>
                 </table>
@@ -118,12 +118,12 @@ if ($userSession->userLoggedIn()) {
                 </div>
 
                 <!-- Modal Editar -->
-                <div id="modal-area">
+                <div id="modal-direccion">
                 </div>
             </div>
         </div>
 
-        <script src="../assets/scriptArea.js"></script>
+        <script src="../assets/scriptDireccion.js"></script>
 
 <?php
         require '../template/footer.php';

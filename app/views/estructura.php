@@ -26,7 +26,7 @@ if ($userSession->userLoggedIn()) {
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
                 <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
             </svg>
-            <p>La estructura se conforma por un área, departamento, sección y cargo.</p>
+            <p>La estructura se conforma por un dirección, unidad, sección y cargo.</p>
         </div>
 
         <div class="bg-white rounded-md shadow-sm mb-6">
@@ -39,21 +39,21 @@ if ($userSession->userLoggedIn()) {
             <div class="p-4">
                 <form action="javascript:void(0);" onsubmit="appEstructura.guardarEstructura()">
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
-                        <!-- Área -->
-                        <div class="content-area sm:col-span-4">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">Área:</label>
+                        <!-- Dirección -->
+                        <div class="content-direccion sm:col-span-4">
+                            <label class="block text-sm font-medium leading-6 text-gray-900">Dirección:</label>
                             <div class="mt-2">
-                                <select id="area-estructura" required class="h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                <select id="direccion-estructura" required class="h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                     <option value="" selected disabled>-- Selecciona --</option>
                                 </select>
                             </div>
                         </div>
 
-                        <!-- Departamento -->
-                        <div class="content-departamento hidden sm:col-span-4">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">Departamento:</label>
+                        <!-- Unidad -->
+                        <div class="content-unidad hidden sm:col-span-4">
+                            <label class="block text-sm font-medium leading-6 text-gray-900">Unidad:</label>
                             <div class="mt-2">
-                                <select id="departamento-estructura" disabled required class="h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                <select id="unidad-estructura" disabled required class="h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                     <option value="" selected disabled>-- Selecciona --</option>
                                 </select>
                             </div>
@@ -118,8 +118,8 @@ if ($userSession->userLoggedIn()) {
                     <!-- Tipo -->
                     <div class="w-64">
                         <select id="busqueda-tipo" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">
-                            <option value="area" selected>Área</option>
-                            <option value="departamento">Departamento</option>
+                            <option value="direccion" selected>Dirección</option>
+                            <option value="unidad">Unidad</option>
                             <option value="seccion">Sección</option>
                             <option value="cargo">Cargo</option>
                         </select>
@@ -144,8 +144,8 @@ if ($userSession->userLoggedIn()) {
                     <thead>
                         <tr class="h-14 border-b border-b-slate-400">
                             <th class="font-medium pr-4">ID</th>
-                            <th class="font-medium pr-4">Área</th>
-                            <th class="font-medium pr-4">Departamento</th>
+                            <th class="font-medium pr-4">Dirección</th>
+                            <th class="font-medium pr-4">Unidad</th>
                             <th class="font-medium pr-4">Sección</th>
                             <th class="font-medium pr-4">Cargo</th>
                             <th class="font-medium pr-4">Estado</th>

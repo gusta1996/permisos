@@ -56,7 +56,7 @@ const appFuncionarioEstructura = new (function () {
 
                 // Inserta estructura y agrega todos los <option>
                 this.verGuardarEstructura.innerHTML = `
-                    <label class="block text-sm font-medium leading-6 text-gray-900">Cargo y área:</label>
+                    <label class="block text-sm font-medium leading-6 text-gray-900">Cargo y dirección:</label>
                     <div class="mt-2">
                         <select id="opciones-estructura" required class="estructura-id-${data.id_estructura} selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                             <option value selected disabled>-- Selecciona: --</option>
@@ -127,11 +127,11 @@ const appFuncionarioEstructura = new (function () {
                     if (opcionesEstructura) {
                         var seleted = 'estructura-id-' + item.id_estructura == opcionesEstructura.classList.item(0) ? 'selected' : '';
                         opcionesEstructura.innerHTML += `
-                        <option ${seleted} value="${item.id_estructura}">${item.cargo_detalle} ( Área: ${item.area_detalle} )</option>
+                        <option ${seleted} value="${item.id_estructura}">${item.cargo_detalle} ( Dirección: ${item.direccion_detalle} )</option>
                     `;
                     } else {
                         this.estructura.innerHTML += `
-                        <option value="${item.id_estructura}">${item.cargo_detalle} ( Área: ${item.area_detalle} )</option>
+                        <option value="${item.id_estructura}">${item.cargo_detalle} ( Dirección: ${item.direccion_detalle} )</option>
                     `;
                     }
                 });

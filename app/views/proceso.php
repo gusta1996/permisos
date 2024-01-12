@@ -28,15 +28,15 @@ if ($userSession->userLoggedIn()) {
                 <h2 class="text-lg font-semibold leading-7 text-gray-900">Agregar proceso</h2>
             </div>
 
-            <!-- Formulario Categoria -->
+            <!-- Formulario Proceso -->
             <div class="p-4">
-                <form action="javascript:void(0);" onsubmit="appCategoria.guardarCategoria()">
+                <form action="javascript:void(0);" onsubmit="appProceso.guardarProceso()">
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-5">
                         <!-- Detalle -->
                         <div class="sm:col-span-4">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Nuevo proceso:</label>
                             <div class="mt-2">
-                                <input type="text" required id="detalle-categoria" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                <input type="text" required id="detalle-proceso" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                             </div>
                         </div>
 
@@ -48,7 +48,7 @@ if ($userSession->userLoggedIn()) {
             </div>
 
             <!-- Mensaje de error -->
-            <div id="error-categoria" class="hidden p-4">
+            <div id="error-proceso" class="hidden p-4">
             </div>
         </div>
 
@@ -56,19 +56,19 @@ if ($userSession->userLoggedIn()) {
             <!-- Titulo -->
             <div class="border-b border-gray-900/10 p-4">
                 <h2 class="text-lg font-semibold leading-7 text-gray-900 mb-2">Buscar proceso</h2>
-                <form action="javascript:void(0);" oninput="appCategoria.busquedaCategoria()">
+                <form action="javascript:void(0);" oninput="appProceso.busquedaProceso()">
                     <div class="relative mb-1">
                         <div class="absolute flex items-center h-full text-gray-500 pl-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                             </svg>
                         </div>
-                        <input type="search" id="busqueda-categoria" placeholder="Búsqueda..." class="block w-full rounded-md border-0 py-3 pl-10 pr-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm">
+                        <input type="search" id="busqueda-proceso" placeholder="Búsqueda..." class="block w-full rounded-md border-0 py-3 pl-10 pr-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm">
                     </div>
                 </form>
             </div>
             <div class="p-4 rounded-md mb-4">
-                <!-- Tabla Categoria -->
+                <!-- Tabla Proceso -->
                 <table class="w-full text-xs md:text-sm text-left">
                     <thead>
                         <tr class="h-16 border-b border-b-slate-400">
@@ -78,7 +78,7 @@ if ($userSession->userLoggedIn()) {
                             <th class="font-medium text-right">Opciones</th>
                         </tr>
                     </thead>
-                    <tbody id="tbodyCategoria">
+                    <tbody id="tbodyProceso">
 
                     </tbody>
                 </table>
@@ -88,12 +88,12 @@ if ($userSession->userLoggedIn()) {
                 </div>
                 
                 <!-- Modal Editar -->
-                <div id="modal-categoria">
+                <div id="modal-proceso">
                 </div>
             </div>
         </div>
 
-        <script src="../assets/scriptCategoria.js"></script>
+        <script src="../assets/scriptProceso.js"></script>
 
 <?php
         require '../template/footer.php';

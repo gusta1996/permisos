@@ -11,9 +11,9 @@ class Seccion extends Connection
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos  
             // Consulta para obtener los datos
             $sql = "SELECT seccion.id_seccion, seccion.detalle AS seccion_detalle, seccion.estado AS seccion_estado, 
-                            departamento.detalle AS departamento_detalle, departamento.estado AS departamento_estado
+                            unidad.detalle AS unidad_detalle, unidad.estado AS unidad_estado
                     FROM seccion
-                    INNER JOIN departamento ON seccion.id_departamento_fk = departamento.id_departamento
+                    INNER JOIN unidad ON seccion.id_unidad_fk = unidad.id_unidad
                     WHERE seccion.estado != 'anulado'
                     ORDER BY id_seccion DESC
                     LIMIT :limit OFFSET :start";
@@ -24,9 +24,9 @@ class Seccion extends Connection
             $resultado = $declaracion->fetchAll();
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
-                if (isset($item['seccion_detalle']) && isset($item['departamento_detalle'])) {
+                if (isset($item['seccion_detalle']) && isset($item['unidad_detalle'])) {
                     $resultado[$i]['seccion_detalle'] = ucfirst($item['seccion_detalle']);
-                    $resultado[$i]['departamento_detalle'] = ucfirst($item['departamento_detalle']);
+                    $resultado[$i]['unidad_detalle'] = ucfirst($item['unidad_detalle']);
                 }
             }
             // Consulta para obtener el número total de registros
@@ -53,9 +53,9 @@ class Seccion extends Connection
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos
             // Hacer busqueda
             $sql = "SELECT seccion.id_seccion, seccion.detalle AS seccion_detalle, seccion.estado AS seccion_estado, 
-                            departamento.detalle AS departamento_detalle, departamento.estado AS departamento_estado
+                            unidad.detalle AS unidad_detalle, unidad.estado AS unidad_estado
                     FROM seccion
-                    INNER JOIN departamento ON seccion.id_departamento_fk = departamento.id_departamento
+                    INNER JOIN unidad ON seccion.id_unidad_fk = unidad.id_unidad
                     WHERE seccion.detalle ILIKE '%$busqueda%' AND seccion.estado != 'anulado'
                     ORDER BY id_seccion DESC
                     LIMIT :limit OFFSET :start";
@@ -66,9 +66,9 @@ class Seccion extends Connection
             $resultado = $declaracion->fetchAll();
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
-                if (isset($item['seccion_detalle']) && isset($item['departamento_detalle'])) {
+                if (isset($item['seccion_detalle']) && isset($item['unidad_detalle'])) {
                     $resultado[$i]['seccion_detalle'] = ucfirst($item['seccion_detalle']);
-                    $resultado[$i]['departamento_detalle'] = ucfirst($item['departamento_detalle']);
+                    $resultado[$i]['unidad_detalle'] = ucfirst($item['unidad_detalle']);
                 }
             }
             // Consulta para obtener el número total de registros
@@ -87,14 +87,14 @@ class Seccion extends Connection
             echo $e->getMessage();
         }
     }
-    public static function selectSeccionIdDepartamento($id_departamento)
+    public static function selectSeccionIdUnidad($id_unidad)
     {
         try {
             $sql = "SELECT * FROM seccion
-                    WHERE id_departamento_fk=:id_departamento AND estado = 'activo'
+                    WHERE id_unidad_fk=:id_unidad AND estado = 'activo'
                     ORDER BY detalle ASC";
             $declaracion = Connection::getConnection()->prepare($sql);
-            $declaracion->bindParam(':id_departamento', $id_departamento);
+            $declaracion->bindParam(':id_unidad', $id_unidad);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
             // Convertir la primera letra a mayúsculas, solo campo detalle
@@ -163,10 +163,10 @@ class Seccion extends Connection
                 return $comprobacion;
             }
 
-            $sql = 'INSERT INTO seccion (detalle, estado, id_departamento_fk) VALUES (:detalle, :estado, :departamento)';
+            $sql = 'INSERT INTO seccion (detalle, estado, id_unidad_fk) VALUES (:detalle, :estado, :unidad)';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':detalle', $data['detalle']);
-            $declaracion->bindParam(':departamento', $data['departamento']);
+            $declaracion->bindParam(':unidad', $data['unidad']);
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
 
@@ -179,15 +179,15 @@ class Seccion extends Connection
     {
         try {
             // Consulta que no existe una seccion (activo) igual
-            $sql = "SELECT detalle, estado, id_departamento_fk 
+            $sql = "SELECT detalle, estado, id_unidad_fk 
                     FROM seccion
                     WHERE id_seccion!=:id_seccion 
-                    AND detalle=:detalle AND id_departamento_fk=:departamento AND estado=:estado";
+                    AND detalle=:detalle AND id_unidad_fk=:unidad AND estado=:estado";
             $compruebaSeccion = Connection::getConnection()->prepare($sql);
             $compruebaSeccion->bindParam(':id_seccion', $data['id_seccion']);
             $compruebaSeccion->bindParam(':detalle', $data['detalle']);
             $compruebaSeccion->bindParam(':estado', $data['estado']);
-            $compruebaSeccion->bindParam(':departamento', $data['departamento']);
+            $compruebaSeccion->bindParam(':unidad', $data['unidad']);
             $compruebaSeccion->execute();
             
             if ($compruebaSeccion->rowCount() > 0) {
@@ -197,13 +197,13 @@ class Seccion extends Connection
             }
 
             $sql = 'UPDATE seccion 
-                    SET detalle=:detalle, estado=:estado, id_departamento_fk=:departamento 
+                    SET detalle=:detalle, estado=:estado, id_unidad_fk=:unidad 
                     WHERE id_seccion=:id_seccion';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_seccion', $data['id_seccion']);
             $declaracion->bindParam(':detalle', $data['detalle']);
             $declaracion->bindParam(':estado', $data['estado']);
-            $declaracion->bindParam(':departamento', $data['departamento']);
+            $declaracion->bindParam(':unidad', $data['unidad']);
             $declaracion->execute();
             return true;
         } catch (PDOException $e) {

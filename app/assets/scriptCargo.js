@@ -318,7 +318,7 @@ const appCargo = new (function () {
         var selectSeccion = $('#seccion-cargo');
         // resetear opciones
         this.detalle.value = '';
-        selectSeccion.empty().append('<option selected disabled>-- Selecciona --</option>');
+        selectSeccion.val(null).trigger('change');
     }
     this.cerrarModalCargo = () => {
         var modalCargo = document.getElementById('modal-cargo');

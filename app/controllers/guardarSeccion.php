@@ -2,7 +2,7 @@
 require_once '../models/seccion-model.php';
 $arrayName = array(
     'detalle' => strtolower($_POST['detalle']),
-    'departamento' => $_POST['departamento'],
+    'unidad' => $_POST['unidad'],
     'estado' => 'activo'
 );
 

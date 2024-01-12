@@ -4,8 +4,8 @@ $arrayName = array(
     'id_estructura' => $_POST['id_estructura'],
     'cargo' => $_POST['cargo'],
     'seccion' => $_POST['seccion'],
-    'departamento' => $_POST['departamento'],
-    'area' => $_POST['area'],
+    'unidad' => $_POST['unidad'],
+    'direccion' => $_POST['direccion'],
     'estado' => strtolower($_POST['estado'])
 );
 

@@ -1,7 +1,7 @@
 const appSeccion = new (function () {
     this.tbodySeccion = document.getElementById('tbodySeccion');
     this.detalle = document.getElementById('detalle-seccion');
-    this.departamento = document.getElementById('departamento-seccion');
+    this.unidad = document.getElementById('unidad-seccion');
     this.errorSeccion = document.getElementById('error-seccion');
     this.busqueda = document.getElementById('busqueda-seccion');
     this.paginacion = document.getElementById('paginacion');
@@ -13,7 +13,7 @@ const appSeccion = new (function () {
         // Enviar formulario para la consulta
         var formSeccion = new FormData();
         formSeccion.append('detalle', this.detalle.value);
-        formSeccion.append('departamento', this.departamento.value);
+        formSeccion.append('unidad', this.unidad.value);
         fetch("../controllers/guardarSeccion.php", { method: "POST", body: formSeccion })
             .then((respuesta) => respuesta.json())
             .then((data) => {
@@ -29,21 +29,21 @@ const appSeccion = new (function () {
             })
             .catch((error) => console.log(error));
     }
-    this.selectDepartamento = () => {
-        var editarDepartamento = document.getElementById('editar-departamento-seccion');
-        fetch("../controllers/selectDepartamento.php")
+    this.selectUnidad = () => {
+        var editarUnidad = document.getElementById('editar-unidad-seccion');
+        fetch("../controllers/selectUnidad.php")
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
                     // Imprimir las opciones
-                    if (editarDepartamento) {
-                        var seleted = 'departamento-id-' + item.id_departamento == editarDepartamento.classList.item(0) ? 'selected' : '';
-                        editarDepartamento.innerHTML += `
-                        <option ${seleted} value="${item.id_departamento}">${item.detalle}</option>
+                    if (editarUnidad) {
+                        var seleted = 'unidad-id-' + item.id_unidad == editarUnidad.classList.item(0) ? 'selected' : '';
+                        editarUnidad.innerHTML += `
+                        <option ${seleted} value="${item.id_unidad}">${item.detalle}</option>
                     `;
                     } else {
-                        this.departamento.innerHTML += `
-                        <option value="${item.id_departamento}">${item.detalle}</option>
+                        this.unidad.innerHTML += `
+                        <option value="${item.id_unidad}">${item.detalle}</option>
                     `;
                     }
                 });
@@ -69,9 +69,9 @@ const appSeccion = new (function () {
                             <td class="pr-4">${item[i].seccion_detalle}</td>
                             <td class="pr-4">
                                 <div class="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].departamento_estado == 'activo' ? 'text-green-600' : ''}${item[i].departamento_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].departamento_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].unidad_estado == 'activo' ? 'text-green-600' : ''}${item[i].unidad_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].unidad_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
                                         <circle cx="8" cy="8" r="8"/>
-                                    </svg>${item[i].departamento_detalle}
+                                    </svg>${item[i].unidad_detalle}
                                 </div>
                             </td>
                             <td class="font-medium capitalize ${item[i].seccion_estado == 'activo' ? 'text-green-600' : ''}${item[i].seccion_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].seccion_estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].seccion_estado}</td>
@@ -123,9 +123,9 @@ const appSeccion = new (function () {
                             <td class="pr-4">${item[i].seccion_detalle}</td>
                             <td class="pr-4">
                                 <div class="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].departamento_estado == 'activo' ? 'text-green-600' : ''}${item[i].departamento_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].departamento_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-circle-fill ${item[i].unidad_estado == 'activo' ? 'text-green-600' : ''}${item[i].unidad_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].unidad_estado == 'anulado' ? 'text-red-600' : ''}" viewBox="0 0 16 16">
                                         <circle cx="8" cy="8" r="8"/>
-                                    </svg>${item[i].departamento_detalle}
+                                    </svg>${item[i].unidad_detalle}
                                 </div>
                             </td>
                             <td class="font-medium capitalize ${item[i].seccion_estado == 'activo' ? 'text-green-600' : ''}${item[i].seccion_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].seccion_estado == 'anulado' ? 'text-red-600' : ''} pr-4">${item[i].seccion_estado}</td>
@@ -205,11 +205,11 @@ const appSeccion = new (function () {
         var formSeccion = new FormData();
         var editarId_Seccion = document.getElementById('editar-id-seccion');
         var editarDetalle = document.getElementById('editar-detalle-seccion');
-        var editarDepartamento = document.getElementById('editar-departamento-seccion');
+        var editarUnidad = document.getElementById('editar-unidad-seccion');
         var editarEstado = document.getElementById('editar-estado-seccion');
         formSeccion.append('id_seccion', editarId_Seccion.value);
         formSeccion.append('detalle', editarDetalle.value);
-        formSeccion.append('departamento', editarDepartamento.value);
+        formSeccion.append('unidad', editarUnidad.value);
         formSeccion.append('estado', editarEstado.value);
         fetch("../controllers/actualizarSeccion.php", { method: "POST", body: formSeccion })
             .then((respuesta) => respuesta.json())
@@ -254,10 +254,10 @@ const appSeccion = new (function () {
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Sección:</label>
                                             <input type="text" id="editar-detalle-seccion" value="${data.detalle}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
-                                        <!-- Departamento -->
+                                        <!-- Unidad -->
                                         <div class="sm:col-span-2">
-                                            <label class="block text-sm font-medium leading-6 text-gray-900">Departamento:</label>
-                                            <select id="editar-departamento-seccion" required class="departamento-id-${data.id_departamento_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                            <label class="block text-sm font-medium leading-6 text-gray-900">Unidad:</label>
+                                            <select id="editar-unidad-seccion" required class="unidad-id-${data.id_unidad_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                                 <option disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
@@ -284,9 +284,9 @@ const appSeccion = new (function () {
                     </div>
                 </div>
                 `;
-                this.selectDepartamento();
+                this.selectUnidad();
                 // Jquery para trabajar con la biblioteca Select2
-                $('#editar-departamento-seccion').select2();
+                $('#editar-unidad-seccion').select2();
                 $('#editar-estado-seccion').select2();
                 $('.select2').addClass('bg-white h-[38px] block !w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6');
             })
@@ -315,15 +315,15 @@ const appSeccion = new (function () {
     this.limpiarSeccion = () => {
         // Jquery para trabajar con la biblioteca Select2
         // variables
-        var selectDepartamento = $('#departamento-seccion');
+        var selectUnidad = $('#unidad-seccion');
         // resetear opciones
         this.detalle.value = '';
-        selectDepartamento.empty().append('<option selected disabled>-- Selecciona --</option>');
+        selectUnidad.val(null).trigger('change');
     }
     this.cerrarModalSeccion = () => {
         var modalSeccion = document.getElementById('modal-seccion');
         modalSeccion.innerHTML = '';
     }
 });
-appSeccion.selectDepartamento();
+appSeccion.selectUnidad();
 appSeccion.listadoSeccion();

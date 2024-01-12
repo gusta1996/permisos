@@ -3,8 +3,8 @@ const appEstructura = new (function () {
     this.errorEstructura = document.getElementById('error-estructura');
     this.cargo = document.getElementById('cargo-estructura');
     this.seccion = document.getElementById('seccion-estructura');
-    this.departamento = document.getElementById('departamento-estructura');
-    this.area = document.getElementById('area-estructura');
+    this.unidad = document.getElementById('unidad-estructura');
+    this.direccion = document.getElementById('direccion-estructura');
     this.busqueda = document.getElementById('busqueda-estructura');
     this.busquedaTipo = document.getElementById('busqueda-tipo');
     this.paginacion = document.getElementById('paginacion');
@@ -12,8 +12,8 @@ const appEstructura = new (function () {
     this.cargarSelect = () => {
         // Jquery para trabajar con la biblioteca Select2
         // variables
-        var selectArea = $('#area-estructura');
-        var selectDepartamento = $('#departamento-estructura');
+        var selectDireccion = $('#direccion-estructura');
+        var selectUnidad = $('#unidad-estructura');
         var selectSeccion = $('#seccion-estructura');
         var selectCargo = $('#cargo-estructura');
         var clasesSelect = 'bg-white h-[38px] block !w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6';
@@ -35,40 +35,40 @@ const appEstructura = new (function () {
             $('.select2').addClass(clasesSelect); // agregar clases en select2
         }
 
-        /* Activar SELECT AREA */
-        this.selectArea();
-        selectArea.select2(); // iniciar select2
+        /* Activar SELECT DIRECCION */
+        this.selectDireccion();
+        selectDireccion.select2(); // iniciar select2
 
-        /* Activar SELECT DEPARTAMENTO */
-        selectArea.on('select2:select', function (e) {
+        /* Activar SELECT UNIDAD */
+        selectDireccion.on('select2:select', function (e) {
             // resetear opciones (seccion, cargo)
             selectSeccion.empty().append('<option value selected disabled>-- Selecciona --</option>');
             selectCargo.empty().append('<option value selected disabled>-- Selecciona --</option>');
             // desabilitar select (seccion, cargo)
             selectSeccion.prop('disabled', true).trigger('change');
             selectCargo.prop('disabled', true).trigger('change');
-            // agregar opciones (departamento)
-            appEstructura.selectDepartamento(selectArea.val());
+            // agregar opciones (unidad)
+            appEstructura.selectUnidad(selectDireccion.val());
             // iniciar select2
-            selectDepartamento.select2();
+            selectUnidad.select2();
             // funciones necesarias
             setTimeout(function () {
                 agregarClasesSelect2();
                 agregarColorDesabilitado();
                 verificarCargo();
             }, 0);
-            // Mostrar select de departamento
-            $('.content-departamento').removeClass('hidden');
+            // Mostrar select de unidad
+            $('.content-unidad').removeClass('hidden');
         });
 
         /* Activar SELECT SECCION */
-        selectDepartamento.on('select2:select', function (e) {
+        selectUnidad.on('select2:select', function (e) {
             // resetear opciones (cargo)
             selectCargo.empty().append('<option value selected disabled>-- Selecciona --</option>');
             // desabilitar select (cargo)
             selectCargo.prop('disabled', true).trigger('change');
             // agregar opciones (seccion)
-            appEstructura.selectSeccion(selectDepartamento.val());
+            appEstructura.selectSeccion(selectUnidad.val());
             // iniciar select2
             selectSeccion.select2();
             // funciones necesarias
@@ -106,8 +106,8 @@ const appEstructura = new (function () {
     this.cargarSelectEditar = async () => {
         // Jquery para trabajar con la biblioteca Select2
         // variables
-        var selectArea = $('#editar-area-estructura');
-        var selectDepartamento = $('#editar-departamento-estructura');
+        var selectDireccion = $('#editar-direccion-estructura');
+        var selectUnidad = $('#editar-unidad-estructura');
         var selectSeccion = $('#editar-seccion-estructura');
         var selectCargo = $('#editar-cargo-estructura');
         var clasesSelect = 'bg-white h-[38px] block !w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6';
@@ -121,16 +121,16 @@ const appEstructura = new (function () {
             $('.select2').addClass(clasesSelect); // agregar clases en select2
         }
 
-        /* Activar SELECT AREA */
-        await this.selectArea();
-        selectArea.select2(); // iniciar select2
+        /* Activar SELECT DIRECCION */
+        await this.selectDireccion();
+        selectDireccion.select2(); // iniciar select2
 
-        /* Activar SELECT DEPARTAMENTO */
-        await this.selectDepartamento(selectArea.val()); // agregar opciones
-        selectDepartamento.select2(); // iniciar select2
+        /* Activar SELECT UNIDAD */
+        await this.selectUnidad(selectDireccion.val()); // agregar opciones
+        selectUnidad.select2(); // iniciar select2
 
         /* Activar SELECT SECCION */
-        await this.selectSeccion(selectDepartamento.val()); // agregar opciones
+        await this.selectSeccion(selectUnidad.val()); // agregar opciones
         selectSeccion.select2(); // iniciar select2
 
         /* Activar SELECT CARGO */
@@ -140,16 +140,16 @@ const appEstructura = new (function () {
         // agrega las clases a select 2
         agregarClasesSelect2();
 
-        /* Recarga SELECT DEPARTAMENTO */
-        selectArea.on('select2:select', function (e) {
+        /* Recarga SELECT UNIDAD */
+        selectDireccion.on('select2:select', function (e) {
             // resetear opciones (seccion, cargo)
             selectSeccion.empty().append('<option value selected disabled>-- Selecciona --</option>');
             selectCargo.empty().append('<option value selected disabled>-- Selecciona --</option>');
             // desabilitar select (seccion, cargo)
             selectSeccion.prop('disabled', true).trigger('change');
             selectCargo.prop('disabled', true).trigger('change');
-            // agregar opciones (departamento)
-            appEstructura.selectDepartamento(selectArea.val());
+            // agregar opciones (unidad)
+            appEstructura.selectUnidad(selectDireccion.val());
             // funciones necesarias
             setTimeout(function () {
                 agregarClasesSelect2();
@@ -158,13 +158,13 @@ const appEstructura = new (function () {
         });
 
         /* Recarga SELECT SECCION */
-        selectDepartamento.on('select2:select', function (e) {
+        selectUnidad.on('select2:select', function (e) {
             // resetear opciones (cargo)
             selectCargo.empty().append('<option value selected disabled>-- Selecciona --</option>');
             // desabilitar select (cargo)
             selectCargo.prop('disabled', true).trigger('change');
             // agregar opciones (seccion)
-            appEstructura.selectSeccion(selectDepartamento.val());
+            appEstructura.selectSeccion(selectUnidad.val());
             // iniciar select2
             selectSeccion.select2();
             // funciones necesarias
@@ -186,45 +186,45 @@ const appEstructura = new (function () {
             }, 0);
         });
     }
-    this.selectArea = async () => {
+    this.selectDireccion = async () => {
         let select;
         // verifica que select se esta usando (para editar o guardar)
-        if (document.getElementById('editar-area-estructura')) {
+        if (document.getElementById('editar-direccion-estructura')) {
             // se usa el select para editar seccion
-            select = document.getElementById('editar-area-estructura');
+            select = document.getElementById('editar-direccion-estructura');
         } else {
             // se usa el select para guardar seccion
-            select = this.area;
+            select = this.direccion;
         }
-        await fetch("../controllers/selectArea.php")
+        await fetch("../controllers/selectDireccion.php")
             .then((resultado) => resultado.json())
             .then((data) => {
                 data.forEach(item => {
                     // NECESARIO: volver a verificar que select se esta usando (para editar o guardar) antes de agregar las opciones
-                    if (document.getElementById('editar-area-estructura')) {
-                        var seleted = 'area-id-' + item.id_area == select.classList.item(0) ? 'selected' : '';
-                        select.innerHTML += `<option ${seleted} value="${item.id_area}">${item.detalle}</option>`;
+                    if (document.getElementById('editar-direccion-estructura')) {
+                        var seleted = 'direccion-id-' + item.id_direccion == select.classList.item(0) ? 'selected' : '';
+                        select.innerHTML += `<option ${seleted} value="${item.id_direccion}">${item.detalle}</option>`;
                     } else {
-                        select.innerHTML += `<option value="${item.id_area}">${item.detalle}</option>`;
+                        select.innerHTML += `<option value="${item.id_direccion}">${item.detalle}</option>`;
                     }
                 });
             })
             .catch((error) => console.log(error));
     }
-    this.selectDepartamento = async (id_area) => {
+    this.selectUnidad = async (id_direccion) => {
         let select;
         // verifica que select se esta usando (para editar o guardar)
-        if (document.getElementById('editar-departamento-estructura')) {
+        if (document.getElementById('editar-unidad-estructura')) {
             // se usa el select para editar seccion
-            select = document.getElementById('editar-departamento-estructura');
+            select = document.getElementById('editar-unidad-estructura');
         } else {
             // se usa el select para guardar seccion
-            select = this.departamento;
+            select = this.unidad;
         }
-        // habilita select de departamento
+        // habilita select de unidad
         select.removeAttribute("disabled");
         // obtener las opciones
-        await fetch("../controllers/selectDepartamento.php?id_area=" + id_area)
+        await fetch("../controllers/selectUnidad.php?id_direccion=" + id_direccion)
             .then((resultado) => resultado.json())
             .then((data) => {
                 // verifica si existen resultados
@@ -237,17 +237,17 @@ const appEstructura = new (function () {
                     // agregar opciones
                     data.forEach(item => {
                         // NECESARIO: volver a verificar que select se esta usando (para editar o guardar) antes de agregar las opciones
-                        if (document.getElementById('editar-departamento-estructura')) {
-                            var seleted = 'departamento-id-' + item.id_departamento == select.classList.item(0) ? 'selected' : '';
-                            select.innerHTML += `<option ${seleted} value="${item.id_departamento}">${item.detalle}</option>`;
+                        if (document.getElementById('editar-unidad-estructura')) {
+                            var seleted = 'unidad-id-' + item.id_unidad == select.classList.item(0) ? 'selected' : '';
+                            select.innerHTML += `<option ${seleted} value="${item.id_unidad}">${item.detalle}</option>`;
                         } else {
-                            select.innerHTML += `<option value="${item.id_departamento}">${item.detalle}</option>`;
+                            select.innerHTML += `<option value="${item.id_unidad}">${item.detalle}</option>`;
                         }
                     });
                     // NECESARIO: verificar si se esta usando select para editar, esto activara el select seccion
-                    if (document.getElementById('editar-departamento-estructura')) {
+                    if (document.getElementById('editar-unidad-estructura')) {
                         // quitar clase !bg-[#eeeeee]
-                        $('#editar-departamento-estructura').next().removeClass('!bg-[#eeeeee]');
+                        $('#editar-unidad-estructura').next().removeClass('!bg-[#eeeeee]');
                         // desabilitar select (cargo)
                         $('#editar-cargo-estructura').prop('disabled', true).trigger('change');
                         /* recarga SELECT SECCION */
@@ -263,7 +263,7 @@ const appEstructura = new (function () {
             .catch((error) => console.log(error));
 
     }
-    this.selectSeccion = async (id_departamento) => {
+    this.selectSeccion = async (id_unidad) => {
         let select;
         // verifica que select se esta usando (para editar o guardar)
         if (document.getElementById('editar-seccion-estructura')) {
@@ -276,7 +276,7 @@ const appEstructura = new (function () {
         // habilita select de seccion
         select.removeAttribute("disabled");
         // obtener las opciones
-        await fetch("../controllers/selectSeccion.php?id_departamento=" + id_departamento)
+        await fetch("../controllers/selectSeccion.php?id_unidad=" + id_unidad)
             .then((resultado) => resultado.json())
             .then((data) => {
                 // verifica si existen resultados
@@ -361,8 +361,8 @@ const appEstructura = new (function () {
         var formEstructura = new FormData();
         formEstructura.append('cargo', this.cargo.value);
         formEstructura.append('seccion', this.seccion.value);
-        formEstructura.append('departamento', this.departamento.value);
-        formEstructura.append('area', this.area.value);
+        formEstructura.append('unidad', this.unidad.value);
+        formEstructura.append('direccion', this.direccion.value);
         fetch("../controllers/guardarEstructura.php", { method: "POST", body: formEstructura })
             .then((respuesta) => respuesta.json())
             .then((data) => {
@@ -394,8 +394,8 @@ const appEstructura = new (function () {
                         html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="pr-4">${item[i].id_estructura}</td>
-                            <td class="pr-4 ${item[i].area_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].area_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].area_detalle}</td>
-                            <td class="pr-4 ${item[i].depa_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].depa_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].depa_detalle}</td>
+                            <td class="pr-4 ${item[i].direccion_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].direccion_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].direccion_detalle}</td>
+                            <td class="pr-4 ${item[i].unidad_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].unidad_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].unidad_detalle}</td>
                             <td class="pr-4 ${item[i].seccion_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].seccion_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].seccion_detalle}</td>
                             <td class="pr-4 ${item[i].cargo_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].cargo_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].cargo_detalle}</td>
                             <td class="font-medium capitalize pr-4 ${item[i].estruc_estado == 'activo' ? 'text-green-600' : ''}${item[i].estruc_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].estruc_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].estruc_estado}</td>
@@ -445,8 +445,8 @@ const appEstructura = new (function () {
                         html += `
                             <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                                 <td class="pr-4">${item[i].id_estructura}</td>
-                                <td class="pr-4 ${item[i].area_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].area_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].area_detalle}</td>
-                                <td class="pr-4 ${item[i].depa_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].depa_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].depa_detalle}</td>
+                                <td class="pr-4 ${item[i].direccion_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].direccion_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].direccion_detalle}</td>
+                                <td class="pr-4 ${item[i].unidad_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].unidad_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].unidad_detalle}</td>
                                 <td class="pr-4 ${item[i].seccion_detalle == 'suspendido' ? 'text-amber-400' : ''}${item[i].seccion_detalle == 'anulado' ? 'text-red-600' : ''}">${item[i].seccion_detalle}</td>
                                 <td class="pr-4 ${item[i].cargo_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].cargo_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].cargo_detalle}</td>
                                 <td class="font-medium capitalize pr-4 ${item[i].estruc_estado == 'activo' ? 'text-green-600' : ''}${item[i].estruc_estado == 'suspendido' ? 'text-amber-400' : ''}${item[i].estruc_estado == 'anulado' ? 'text-red-600' : ''}">${item[i].estruc_estado}</td>
@@ -527,14 +527,14 @@ const appEstructura = new (function () {
         var editarIdEstructura = document.getElementById('editar-id-estructura');
         var editarCargo = document.getElementById('editar-cargo-estructura');
         var editarSeccion = document.getElementById('editar-seccion-estructura');
-        var editarDepartamento = document.getElementById('editar-departamento-estructura');
-        var editarArea = document.getElementById('editar-area-estructura');
+        var editarUnidad = document.getElementById('editar-unidad-estructura');
+        var editarDireccion = document.getElementById('editar-direccion-estructura');
         var editarEstado = document.getElementById('editar-estado-estructura');
         formEstructura.append('id_estructura', editarIdEstructura.value);
         formEstructura.append('cargo', editarCargo.value);
         formEstructura.append('seccion', editarSeccion.value);
-        formEstructura.append('departamento', editarDepartamento.value);
-        formEstructura.append('area', editarArea.value);
+        formEstructura.append('unidad', editarUnidad.value);
+        formEstructura.append('direccion', editarDireccion.value);
         formEstructura.append('estado', editarEstado.value);
         fetch("../controllers/actualizarEstructura.php", { method: "POST", body: formEstructura })
             .then((respuesta) => respuesta.json())
@@ -575,18 +575,18 @@ const appEstructura = new (function () {
                                             <label class="block text-sm font-medium leading-6 text-gray-900">ID:</label>
                                             <input type="text" id="editar-id-estructura" value="${data.id_estructura}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
-                                        <!-- Área -->
+                                        <!-- Dirección -->
                                         <div class="sm:col-span-2">
-                                            <label class="block text-sm font-medium leading-6 text-gray-900">Área</label>
-                                            <select id="editar-area-estructura" required class="area-id-${data.id_area_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
-                                                <option ${data.area_estado != 'activo' ? 'value selected ' : ''}disabled>-- Selecciona --</option>
+                                            <label class="block text-sm font-medium leading-6 text-gray-900">Dirección</label>
+                                            <select id="editar-direccion-estructura" required class="direccion-id-${data.id_direccion_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                                <option ${data.direccion_estado != 'activo' ? 'value selected ' : ''}disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
-                                        <!-- Departamento -->
+                                        <!-- Unidad -->
                                         <div class="sm:col-span-2">
-                                            <label class="block text-sm font-medium leading-6 text-gray-900">Departamento</label>
-                                            <select id="editar-departamento-estructura" required class="departamento-id-${data.id_departamento_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
-                                                <option ${data.depa_estado != 'activo' ? 'value selected ' : ''}disabled>-- Selecciona --</option>
+                                            <label class="block text-sm font-medium leading-6 text-gray-900">Unidad</label>
+                                            <select id="editar-unidad-estructura" required class="unidad-id-${data.id_unidad_fk} h-[38px] block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
+                                                <option ${data.unidad_estado != 'activo' ? 'value selected ' : ''}disabled>-- Selecciona --</option>
                                             </select>
                                         </div>
                                         <!-- Sección -->
@@ -653,15 +653,15 @@ const appEstructura = new (function () {
     this.limpiarEstructura = () => {
         // Jquery para trabajar con la biblioteca Select2
         // variables
-        var selectArea = $('#area-estructura');
-        var selectDepartamento = $('#departamento-estructura');
+        var selectDireccion = $('#direccion-estructura');
+        var selectUnidad = $('#unidad-estructura');
         var selectSeccion = $('#seccion-estructura');
         var selectCargo = $('#cargo-estructura');
         // Selecion null y desabilita seleccion
-        selectArea.val(null).trigger('change');
+        selectDireccion.val(null).trigger('change');
         // resetear opciones y desabilitar
-        selectDepartamento.empty().append('<option value selected disabled>-- Selecciona --</option>');
-        selectDepartamento.prop('disabled', true).trigger('change');
+        selectUnidad.empty().append('<option value selected disabled>-- Selecciona --</option>');
+        selectUnidad.prop('disabled', true).trigger('change');
         // resetear opciones y desabilitar
         selectSeccion.empty().append('<option value selected disabled>-- Selecciona --</option>');
         selectSeccion.prop('disabled', true).trigger('change');

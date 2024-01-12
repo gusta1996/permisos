@@ -13,13 +13,13 @@ class Estructura extends Connection
             $sql = "SELECT estructura.id_estructura, estructura.estado AS estruc_estado, 
                         cargo.detalle AS cargo_detalle, cargo.estado AS cargo_estado,
                         seccion.detalle AS seccion_detalle, seccion.estado AS seccion_estado,
-                        departamento.detalle AS depa_detalle, departamento.estado AS depa_estado,
-                        area.detalle AS area_detalle, area.estado AS area_estado
+                        unidad.detalle AS unidad_detalle, unidad.estado AS unidad_estado,
+                        direccion.detalle AS direccion_detalle, direccion.estado AS direccion_estado
                     FROM estructura
                     INNER JOIN cargo ON estructura.id_cargo_fk = cargo.id_cargo
                     INNER JOIN seccion ON estructura.id_seccion_fk = seccion.id_seccion
-                    INNER JOIN departamento ON estructura.id_departamento_fk = departamento.id_departamento
-                    INNER JOIN area ON estructura.id_area_fk = area.id_area
+                    INNER JOIN unidad ON estructura.id_unidad_fk = unidad.id_unidad
+                    INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
                     WHERE estructura.estado != 'anulado'
                     ORDER BY id_estructura DESC
                     LIMIT :limit OFFSET :start";
@@ -30,10 +30,10 @@ class Estructura extends Connection
             $resultado = $declaracion->fetchAll();
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
-                if (isset($item['area_detalle']) && isset($item['depa_detalle']) &&
+                if (isset($item['direccion_detalle']) && isset($item['unidad_detalle']) &&
                     isset($item['seccion_detalle']) && isset($item['cargo_detalle']) ) {
-                    $resultado[$i]['area_detalle'] = ucfirst($item['area_detalle']);
-                    $resultado[$i]['depa_detalle'] = ucfirst($item['depa_detalle']);
+                    $resultado[$i]['direccion_detalle'] = ucfirst($item['direccion_detalle']);
+                    $resultado[$i]['unidad_detalle'] = ucfirst($item['unidad_detalle']);
                     $resultado[$i]['seccion_detalle'] = ucfirst($item['seccion_detalle']);
                     $resultado[$i]['cargo_detalle'] = ucfirst($item['cargo_detalle']);
                 }
@@ -65,13 +65,13 @@ class Estructura extends Connection
             $sql = "SELECT estructura.id_estructura, estructura.estado AS estruc_estado, 
                 cargo.detalle AS cargo_detalle, cargo.estado AS cargo_estado,
                 seccion.detalle AS seccion_detalle, seccion.estado AS seccion_estado,
-                departamento.detalle AS depa_detalle, departamento.estado AS depa_estado,
-                area.detalle AS area_detalle, area.estado AS area_estado
+                unidad.detalle AS unidad_detalle, unidad.estado AS unidad_estado,
+                direccion.detalle AS direccion_detalle, direccion.estado AS direccion_estado
             FROM estructura
             INNER JOIN cargo ON estructura.id_cargo_fk = cargo.id_cargo
             INNER JOIN seccion ON estructura.id_seccion_fk = seccion.id_seccion
-            INNER JOIN departamento ON estructura.id_departamento_fk = departamento.id_departamento
-            INNER JOIN area ON estructura.id_area_fk = area.id_area
+            INNER JOIN unidad ON estructura.id_unidad_fk = unidad.id_unidad
+            INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
             WHERE  $tipoBusqueda.detalle ILIKE '%$busqueda%' AND estructura.estado != 'anulado'
             ORDER BY id_estructura DESC
             LIMIT :limit OFFSET :start";
@@ -82,10 +82,10 @@ class Estructura extends Connection
             $resultado = $declaracion->fetchAll();
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
-                if (isset($item['area_detalle']) && isset($item['depa_detalle']) &&
+                if (isset($item['direccion_detalle']) && isset($item['unidad_detalle']) &&
                     isset($item['seccion_detalle']) && isset($item['cargo_detalle']) ) {
-                    $resultado[$i]['area_detalle'] = ucfirst($item['area_detalle']);
-                    $resultado[$i]['depa_detalle'] = ucfirst($item['depa_detalle']);
+                    $resultado[$i]['direccion_detalle'] = ucfirst($item['direccion_detalle']);
+                    $resultado[$i]['unidad_detalle'] = ucfirst($item['unidad_detalle']);
                     $resultado[$i]['seccion_detalle'] = ucfirst($item['seccion_detalle']);
                     $resultado[$i]['cargo_detalle'] = ucfirst($item['cargo_detalle']);
                 }
@@ -95,8 +95,8 @@ class Estructura extends Connection
                         FROM estructura 
                         INNER JOIN cargo ON estructura.id_cargo_fk = cargo.id_cargo
                         INNER JOIN seccion ON estructura.id_seccion_fk = seccion.id_seccion
-                        INNER JOIN departamento ON estructura.id_departamento_fk = departamento.id_departamento
-                        INNER JOIN area ON estructura.id_area_fk = area.id_area
+                        INNER JOIN unidad ON estructura.id_unidad_fk = unidad.id_unidad
+                        INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
                         WHERE $tipoBusqueda.detalle ILIKE '%$busqueda%' AND estructura.estado != 'anulado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
@@ -117,13 +117,13 @@ class Estructura extends Connection
             $sql = "SELECT estructura.id_estructura, estructura.estado AS estruc_estado, 
                         cargo.detalle AS cargo_detalle, cargo.estado AS cargo_estado,
                         seccion.detalle AS seccion_detalle, seccion.estado AS seccion_estado,
-                        departamento.detalle AS depa_detalle, departamento.estado AS depa_estado,
-                        area.detalle AS area_detalle, area.estado AS area_estado
+                        unidad.detalle AS unidad_detalle, unidad.estado AS unidad_estado,
+                        direccion.detalle AS direccion_detalle, direccion.estado AS direccion_estado
                     FROM estructura
                     INNER JOIN cargo ON estructura.id_cargo_fk = cargo.id_cargo
                     INNER JOIN seccion ON estructura.id_seccion_fk = seccion.id_seccion
-                    INNER JOIN departamento ON estructura.id_departamento_fk = departamento.id_departamento
-                    INNER JOIN area ON estructura.id_area_fk = area.id_area
+                    INNER JOIN unidad ON estructura.id_unidad_fk = unidad.id_unidad
+                    INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
                     WHERE estructura.estado = 'activo'
                     ORDER BY cargo.detalle ASC";
             $declaracion = Connection::getConnection()->prepare($sql);
@@ -131,10 +131,10 @@ class Estructura extends Connection
             $resultado = $declaracion->fetchAll();
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
-                if (isset($item['area_detalle']) && isset($item['depa_detalle']) &&
+                if (isset($item['direccion_detalle']) && isset($item['unidad_detalle']) &&
                     isset($item['seccion_detalle']) && isset($item['cargo_detalle']) ) {
-                    $resultado[$i]['area_detalle'] = ucfirst($item['area_detalle']);
-                    $resultado[$i]['depa_detalle'] = ucfirst($item['depa_detalle']);
+                    $resultado[$i]['direccion_detalle'] = ucfirst($item['direccion_detalle']);
+                    $resultado[$i]['unidad_detalle'] = ucfirst($item['unidad_detalle']);
                     $resultado[$i]['seccion_detalle'] = ucfirst($item['seccion_detalle']);
                     $resultado[$i]['cargo_detalle'] = ucfirst($item['cargo_detalle']);
                 }
@@ -148,14 +148,14 @@ class Estructura extends Connection
     {
         try {
             $sql = 'SELECT estructura.id_estructura, estructura.estado AS estructura_estado, 
-                        estructura.id_area_fk, estructura.id_departamento_fk, estructura.id_seccion_fk, estructura.id_cargo_fk, 
-                        area.estado AS area_estado,
-                        departamento.estado AS depa_estado,
+                        estructura.id_direccion_fk, estructura.id_unidad_fk, estructura.id_seccion_fk, estructura.id_cargo_fk, 
+                        direccion.estado AS direccion_estado,
+                        unidad.estado AS unidad_estado,
                         seccion.estado AS seccion_estado,
                         cargo.estado AS cargo_estado
                     FROM estructura 
-                    INNER JOIN area on estructura.id_area_fk = area.id_area
-                    INNER JOIN departamento ON estructura.id_departamento_fk = departamento.id_departamento
+                    INNER JOIN direccion on estructura.id_direccion_fk = direccion.id_direccion
+                    INNER JOIN unidad ON estructura.id_unidad_fk = unidad.id_unidad
                     INNER JOIN seccion ON estructura.id_seccion_fk = seccion.id_seccion
                     INNER JOIN cargo ON estructura.id_cargo_fk = cargo.id_cargo
                     WHERE id_estructura=:id_estructura';
@@ -172,15 +172,15 @@ class Estructura extends Connection
     {
         try {
             // Consulta que no existe un estructura (activo) igual
-            $sql = 'SELECT id_cargo_fk, id_seccion_fk, id_departamento_fk, id_area_fk, estado
+            $sql = 'SELECT id_cargo_fk, id_seccion_fk, id_unidad_fk, id_direccion_fk, estado
                     FROM estructura
                     WHERE id_cargo_fk=:cargo AND id_seccion_fk=:seccion 
-                    AND id_departamento_fk=:departamento AND id_area_fk=:area AND estado=:estado';
+                    AND id_unidad_fk=:unidad AND id_direccion_fk=:direccion AND estado=:estado';
             $compruebaEstructura = Connection::getConnection()->prepare($sql);
             $compruebaEstructura->bindParam(':cargo', $data['cargo']);
             $compruebaEstructura->bindParam(':seccion', $data['seccion']);
-            $compruebaEstructura->bindParam(':departamento', $data['departamento']);
-            $compruebaEstructura->bindParam(':area', $data['area']);
+            $compruebaEstructura->bindParam(':unidad', $data['unidad']);
+            $compruebaEstructura->bindParam(':direccion', $data['direccion']);
             $compruebaEstructura->bindParam(':estado', $data['estado']);
             $compruebaEstructura->execute();
 
@@ -190,13 +190,13 @@ class Estructura extends Connection
                 return $comprobacion;
             }
 
-            $sql = 'INSERT INTO estructura (id_cargo_fk, id_seccion_fk, id_departamento_fk, id_area_fk, estado)
-                    VALUES (:cargo, :seccion, :departamento, :area, :estado)';
+            $sql = 'INSERT INTO estructura (id_cargo_fk, id_seccion_fk, id_unidad_fk, id_direccion_fk, estado)
+                    VALUES (:cargo, :seccion, :unidad, :direccion, :estado)';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':cargo', $data['cargo']);
             $declaracion->bindParam(':seccion', $data['seccion']);
-            $declaracion->bindParam(':departamento', $data['departamento']);
-            $declaracion->bindParam(':area', $data['area']);
+            $declaracion->bindParam(':unidad', $data['unidad']);
+            $declaracion->bindParam(':direccion', $data['direccion']);
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
             return true;
@@ -208,16 +208,16 @@ class Estructura extends Connection
     {
         try {
             // Consulta que no existe un estructura (activo) igual
-            $sql = "SELECT id_cargo_fk, id_seccion_fk, id_departamento_fk, id_area_fk, estado
+            $sql = "SELECT id_cargo_fk, id_seccion_fk, id_unidad_fk, id_direccion_fk, estado
                     FROM estructura
                     WHERE id_estructura!=:id_estructura AND id_cargo_fk=:cargo AND id_seccion_fk=:seccion 
-                    AND id_departamento_fk=:departamento AND id_area_fk=:area AND estado=:estado";
+                    AND id_unidad_fk=:unidad AND id_direccion_fk=:direccion AND estado=:estado";
             $compruebaEstructura = Connection::getConnection()->prepare($sql);
             $compruebaEstructura->bindParam(':id_estructura', $data['id_estructura']);
             $compruebaEstructura->bindParam(':cargo', $data['cargo']);
             $compruebaEstructura->bindParam(':seccion', $data['seccion']);
-            $compruebaEstructura->bindParam(':departamento', $data['departamento']);
-            $compruebaEstructura->bindParam(':area', $data['area']);
+            $compruebaEstructura->bindParam(':unidad', $data['unidad']);
+            $compruebaEstructura->bindParam(':direccion', $data['direccion']);
             $compruebaEstructura->bindParam(':estado', $data['estado']);
             $compruebaEstructura->execute();
 
@@ -228,14 +228,14 @@ class Estructura extends Connection
             }
 
             $sql = 'UPDATE estructura
-                    SET id_cargo_fk=:cargo, id_seccion_fk=:seccion, id_departamento_fk=:departamento, id_area_fk=:area, estado=:estado
+                    SET id_cargo_fk=:cargo, id_seccion_fk=:seccion, id_unidad_fk=:unidad, id_direccion_fk=:direccion, estado=:estado
                     WHERE id_estructura=:id_estructura';
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_estructura', $data['id_estructura']);
             $declaracion->bindParam(':cargo', $data['cargo']);
             $declaracion->bindParam(':seccion', $data['seccion']);
-            $declaracion->bindParam(':departamento', $data['departamento']);
-            $declaracion->bindParam(':area', $data['area']);
+            $declaracion->bindParam(':unidad', $data['unidad']);
+            $declaracion->bindParam(':direccion', $data['direccion']);
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
             return true;
