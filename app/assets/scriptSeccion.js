@@ -1,11 +1,36 @@
 const appSeccion = new (function () {
     this.tbodySeccion = document.getElementById('tbodySeccion');
+    this.seccionSinNombre = document.getElementById('seccion-sin-nombre');
     this.detalle = document.getElementById('detalle-seccion');
     this.unidad = document.getElementById('unidad-seccion');
     this.errorSeccion = document.getElementById('error-seccion');
     this.busqueda = document.getElementById('busqueda-seccion');
     this.paginacion = document.getElementById('paginacion');
 
+    this.checkboxSeccionSinNombre = () => {
+        // comprueba el checkbox
+        if (this.seccionSinNombre.checked == true) {
+            // si el checkbox es esta activo, desabilita el input detalle
+            this.detalle.setAttribute('disabled', false);
+            // vacia el valor del input detalle
+            this.detalle.value = '';
+            // jquery: 
+            let inputDetalle = $('#detalle-seccion');
+            let selectUnidad = $('#unidad-seccion');
+            // el texto del select se agrega al input
+            inputDetalle.attr("placeholder", selectUnidad.find("option:selected").text());
+            selectUnidad.on('select2:select', function (e) {
+                inputDetalle.attr("placeholder", selectUnidad.find("option:selected").text());
+            
+            });
+        } else {
+            // si el checkbox es esta desactivado, habilita el input detalle
+            this.detalle.removeAttribute('disabled', true);
+            // vacia el valor del input detalle
+            this.detalle.value = '';
+            this.detalle.placeholder = '';
+        }
+    }
     this.guardarSeccion = () => {
         // Esconder mensaje de error al guardar cada vez
         this.errorSeccion.classList.add('hidden');
@@ -327,3 +352,4 @@ const appSeccion = new (function () {
 });
 appSeccion.selectUnidad();
 appSeccion.listadoSeccion();
+

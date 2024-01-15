@@ -32,11 +32,32 @@ if ($userSession->userLoggedIn()) {
             <div class="p-4">
                 <form action="javascript:void(0);" onsubmit="appSeccion.guardarSeccion()">
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-7">
+                        <!-- Switch: ¿Agregar sección sin nombre? -->
+                        <div class="sm:col-span-7">
+                            <style>
+                                .toggle-checkbox:checked {
+                                    right: 0;
+                                    border-color: #68D391;
+                                    background-color: #68D391;
+                                }
+
+                                .toggle-checkbox:checked+.toggle-label {
+                                    background-color: #1F2937;
+                                }
+                            </style>
+
+                            <label for="seccion-sin-nombre" class="mr-4 cursor-pointer text-sm font-medium leading-6 text-gray-900">¿Agregar sección sin nombre?</label>
+                            <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" name="seccion-sin-nombre" id="seccion-sin-nombre" onchange="appSeccion.checkboxSeccionSinNombre()" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                                <label for="seccion-sin-nombre" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </div>
+
                         <!-- Sección -->
                         <div class="sm:col-span-3">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Nueva sección:</label>
                             <div class="mt-2">
-                                <input type="text" required id="detalle-seccion" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                <input type="text" required id="detalle-seccion" class="disabled:cursor-not-allowed disabled:bg-slate-100 block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                             </div>
                         </div>
 
