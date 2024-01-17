@@ -14,14 +14,15 @@ const appSeccion = new (function () {
             this.detalle.setAttribute('disabled', false);
             // vacia el valor del input detalle
             this.detalle.value = '';
-            // jquery: 
+
+            /* JQUERY */
             let inputDetalle = $('#detalle-seccion');
             let selectUnidad = $('#unidad-seccion');
             // el texto del select se agrega al input
             inputDetalle.attr("placeholder", selectUnidad.find("option:selected").text());
             selectUnidad.on('select2:select', function (e) {
                 inputDetalle.attr("placeholder", selectUnidad.find("option:selected").text());
-            
+                inputDetalle.val(selectUnidad.find("option:selected").text());
             });
         } else {
             // si el checkbox es esta desactivado, habilita el input detalle
@@ -29,6 +30,15 @@ const appSeccion = new (function () {
             // vacia el valor del input detalle
             this.detalle.value = '';
             this.detalle.placeholder = '';
+
+            /* JQUERY */
+            let inputDetalle = $('#detalle-seccion');
+            let selectUnidad = $('#unidad-seccion');
+            // vacia el valor del input detalle
+            selectUnidad.on('select2:select', function (e) {
+                inputDetalle.attr("placeholder", '');
+                inputDetalle.val('');
+            });
         }
     }
     this.guardarSeccion = () => {

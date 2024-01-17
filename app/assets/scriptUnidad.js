@@ -1,11 +1,46 @@
 const appUnidad = new (function () {
     this.tbodyUnidad = document.getElementById('tbodyUnidad');
+    this.unidadSinNombre = document.getElementById('unidad-sin-nombre');
     this.detalle = document.getElementById('detalle-unidad');
     this.direccion = document.getElementById('direccion-unidad');
     this.errorUnidad = document.getElementById('error-unidad');
     this.busqueda = document.getElementById('busqueda-unidad');
     this.paginacion = document.getElementById('paginacion');
 
+    this.checkboxUnidadSinNombre = () => {
+        // comprueba el checkbox
+        if (this.unidadSinNombre.checked == true) {
+            // si el checkbox es esta activo, desabilita el input detalle
+            this.detalle.setAttribute('disabled', false);
+            // vacia el valor del input detalle
+            this.detalle.value = '';
+
+            /* JQUERY */
+            let inputDetalle = $('#detalle-unidad');
+            let selectDireccion = $('#direccion-unidad');
+            // el texto del select se agrega al input
+            inputDetalle.attr("placeholder", selectDireccion.find("option:selected").text());
+            selectDireccion.on('select2:select', function (e) {
+                inputDetalle.attr("placeholder", selectDireccion.find("option:selected").text());
+                inputDetalle.val(selectDireccion.find("option:selected").text());
+            });
+        } else {
+            // si el checkbox es esta desactivado, habilita el input detalle
+            this.detalle.removeAttribute('disabled', true);
+            // vacia el valor del input detalle
+            this.detalle.value = '';
+            this.detalle.placeholder = '';
+
+            /* JQUERY */
+            let inputDetalle = $('#detalle-unidad');
+            let selectDireccion = $('#direccion-unidad');
+            // vacia el valor del input detalle
+            selectDireccion.on('select2:select', function (e) {
+                inputDetalle.attr("placeholder", '');
+                inputDetalle.val('');
+            });
+        }
+    }
     this.guardarUnidad = () => {
         // Esconder mensaje de error al guardar cada vez
         this.errorUnidad.classList.add('hidden');

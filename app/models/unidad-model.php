@@ -158,7 +158,7 @@ class Unidad extends Connection
 
             if ($compruebaUnidad->rowCount() > 0) {
                 // Si existe duplicados retorna mensajes
-                $comprobacion = "Ya existe un unidad activo con este nombre.";
+                $comprobacion = "Ya existe una unidad activa con este nombre.";
                 return $comprobacion;
             }
 
@@ -191,7 +191,7 @@ class Unidad extends Connection
             
             if ($compruebaUnidad->rowCount() > 0) {
                 // Si existe duplicados retorna mensajes
-                $comprobacion = "Ya existe un unidad activo igual a este.";
+                $comprobacion = "Ya existe una unidad activa igual a esta.";
                 return $comprobacion;
             }
 

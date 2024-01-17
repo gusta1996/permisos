@@ -32,7 +32,28 @@ if ($userSession->userLoggedIn()) {
             <div class="p-4">
                 <form action="javascript:void(0);" onsubmit="appUnidad.guardarUnidad()">
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-7">
-                        <!-- Detalle -->
+                        <!-- Switch: ¿Agregar unidad sin nombre? -->
+                        <div class="sm:col-span-7">
+                            <style>
+                                .toggle-checkbox:checked {
+                                    right: 0;
+                                    border-color: #68D391;
+                                    background-color: #68D391;
+                                }
+
+                                .toggle-checkbox:checked+.toggle-label {
+                                    background-color: #1F2937;
+                                }
+                            </style>
+
+                            <label for="unidad-sin-nombre" class="mr-4 cursor-pointer text-sm font-medium leading-6 text-gray-900">¿Agregar unidad sin nombre?</label>
+                            <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" name="unidad-sin-nombre" id="unidad-sin-nombre" onchange="appUnidad.checkboxUnidadSinNombre()" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                                <label for="unidad-sin-nombre" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </div>
+
+                        <!-- Unidad -->
                         <div class="sm:col-span-3">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Nueva unidad:</label>
                             <div class="mt-2">
