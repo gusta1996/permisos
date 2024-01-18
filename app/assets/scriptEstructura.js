@@ -638,8 +638,9 @@ const appEstructura = new (function () {
             fetch("../controllers/eliminarEstructura.php", { method: "POST", body: formEstructura })
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
-                    if (data.estado != 'anulado') {
-                        alert('¡No se pudo anular, esta estructura está siendo usada!')
+                    if (data.estructura_estado != 'anulado') {
+                        alert('¡No se pudo anular, esta estructura está siendo usada!');
+                        return;
                     }
                     app.notificacion('¡Estructura eliminada!', 'Se ha eliminado una estructura.', 'eliminar');
                     this.listadoEstructura();

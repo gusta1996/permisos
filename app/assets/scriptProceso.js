@@ -254,7 +254,8 @@ const appProceso = new (function () {
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
                     if (data.estado != 'anulado') {
-                        alert('¡No se pudo anular, este proceso está siendo usado!')
+                        alert('¡No se pudo anular, este proceso está siendo usado!');
+                        return;
                     }
                     app.notificacion('¡Proceso eliminado!', 'Se ha eliminado un proceso.', 'eliminar');
                     this.listadoProceso();

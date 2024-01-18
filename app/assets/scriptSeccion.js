@@ -35,9 +35,11 @@ const appSeccion = new (function () {
             let inputDetalle = $('#detalle-seccion');
             let selectUnidad = $('#unidad-seccion');
             // vacia el valor del input detalle
-            selectUnidad.on('select2:select', function (e) {
-                inputDetalle.attr("placeholder", '');
-                inputDetalle.val('');
+            inputDetalle.attr("placeholder", '');
+            inputDetalle.val('');
+            // Esto asegura que cualquier controlador de eventos anterior para ‘select2:select’ se elimine
+            selectUnidad.off('select2:select').on('select2:select', function (e) {
+                // vacio
             });
         }
     }
@@ -336,7 +338,8 @@ const appSeccion = new (function () {
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
                     if (data.estado != 'anulado') {
-                        alert('¡No se pudo anular, este sección está siendo usada!')
+                        alert('¡No se pudo anular, este sección está siendo usada!');
+                        return;
                     }
                     app.notificacion('¡Sección eliminada!', 'Se ha eliminado una seccion.', 'eliminar');
                     this.listadoSeccion();

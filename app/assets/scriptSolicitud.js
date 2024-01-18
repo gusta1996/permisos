@@ -584,6 +584,7 @@ const appSolicitud = new (function () {
                 .then((data) => {
                     if (data.estado != 'anulado') {
                         alert('¡No se pudo anular, esta solicitud está siendo usada!');
+                        return;
                     }
                     app.notificacion('¡Solicitud eliminada!', 'Se ha eliminado una solicitud.', 'eliminar');
                     this.listadoSolicitudCompleta();

@@ -266,6 +266,7 @@ const appContrato = new (function () {
                 .then((data) => {
                     if (data.estado != 'anulado') {
                         alert('¡No se pudo anular, este contrato está siendo usado!');
+                        return;
                     }
                     app.notificacion('¡Contrato eliminado!', 'Se ha eliminado un contrato.', 'eliminar');
                     this.listadoContrato();

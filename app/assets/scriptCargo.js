@@ -301,7 +301,8 @@ const appCargo = new (function () {
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
                     if (data.estado != 'anulado') {
-                        alert('¡No se pudo anular, este cargo está siendo usado!')
+                        alert('¡No se pudo anular, este cargo está siendo usado!');
+                        return;
                     }
                     app.notificacion('¡Cargo eliminado!', 'Se ha eliminado un cargo.', 'eliminar');
                     this.listadoCargo();

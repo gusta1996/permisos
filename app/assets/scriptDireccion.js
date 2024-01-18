@@ -301,7 +301,8 @@ const appDireccion = new (function () {
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
                     if (data.estado != 'anulado') {
-                        alert('¡No se pudo anular, esta dirección está siendo usada!')
+                        alert('¡No se pudo anular, esta dirección está siendo usada!');
+                        return;
                     }
                     app.notificacion('¡Dirección eliminada!', 'Se ha eliminado una dirección.', 'eliminar');
                     this.listadoDireccion();

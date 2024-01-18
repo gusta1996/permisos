@@ -20,7 +20,7 @@ const appUnidad = new (function () {
             let selectDireccion = $('#direccion-unidad');
             // el texto del select se agrega al input
             inputDetalle.attr("placeholder", selectDireccion.find("option:selected").text());
-            selectDireccion.on('select2:select', function (e) {
+            selectDireccion.off('select2:select').on('select2:select', function (e) {
                 inputDetalle.attr("placeholder", selectDireccion.find("option:selected").text());
                 inputDetalle.val(selectDireccion.find("option:selected").text());
             });
@@ -35,9 +35,11 @@ const appUnidad = new (function () {
             let inputDetalle = $('#detalle-unidad');
             let selectDireccion = $('#direccion-unidad');
             // vacia el valor del input detalle
-            selectDireccion.on('select2:select', function (e) {
-                inputDetalle.attr("placeholder", '');
-                inputDetalle.val('');
+            inputDetalle.attr("placeholder", '');
+            inputDetalle.val('');
+            // Esto asegura que cualquier controlador de eventos anterior para ‘select2:select’ se elimine
+            selectDireccion.off('select2:select').on('select2:select', function (e) {
+                // vacio
             });
         }
     }
@@ -336,7 +338,8 @@ const appUnidad = new (function () {
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
                     if (data.estado != 'anulado') {
-                        alert('¡No se pudo anular, este unidad está siendo usado!')
+                        alert('¡No se pudo anular, este unidad está siendo usado!');
+                        return;
                     }
                     app.notificacion('¡Unidad eliminada!', 'Se ha eliminado una unidad.', 'eliminar');
                     this.listadoUnidad();

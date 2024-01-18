@@ -253,11 +253,11 @@ const appFuncionarios = new (function () {
                         // Capitalizar letras minusculas
                         let cargo = item.cargo_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
                         let seccion = item.seccion_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
-                        let departamento = item.depa_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
-                        let area = item.area_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        let unidad = item.unidad_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
+                        let direccion = item.direccion_detalle.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase());
                         // Imprimir las opciones
                         this.idEstructuraFuncionario.innerHTML += `
-                            <option value="${item.id_estructura}">${cargo}</option>
+                            <option value="${item.id_estructura}">${cargo} (Dirección: ${direccion})</option>
                         `;
                     }
                 });
@@ -465,7 +465,8 @@ const appFuncionarios = new (function () {
                 .then((respuesta) => respuesta.json())
                 .then((data) => {
                     if (data.f_estado != 'anulado') {
-                        alert('¡No se pudo anular, este funcionario tiene un cargo asignado!')
+                        alert('¡No se pudo anular, este funcionario tiene un cargo asignado!');
+                        return;
                     }
                     app.notificacion('¡Funcionario eliminado!', 'Se ha eliminado un funcionario.', 'eliminar');
                     this.listadoFuncionarios();
