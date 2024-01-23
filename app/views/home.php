@@ -2,7 +2,7 @@
 $title = 'Pagina principal';
 require '../template/header.php'; ?>
 
-<div class="grid grid-cols-5 gap-5">
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5">
     <a class="flex items-center flex-col gap-4 bg-white py-12 sm:py-20 rounded-md shadow-sm" href="../views/solicitud.php">
         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
             <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z" />

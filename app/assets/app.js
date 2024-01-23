@@ -1,6 +1,7 @@
 const app = new (function () {
     this.notificacionContent = document.getElementById('notificacionContent');
     this.navegacion = document.getElementById('navegacion');
+    this.navegacionBg = document.getElementById('navegacion-bg');
 
     this.notificacion = (titulo, texto, icono) => {
         // actualiza la variable
@@ -74,5 +75,16 @@ const app = new (function () {
     }
     this.abrirMenu = () => {
         this.navegacion.classList.toggle('hidden');
+        this.navegacionBg.classList.toggle('hidden');
+    }
+    this.cerrarMenu = () => {
+        this.navegacionBg.addEventListener('click', () => {
+            this.navegacion.classList.toggle('hidden');
+            this.navegacionBg.classList.toggle('hidden');
+        });
     }
 });
+
+
+// funcion para cerrar menu
+app.cerrarMenu();

@@ -303,7 +303,7 @@ const appSolicitud = new (function () {
         fetch("../controllers/guardarFuncionarioSolicitud.php", { method: "POST", body: formSolicitud })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Solicitud guardada con exito!');
+                alert('¡Solicitud generada con éxito, espere la aprobación!');
                 window.location.href = '../views/solicitud.php';
             })
             .catch((error) => console.log(error));

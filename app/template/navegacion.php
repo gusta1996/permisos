@@ -129,3 +129,5 @@ $autorizador = $user->getRol() == 'autorizador' ? true : false;
         </ul>
     </nav>
 </div>
+
+<div id="navegacion-bg" class="hidden fixed z-40 top-0 right-0 bottom-0 left-0 bg-black opacity-50"></div>
