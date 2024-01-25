@@ -349,23 +349,64 @@ class funcionarioSolicitud extends Connection
         }
     }
     // Extraer meses con años de los registros de solicitudes
-    public static function selectFechaDescarga()
+    public static function filtrosReporte()
     {
         try {
-            $sql = "SELECT DISTINCT TO_CHAR(fecha, 'TMMonth') AS mes, EXTRACT(YEAR FROM fecha) AS ano,
-                    LPAD(CAST(EXTRACT(MONTH FROM fecha) AS TEXT), 2, '0') AS mesnumero
-                    FROM solicitud
-                    ORDER BY ano DESC, mesNumero DESC";
+            // CONSULTA MES
+            $sql = "SELECT LPAD(CAST(EXTRACT(MONTH FROM fecha) AS TEXT), 2, '0') AS mes
+                    FROM funcionario_solicitud
+                    INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
+                    ORDER BY fecha DESC
+                    LIMIT 1";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();
-            $resultado = $declaracion->fetchAll();
-            // Convertir la primera letra a mayúsculas, solo campo detalle
-            foreach ($resultado as $i => $item) {
-                if ( isset($item['mes']) ) {
-                    $resultado[$i]['mes'] = ucfirst($item['mes']);
+            $mes = $declaracion->fetchAll();
+
+            // CONSULTA AÑO
+            $sql = "SELECT DISTINCT EXTRACT(YEAR FROM fecha) AS ano
+                    FROM funcionario_solicitud
+                    INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
+                    ORDER BY ano DESC";
+            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->execute();
+            $ano = $declaracion->fetchAll();
+
+            // CONSULTA FUNCIONARIO
+            $sql2 = "SELECT funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos
+                FROM funcionario
+                WHERE funcionario.estado = 'activo'
+                ORDER BY funcionario.apellidos ASC";
+            $declaracion2 = Connection::getConnection()->prepare($sql2);
+            $declaracion2->execute();
+            $funcionario = $declaracion2->fetchAll();
+            // Capitalizar nombre y apellido
+            foreach ($funcionario as $i => $item) {
+                if (isset($item['nombres']) || isset($item['apellidos'])) {
+                    $funcionario[$i]['nombres'] = ucwords($item['nombres']);
+                    $funcionario[$i]['apellidos'] = ucwords($item['apellidos']);
                 }
             }
-            return $resultado;
+
+            // CONSULTA DIRECCION
+            $sql3 = "SELECT direccion.id_direccion, direccion,detalle AS direccion
+                FROM direccion
+                WHERE direccion.estado = 'activo'
+                ORDER BY direccion.detalle ASC";
+            $declaracion3 = Connection::getConnection()->prepare($sql3);
+            $declaracion3->execute();
+            $direccion = $declaracion3->fetchAll();
+            // Capitalizar direccion
+            foreach ($direccion as $i => $item) {
+                if (isset($item['direccion'])) {
+                    $direccion[$i]['direccion'] = ucfirst($item['direccion']);
+                }
+            }
+            return array(
+                'mes' => $mes,
+                'ano' => $ano,
+                'funcionario' => $funcionario,
+                'direccion' => $direccion
+            );
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
@@ -374,6 +415,8 @@ class funcionarioSolicitud extends Connection
     public static function mostrarReporteMensual($data)
     {
         try {
+            $funcionario =  $data['funcionario'] == 'todos' ? " funcionario.estado= 'activo' " : " (funcionario.id_funcionario='" .$data['funcionario']. "' AND funcionario.estado='activo') " ;
+            $direccion =  $data['direccion'] == 'todos' ? " direccion.estado= 'activo' " : " (direccion.id_direccion='" .$data['direccion']. "' AND direccion.estado='activo') ";
             $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado,
                             funcionario.nombres, funcionario.apellidos, funcionario.cedula,
                             solicitud.numero, solicitud.fecha,
@@ -385,7 +428,12 @@ class funcionarioSolicitud extends Connection
                     INNER JOIN razon ON solicitud.id_razon_fk = razon.id_razon
                     INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
                     INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
-                    WHERE TO_CHAR(solicitud.fecha, 'MM')=:fecha_mes AND TO_CHAR(solicitud.fecha, 'YYYY')=:fecha_ano
+                    INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                    INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                    WHERE TO_CHAR(solicitud.fecha, 'MM')=:fecha_mes 
+                        AND TO_CHAR(solicitud.fecha, 'YYYY')=:fecha_ano 
+                        AND $funcionario
+                        AND $direccion
                     ORDER BY funcionario_solicitud.id_funcionario_solicitud DESC";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':fecha_mes', $data['fecha_mes']);

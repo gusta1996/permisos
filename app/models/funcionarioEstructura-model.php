@@ -155,7 +155,7 @@ class funcionarioEstructura extends Connection
                     funcionario.nombres, funcionario.apellidos, funcionario.estado AS f_estado
                     FROM funcionario_estructura
                     INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
-                    WHERE funcionario_estructura.estado = 'activo'
+                    WHERE funcionario_estructura.estado = 'activo' AND funcionario.estado = 'activo'
                     ORDER BY funcionario.apellidos ASC";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->execute();

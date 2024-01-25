@@ -1,8 +1,9 @@
 const appReporte = new (function () {
   this.tbodyReporte = document.getElementById('tbodyReporte');
-  this.selecReporteMes = document.getElementById('selec-reporte-mes');
   this.btnReportePDF = document.getElementById('btn-reporte-pdf');
   this.reporteMensual = document.getElementById('reporte-mensual');
+  this.selectFuncionario = document.getElementById('select-funcionario');
+  this.selectDireccion = document.getElementById('select-direccion');
   this.selectMes = document.getElementById('select-mes');
   this.selectAno = document.getElementById('select-ano');
   this.busqueda = document.getElementById('busqueda-reporte');
@@ -152,16 +153,33 @@ const appReporte = new (function () {
     }
     this.paginacion.innerHTML = html;
   }
-  this.selectFechaDescarga = () => {
-    fetch("../controllers/selectFechaDescarga.php")
+  this.filtrosReporte = () => {
+    fetch("../controllers/filtrosReporte.php")
       .then((resultado) => resultado.json())
       .then((data) => {
-        data.forEach((item) => {
-          this.selectMes.innerHTML += `
-            <option value="${item.mesnumero}">${item.mes}</option>
-          `;
+        // Mes
+        data.mes.forEach((item) => {
+          // Con jquery seleccionar el mes mas reciente en el select #select-mes que usa select2
+          $('#select-mes').val(item.mes).trigger('change.select2');
+        });
+        // Año
+        data.ano.forEach((item) => {
           this.selectAno.innerHTML += `
             <option value="${item.ano}">${item.ano}</option>
+          `;
+        });
+        // Funcionarios
+        this.selectFuncionario.innerHTML += `<option value="todos" selected="">Todos</option>`;
+        data.funcionario.forEach((item) => {
+          this.selectFuncionario.innerHTML += `
+            <option value="${item.id_funcionario}">${item.apellidos} ${item.nombres}</option>
+          `;
+        })
+        // Area (direccion)
+        this.selectDireccion.innerHTML += `<option value="todos" selected="">Todos</option>`;
+        data.direccion.forEach((item) => {
+          this.selectDireccion.innerHTML += `
+            <option value="${item.id_direccion}">${item.direccion}</option>
           `;
         })
       })
@@ -169,7 +187,6 @@ const appReporte = new (function () {
   }
   this.descargarReporte = () => {
     var contenido = this.reporteMensual.innerHTML;
-    this.selecReporteMes.remove();
     var contenidoOriginal = document.body.innerHTML;
 
     document.body.innerHTML = contenido;
@@ -200,6 +217,8 @@ const appReporte = new (function () {
    `;
     // Enviar mes y año para peticion de datos
     let formReportePDF = new FormData();
+    formReportePDF.append('funcionario', this.selectFuncionario.value);
+    formReportePDF.append('direccion', this.selectDireccion.value);
     formReportePDF.append('fecha_mes', this.selectMes.value);
     formReportePDF.append('fecha_ano', this.selectAno.value);
     fetch("../controllers/reporteMensualPDF.php", { method: "POST", body: formReportePDF })
@@ -207,7 +226,6 @@ const appReporte = new (function () {
       .then((data) => {
         let fechaMesAno = this.convierteFormatoFecha(this.selectAno.value + '-' + this.selectMes.value);
         let filas = '';
-        console.log(data);
         if (data.length > 0) {
           data.forEach(item => {
             let salida = new Date(`${item.fecha_salida} ${item.hora_salida}`);
@@ -285,12 +303,12 @@ const appReporte = new (function () {
 });
 
 var tbodyReporte = document.getElementById('tbodyReporte');
-var selecReporteMes = document.getElementById('selec-reporte-mes');
+var filtros = document.getElementById('filtros-reporte');
 
 if (tbodyReporte) {
   // Solo existe en: reporte-index.php
   appReporte.listadoReporte();
-} else if (selecReporteMes) {
+} else if (filtros) {
   // Solo existe en: reporte-descargar.php
-  appReporte.selectFechaDescarga();
+  appReporte.filtrosReporte();
 }
