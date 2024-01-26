@@ -49,13 +49,9 @@ const appFuncionarios = new (function () {
                         html += `
                         <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                             <td class="pr-4">${item[i].id_funcionario}</td>
-                            <td class="pr-4 capitalize leading-6">
-                                <div>
-                                    ${item[i].apellidos} ${item[i].nombres}
-                                </div>
-                                <div>
-                                    CI: ${item[i].cedula}
-                                </div>
+                            <td class="pr-4 leading-6">
+                                <div>${item[i].apellidos} ${item[i].nombres}</div>
+                                <div>CI: ${item[i].cedula}</div>
                             </td>
                             <td class="font-medium capitalize ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-600' : ''} pr-4">${item[i].f_estado}</td>
                             <td class="max-w-40 block truncate pr-4">${item[i].email}</td>
@@ -117,13 +113,9 @@ const appFuncionarios = new (function () {
                         html += `
                             <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                                 <td class="pr-4">${item[i].id_funcionario}</td>
-                                <td class="pr-4 capitalize leading-6">
-                                    <div>
-                                        ${item[i].apellidos} ${item[i].nombres}
-                                    </div>
-                                    <div>
-                                        CI: ${item[i].cedula}
-                                    </div>
+                                <td class="pr-4 leading-6">
+                                    <div>${item[i].apellidos} ${item[i].nombres}</div>
+                                    <div>CI: ${item[i].cedula}</div>
                                 </td>
                                 <td class="font-medium capitalize ${item[i].f_estado == 'activo' ? 'text-green-600' : ''}${item[i].f_estado == 'suspendido' ? 'text-amber-600' : ''} pr-4">${item[i].f_estado}</td>
                                 <td class="max-w-40 block truncate pr-4">${item[i].email}</td>

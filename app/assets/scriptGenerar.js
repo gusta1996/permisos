@@ -26,15 +26,11 @@ const appGenerar = new (function () {
                 <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                     <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
                     <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
-                    <td class="text-slate-700 pr-4 capitalize leading-6">
-                        <div>
-                            ${item[i].apellidos} ${item[i].nombres}
-                        </div>
-                        <div>
-                            CI: ${item[i].cedula}
-                        </div>
+                    <td class="text-slate-700 pr-4 leading-6">
+                        <div>${item[i].apellidos} ${item[i].nombres}</div>
+                        <div>CI: ${item[i].cedula}</div>
                     </td>
-                    <td class="text-slate-700 pr-4 capitalize">${item[i].razon}</td>
+                    <td class="text-slate-700 pr-4">${item[i].razon}</td>
                     <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
                     <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
                         <button onclick="appGenerar.GenerarPDF(${item[i].id_funcionario_solicitud})" title="Generar PDF" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
@@ -72,7 +68,7 @@ const appGenerar = new (function () {
                 <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                     <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
                     <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
-                    <td class="text-slate-700 pr-4 capitalize">${item[i].razon}</td>
+                    <td class="text-slate-700 pr-4">${item[i].razon}</td>
                     <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
                     <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
                         <button onclick="appGenerar.GenerarPDF(${item[i].id_funcionario_solicitud})" title="Generar PDF" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
@@ -115,15 +111,11 @@ const appGenerar = new (function () {
                       <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                           <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
                           <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
-                          <td class="text-slate-700 pr-4 capitalize leading-6">
-                              <div>
-                                  ${item[i].apellidos} ${item[i].nombres}
-                              </div>
-                              <div>
-                                  CI: ${item[i].cedula}
-                              </div>
+                          <td class="text-slate-700 pr-4 leading-6">
+                              <div>${item[i].apellidos} ${item[i].nombres}</div>
+                              <div>CI: ${item[i].cedula}</div>
                           </td>
-                          <td class="text-slate-700 pr-4 capitalize">${item[i].razon}</td>
+                          <td class="text-slate-700 pr-4">${item[i].razon}</td>
                           <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
                           <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
                               <button onclick="appGenerar.GenerarPDF(${item[i].id_funcionario_solicitud})" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">

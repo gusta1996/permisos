@@ -1,4 +1,4 @@
-<table id="tabla-completa" class="w-full text-xs md:text-sm text-left">
+<table id="tabla-completa" class="tabla-<?php echo $administrador . $autorizador . $validador; ?> w-full text-xs md:text-sm text-left">
     <thead>
         <tr class="h-16 border-b border-b-slate-400">
             <th class="hidden font-medium pr-4">ID</th>

@@ -11,6 +11,7 @@ if ($userSession->userLoggedIn()) {
     // Verifica el rol de usuario
     $administrador = $user->getRol() == 'administrador' ? true : false;
     $autorizador = $user->getRol() == 'autorizador' ? true : false;
+    $validador = $user->getRol() == 'validador' ? true : false;
 
     if (!isset($_GET['page'])) {
         // Titulo, header, contenido

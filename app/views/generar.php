@@ -11,6 +11,7 @@ if ($userSession->userLoggedIn()) {
     // Verifica el rol de usuario
     $administrador = $user->getRol() == 'administrador' ? true : false;
     $autorizador = $user->getRol() == 'autorizador' ? true : false;
+    $validador = $user->getRol() == 'validador' ? true : false;
 
     $title = 'Generar PDF';
     require '../template/header.php'; ?>
@@ -50,7 +51,7 @@ if ($userSession->userLoggedIn()) {
                 <!-- Titulo -->
                 <h2 class="flex-auto text-lg font-semibold leading-7 text-gray-900">Generar PDF</h2>
 
-                <?php if ($administrador || $autorizador) : ?>
+                <?php if ($administrador || $autorizador || $validador) : ?>
                     <!-- Buscar por Tipo -->
                     <h3 class="text-base font-medium leading-7 text-gray-900">Buscar por:</h3>
                     <div class="w-52">
@@ -62,7 +63,7 @@ if ($userSession->userLoggedIn()) {
                     </div>
                 <?php endif; ?>
             </div>
-            <?php if ($administrador || $autorizador) : ?>
+            <?php if ($administrador || $autorizador || $validador) : ?>
                 <form action="javascript:void(0);" oninput="appGenerar.busquedaGenerarPDF()">
                     <div class="relative mt-5 mb-1">
                         <div class="absolute flex items-center h-full text-gray-500 pl-3">
@@ -79,7 +80,7 @@ if ($userSession->userLoggedIn()) {
         <div class="bg-white rounded-md shadow-sm mb-6">
             <div class="p-4 rounded-md mb-4">
                 <!-- Tabla Generar PDF -->
-                <?php if ($administrador || $autorizador) {
+                <?php if ($administrador || $autorizador || $validador) {
                     require './table/generar-tabla-completa.php';
                 } else {
                     require './table/generar-tabla-simple.php';

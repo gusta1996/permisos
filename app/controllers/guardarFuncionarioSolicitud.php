@@ -9,7 +9,9 @@ $arrayName = array(
     'fecha' => date("Y-m-d"),
     'razon' => strtolower($_POST['razon']),
     'observacion' => $_POST['observacion'],
-    'estado' => 'pendiente'
+    'estado' => 'pendiente',
+    'estado_autorizador' => 'pendiente',
+    'estado_validador' => 'pendiente',
 );
 
 echo json_encode(funcionarioSolicitud::guardarFuncionarioSolicitud($arrayName));

@@ -2,6 +2,7 @@
 // permisos de roles
 $administrador = $user->getRol() == 'administrador' ? true : false;
 $autorizador = $user->getRol() == 'autorizador' ? true : false;
+$validador = $user->getRol() == 'validador' ? true : false;
 ?>
 
 <div id="navegacion" class="hidden lg:block flex-initial bg-white shadow z-50 fixed lg:relative top-0 bottom-0 min-w-max w-5/6 lg:w-60 overflow-auto">
@@ -28,7 +29,7 @@ $autorizador = $user->getRol() == 'autorizador' ? true : false;
                     </svg>Imprimir permiso
                 </a>
             </li>
-            <?php if ($administrador || $autorizador) : ?>
+            <?php if ($administrador || $autorizador || $validador) : ?>
                 <li class="mb-1 rounded-lg hover:bg-slate-50">
                     <a class="flex items-center gap-2 px-3 py-2" href="../views/reporte.php">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard2" viewBox="0 0 16 16">

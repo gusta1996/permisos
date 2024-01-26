@@ -26,6 +26,13 @@ class Funcionario extends Connection
             $declaracion->bindParam(':start', $start);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
+            // Capitalizar
+            foreach ($resultado as $i => $item) {
+                if (isset($item['nombres']) || isset($item['apellidos'])) {
+                    $resultado[$i]['nombres'] = ucwords($item['nombres']);
+                    $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
+                }
+            }
 
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM funcionario WHERE funcionario.estado != 'anulado'";
@@ -67,6 +74,13 @@ class Funcionario extends Connection
             $declaracion->bindParam(':start', $start);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
+            // Capitalizar
+            foreach ($resultado as $i => $item) {
+                if (isset($item['nombres']) || isset($item['apellidos'])) {
+                    $resultado[$i]['nombres'] = ucwords($item['nombres']);
+                    $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
+                }
+            }
 
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM funcionario 

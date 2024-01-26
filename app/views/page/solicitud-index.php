@@ -15,7 +15,7 @@
             <!-- Titulo -->
             <h2 class="flex-auto text-lg font-semibold leading-7 text-gray-900">Lista de solicitudes</h2>
 
-            <?php if ($administrador || $autorizador) : ?>
+            <?php if ($administrador || $autorizador || $validador) : ?>
                 <!-- Buscar por Tipo -->
                 <h3 class="text-base font-medium leading-7 text-gray-900">Buscar por:</h3>
                 <div class="w-52">
@@ -27,7 +27,7 @@
                 </div>
             <?php endif; ?>
         </div>
-        <?php if ($administrador || $autorizador) : ?>
+        <?php if ($administrador || $autorizador || $validador) : ?>
             <!-- Buscardor -->
             <form action="javascript:void(0);" oninput="appSolicitud.busquedaSolicitud()">
                 <div class="relative mt-5 mb-1">
@@ -45,7 +45,14 @@
     <div class="bg-white rounded-md shadow-sm mb-6">
         <div class="p-4 rounded-md mb-4">
             <!-- Tabla Solicitudes -->
-            <?php if ($administrador || $autorizador) {
+            <?php if ($administrador) {
+                $administrador = 'administrador';
+                require './table/solicitud-tabla-completa.php';
+            } elseif ($autorizador) {
+                $autorizador = 'autorizador';
+                require './table/solicitud-tabla-completa.php';
+            } elseif ($validador) {
+                $validador = 'validador';
                 require './table/solicitud-tabla-completa.php';
             } else {
                 require './table/solicitud-tabla-simple.php';
