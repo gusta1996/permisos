@@ -182,6 +182,42 @@ const appGenerar = new (function () {
   this.formatearNumero = (numero, longitud) => {
     return String(numero).padStart(longitud, '0');
   }
+  this.convertirHTMLaPDF = async (elemento, numeroPermiso) => {
+    try {
+      // Usar html2canvas para crear un canvas con el contenido del elemento
+      const canvas = await html2canvas(elemento);
+      // Convertir el canvas en una imagen PNG
+      const imagen = canvas.toDataURL("image/png");
+
+      // Crear un nuevo documento PDF
+      const doc = new jsPDF();
+      // Obtener el ancho y el alto del documento PDF
+      const margin = 8;
+      const pageWidth = (doc.internal.pageSize.getWidth()) - margin * 2;
+      // Obtener las propiedades de la imagen
+      const imgProps = doc.getImageProperties(imagen);
+      // Calcular la relación de aspecto entre el ancho y el alto de la imagen
+      const ratioImg = imgProps.width / imgProps.height;
+      // Calcular el alto de la imagen según el ancho de la página y la relación de aspecto
+      const pageHeight = pageWidth / ratioImg;
+      // Agregar la imagen al documento PDF con el ancho y el alto calculados
+      doc.addImage(imagen, "PNG", margin, margin, pageWidth, pageHeight);
+
+      // Guardar el documento PDF
+      doc.save("Permiso_" + numeroPermiso + ".pdf");
+      // Quita el icono "Cargando"
+      document.getElementById('btn-descargar').innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+          <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+          <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+        </svg>
+        Descargar
+      `;
+    } catch (error) {
+      // Manejar el error
+      console.error("Error al convertir el elemento en imagen y PDF", error);
+    }
+  }
   this.descargarSolicitud = (numeroPermiso) => {
     // Actualiza boton descargando...
     var btnDescargar = document.getElementById('btn-descargar');
@@ -192,29 +228,8 @@ const appGenerar = new (function () {
     </svg>
     Descargando...
     `;
-    // Genera y descarga PDF
-    var doc = new jsPDF('p', 'pt', 'a4');
-    var margin = 20;
-    var scale = (doc.internal.pageSize.width - margin * 2) / this.generarPdf.clientWidth;
-    doc.html(this.generarPdf, {
-      x: margin,
-      y: margin,
-      html2canvas: {
-        scale: scale,
-      },
-      callback: function (doc) {
-        // Descarga PDF
-        doc.save("solicitud_permiso_" + numeroPermiso + ".pdf");
-        // Quita el icono "Cargando"
-        btnDescargar.innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-          </svg>
-          Descargar
-        `;
-      }
-    });
+    // Convertir el html en imagen y luego en pdf
+    this.convertirHTMLaPDF(this.generarPdf, numeroPermiso);
   }
   this.cerrarSolicitud = () => {
     // ocultar vista previa de solicitud
@@ -257,12 +272,12 @@ const appGenerar = new (function () {
         this.generarPdf.innerHTML = `
           <div class="text-sm w-full border border-2 border-black rounded-lg overflow-hidden">
             <div class="flex items-center justify-around p-4 bg-cyan-100">
-              <img class="h-20" src="../../public/images/ElGuabo.png">
+              <img class="h-20" src="../../public/images/ElGuaboParaPDF.png">
               <div class="flex flex-col justify-center text-center">
-                <h1 class="text-xl font-semibold">
+                <h1 class="text-lg font-semibold">
                   GOBIERNO MUNICIPAL DEL CANTÓN EL GUABO
                 </h1>
-                <h2 class="text-lg font-semibold -pt-2 pb-3">
+                <h2 class="text-base font-semibold -pt-2 pb-3">
                   CREADO POR D.S. 2834 DEL 30 DE AGOSTO DEL 1978
                 </h2>
                 <div class="flex border border-black rounded-md overflow-hidden">
@@ -327,7 +342,7 @@ const appGenerar = new (function () {
 
               <div class="grid border-b border-stone-600 -pt-2 pb-3 pl-3">
                 <b class="pb-3">Observaciones:</b>
-                <div class="-pt-2 pb-3 min-h-[100px]">
+                <div class="-pt-2 pb-3 min-h-20">
                   ${data.observacion}
                 </div>
               </div>
@@ -335,7 +350,7 @@ const appGenerar = new (function () {
 
             <div class="bg-white flex text-center">
               <div class="w-1/4 p-4 border-r border-stone-600">
-                <img class="h-32 m-auto" src="../../public/images/Escudo_de_El_Guabo.png">
+                <img class="h-28 m-auto" src="../../public/images/EscudoDeElGuaboParaPDF.png">
               </div>
               <div class="flex justify-center items-end w-1/4 p-4 -pt-2 pb-3 pl-3 border-r border-stone-600">
                 <b>SERVIDOR</b>

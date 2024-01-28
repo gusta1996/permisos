@@ -26,7 +26,7 @@ if ($userSession->userLoggedIn()) {
                     <div id="btn-generar-pdf" class="flex gap-4 float-right">
 
                     </div>
-                    <div id="generar-pdf" class="w-full">
+                    <div id="generar-pdf" class="w-full float-right">
                     </div>
                 </div>
             </div>

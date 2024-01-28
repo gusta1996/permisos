@@ -280,10 +280,18 @@ const appReporte = new (function () {
         let html = `
           <div class="bg-white rounded-md shadow-sm mb-6">
             <div class="p-4 rounded-md mb-4">
-              <div class="w-full bg-gray-100 p-2 rounded-md mb-4">
+              <div class="w-full flex items-center justify-around  bg-gray-100 p-2 rounded-md mb-4">
+                <img class="h-20" src="../../public/images/ElGuaboParaPDF.png">
                 <h1 class="text-lg font-bold text-center">Reporte de solicitudes de permisos del G.A.D. El Guabo – Municipio de El Guabo</h1>
               </div>
+              ${appReporte.selectFuncionario.value != "todos" ? `
+                  <p class="mb-4"><b>Funcionario:</b>  ${appReporte.selectFuncionario.options[appReporte.selectFuncionario.selectedIndex].text} </p>
+                ` : '' }
+              ${appReporte.selectDireccion.value != "todos" ? `
+                  <p class="mb-4"><b>Área:</b>  ${appReporte.selectDireccion.options[appReporte.selectDireccion.selectedIndex].text} </p>
+                ` : '' }
               <p class="mb-4"><b>Fecha:</b>  ${fechaMesAno}</p>
+              
               ${table}
             </div>
           </div>

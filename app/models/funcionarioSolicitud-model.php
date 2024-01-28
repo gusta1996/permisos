@@ -333,10 +333,12 @@ class funcionarioSolicitud extends Connection
     public static function obtenerDatosPDF($id_funcionario_solicitud)
     {
         try {
-            $sql = 'SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado,
+            $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado,
                             funcionario.nombres, funcionario.apellidos, funcionario.direccion,
                             solicitud.numero, solicitud.observacion, solicitud.fecha,
-                            tiempo.fecha_salida, tiempo.fecha_entrada, tiempo.hora_salida, tiempo.hora_entrada,
+                            tiempo.fecha_salida, tiempo.fecha_entrada, 
+                            tiempo.hora_salida,
+                            tiempo.hora_entrada,
                             razon.id_razon, razon.descripcion,
                             cargo.detalle
                 FROM funcionario_solicitud 
@@ -347,7 +349,7 @@ class funcionarioSolicitud extends Connection
                 INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
                 INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
                 INNER JOIN cargo ON estructura.id_cargo_fk = cargo.id_cargo
-                WHERE id_funcionario_solicitud=:id_funcionario_solicitud';
+                WHERE id_funcionario_solicitud=:id_funcionario_solicitud";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_funcionario_solicitud', $id_funcionario_solicitud);
             $declaracion->execute();
@@ -481,15 +483,15 @@ class funcionarioSolicitud extends Connection
     {
         try {
             if ($data['funcionario'] == 'todos') {
-                $funcionario = "funcionario.estado='activo'";
+                $funcionario = "";
             } else {
-                $funcionario = "funcionario.id_funcionario='" . $data['funcionario'] . "' AND funcionario.estado='activo'";
+                $funcionario = " AND funcionario_estructura.id_funcionario_fk=" . $data['funcionario'] . " AND funcionario.id_funcionario=" . $data['funcionario'];
             }
 
             if ($data['direccion'] == 'todos') {
-                $direccion = " funcionario_estructura.estado='activo' AND direccion.estado='activo' ";
+                $direccion = "";
             } else {
-                $direccion = " funcionario_estructura.estado='activo' AND direccion.id_direccion='" . $data['direccion'] . "' AND direccion.estado = 'activo'";
+                $direccion = " AND funcionario_estructura.estado='activo' AND direccion.id_direccion=" . $data['direccion'] ;
             }
 
             $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado,
@@ -508,9 +510,9 @@ class funcionarioSolicitud extends Connection
                     INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
                     WHERE TO_CHAR(solicitud.fecha, 'MM')=:fecha_mes 
                         AND TO_CHAR(solicitud.fecha, 'YYYY')=:fecha_ano 
-                        AND $funcionario
-                        AND $direccion
-                    ORDER BY funcionario_solicitud.id_funcionario_solicitud DESC";
+                        $funcionario
+                        $direccion
+                    ORDER BY funcionario_solicitud.id_funcionario_solicitud DESC ";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':fecha_mes', $data['fecha_mes']);
             $declaracion->bindParam(':fecha_ano', $data['fecha_ano']);

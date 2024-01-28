@@ -11,9 +11,9 @@
 <div id="filtros-reporte" class="bg-white rounded-md shadow-sm mb-6">
     <div class="p-4">
         <form action="javascript:void(0);" class="flex items-center gap-4">
-            <div class="flex gap-4 w-full">
+            <div class="grid gap-4 w-full grid-cols-6">
                 <!-- Funcionario -->
-                <div class="w-2/6">
+                <div class="col-span-2">
                     <label class="block text-sm font-medium leading-6 text-gray-900">Funcionario:</label>
                     <div class="mt-2">
                         <select id="select-funcionario" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">
@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <!-- Área -->
-                <div class="w-2/6">
+                <div class="col-span-2">
                     <label class="block text-sm font-medium leading-6 text-gray-900">Área:</label>
                     <div class="mt-2">
                         <select id="select-direccion" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <!-- Mes -->
-                <div class="w-1/6">
+                <div class="col-span-1">
                     <label class="block text-sm font-medium leading-6 text-gray-900">Mes:</label>
                     <div class="mt-2">
                         <select id="select-mes" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">
@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <!-- Año -->
-                <div class="w-1/6">
+                <div class="col-span-1">
                     <label class="block text-sm font-medium leading-6 text-gray-900">Año:</label>
                     <div class="mt-2">
                         <select id="select-ano" required class="selectBuscador h-[38px] block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">
