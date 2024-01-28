@@ -167,10 +167,13 @@ const appFuncionarioEstructura = new (function () {
             })
             .catch((error) => console.log(error));
     }
-    this.listadoFuncionarioEstructura = (pagina) => {
+    this.listadoFuncionarioEstructura = (pagina, registro) => {
         // al cargar la pagina, la variable pagina es igual 1
         var pagina = !pagina ? 1 : pagina;
-        fetch("../controllers/listadoFuncionarioEstructura.php?page=" + pagina)
+        var formListadoFE = new FormData();
+        formListadoFE.append('pagina', pagina);
+        formListadoFE.append('registro', registro);
+        fetch("../controllers/listadoFuncionarioEstructura.php", { method: "POST", body: formListadoFE })
             .then(response => response.json())
             .then(data => {
                 // Datos de la lista y total de paginas
@@ -180,7 +183,6 @@ const appFuncionarioEstructura = new (function () {
                 let html = '';
                 if (item != '') {
                     for (let i = 0; i < item.length; i++) {
-                        if (item[i].fe_estado == 'activo') {
                             html += `
                                 <tr class="h-16 border-b last:border-b-0 border-b-white-100">
                                     <td class="pr-4">${item[i].id_funcionario_estructura}</td>
@@ -196,20 +198,23 @@ const appFuncionarioEstructura = new (function () {
                                     <td class="font-medium capitalize ${item[i].fe_estado == 'activo' ? 'text-green-600' : ''}${item[i].fe_estado == 'suspendido' ? 'text-amber-400' : ''} pr-4">${item[i].fe_estado}</td>
                                 </tr>
                             `;
-                        }
+                        
                     }
                 } else {
                     html += '<p class="w-full mt-5">No se encontró resultados.</p>';
                 }
 
                 this.tbodyFuncionarioEstructura.innerHTML = html;
-                this.paginacionFuncionarioEstructura(pagina, totalPaginas, false);
+                this.paginacionFuncionarioEstructura(pagina, totalPaginas, false, registro);
             });
     }
-    this.listadoRegistroFuncionarioEstructura = (pagina) => {
+    this.listadoRegistroFuncionarioEstructura = (pagina, registro) => {
         // al cargar la pagina, la variable pagina es igual 1
         var pagina = !pagina ? 1 : pagina;
-        fetch("../controllers/listadoFuncionarioEstructura.php?page=" + pagina)
+        var formListadoRFE = new FormData();
+        formListadoRFE.append('pagina', pagina);
+        formListadoRFE.append('registro', registro);
+        fetch("../controllers/listadoFuncionarioEstructura.php", { method: "POST", body: formListadoRFE })
             .then(response => response.json())
             .then(data => {
                 // Datos de la lista y total de paginas
@@ -240,10 +245,10 @@ const appFuncionarioEstructura = new (function () {
                 }
 
                 this.tbodyFuncionarioEstructura.innerHTML = html;
-                this.paginacionFuncionarioEstructura(pagina, totalPaginas, false);
+                this.paginacionFuncionarioEstructura(pagina, totalPaginas, false, registro);
             });
     }
-    this.busquedaFuncionarioEstructura = (pagina) => {
+    this.busquedaFuncionarioEstructura = (pagina, registro) => {
         // al cargar la pagina, la variable pagina es igual 1
         var pagina = !pagina ? 1 : pagina;
         // Si existe texto de busqueda, buscar
@@ -252,6 +257,7 @@ const appFuncionarioEstructura = new (function () {
         formBusqueda.append('busqueda', text);
         formBusqueda.append('tipo', this.busquedaTipo.value);
         formBusqueda.append('pagina', pagina);
+        formBusqueda.append('registro', registro);
         fetch("../controllers/busquedaFuncionarioEstructura.php", { method: "POST", body: formBusqueda })
             .then(response => response.json())
             .then(data => {
@@ -283,16 +289,17 @@ const appFuncionarioEstructura = new (function () {
                 }
 
                 this.tbodyFuncionarioEstructura.innerHTML = html;
-                this.paginacionFuncionarioEstructura(pagina, totalPaginas, true);
+                this.paginacionFuncionarioEstructura(pagina, totalPaginas, true, registro);
             });
     }
-    this.paginacionFuncionarioEstructura = (pagina_actual, total_paginas, buscador) => {
+    this.paginacionFuncionarioEstructura = (pagina_actual, total_paginas, buscador, registro) => {
         let html = '';
+        //let registro = ( registro == true) ? 'Registro' : '';
         if (buscador == false) {
             // Paginacion para la lista
             if (pagina_actual > 1) {
                 html += `
-                    <a href="javascript:appFuncionarioEstructura.listadoFuncionarioEstructura(${pagina_actual - 1})" class="btn-anterior border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Anterior</a>
+                    <a href="javascript:appFuncionarioEstructura.listado${registro == true ? 'Registro' : '' }FuncionarioEstructura(${pagina_actual - 1})" class="btn-anterior border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Anterior</a>
                 `;
             }
             if (total_paginas > 1) {
@@ -304,7 +311,7 @@ const appFuncionarioEstructura = new (function () {
             }
             if (pagina_actual < total_paginas) {
                 html += `
-                    <a href="javascript:appFuncionarioEstructura.listadoFuncionarioEstructura(${pagina_actual + 1})" class="btn-siguiente border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Siguiente</a>
+                    <a href="javascript:appFuncionarioEstructura.listado${registro == true ? 'Registro' : '' }FuncionarioEstructura(${pagina_actual + 1})" class="btn-siguiente border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Siguiente</a>
                 `;
             }
         } else {
@@ -330,12 +337,12 @@ const appFuncionarioEstructura = new (function () {
         this.paginacion.innerHTML = html;
     }
 });
-appFuncionarioEstructura.selectFuncionarios();
 
 if (document.getElementById('contrato-cargo')) {
-    // listado solo muestra FuncionarioEstructura activo
-    appFuncionarioEstructura.listadoFuncionarioEstructura();
+    // pagina asignar cargos
+    appFuncionarioEstructura.selectFuncionarios();
+    appFuncionarioEstructura.listadoFuncionarioEstructura(undefined, 0);
 } else if (document.getElementById('registro-contrato-cargo')) {
-    // listado FuncionarioEstructura completo
-    appFuncionarioEstructura.listadoRegistroFuncionarioEstructura();
+    // pagina historial de cargos
+    appFuncionarioEstructura.listadoRegistroFuncionarioEstructura(undefined, 1);
 }

@@ -190,7 +190,11 @@ const appGenerar = new (function () {
       const imagen = canvas.toDataURL("image/png");
 
       // Crear un nuevo documento PDF
-      const doc = new jsPDF();
+      const doc = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4"
+      });
       // Obtener el ancho y el alto del documento PDF
       const margin = 8;
       const pageWidth = (doc.internal.pageSize.getWidth()) - margin * 2;

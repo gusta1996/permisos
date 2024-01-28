@@ -491,13 +491,14 @@ class funcionarioSolicitud extends Connection
             if ($data['direccion'] == 'todos') {
                 $direccion = "";
             } else {
-                $direccion = " AND funcionario_estructura.estado='activo' AND direccion.id_direccion=" . $data['direccion'] ;
+                $direccion = "  AND direccion.id_direccion=" . $data['direccion'] ;
             }
-
+            // primera consulta
             $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado,
+                            funcionario_estructura.estado AS fe_estado,
                             funcionario.nombres, funcionario.apellidos, funcionario.cedula,
                             direccion.detalle AS direccion,
-                            solicitud.numero, solicitud.fecha,
+                            solicitud.fecha,
                             tiempo.fecha_salida, tiempo.fecha_entrada, tiempo.hora_salida, tiempo.hora_entrada,
                             razon.descripcion AS razon
                     FROM funcionario_solicitud 
@@ -518,6 +519,10 @@ class funcionarioSolicitud extends Connection
             $declaracion->bindParam(':fecha_ano', $data['fecha_ano']);
             $declaracion->execute();
             $resultado = $declaracion->fetchAll();
+
+            // segunda consulta
+
+
             // Capitalizar
             foreach ($resultado as $i => $item) {
                 if (isset($item['nombres']) || isset($item['apellidos']) ||

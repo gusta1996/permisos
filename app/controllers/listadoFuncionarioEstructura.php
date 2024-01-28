@@ -1,3 +1,8 @@
 <?php
 require_once '../models/funcionarioEstructura-model.php';
-echo json_encode(funcionarioEstructura::mostrarFuncionarioEstructuras( $_GET['page'] ));
+$arrayName = array(
+    'pagina' => $_POST['pagina'],
+    'registro' => $_POST['registro']
+);
+
+echo json_encode(funcionarioEstructura::mostrarFuncionarioEstructuras( $arrayName ));

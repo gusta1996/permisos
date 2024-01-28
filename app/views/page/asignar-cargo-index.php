@@ -84,7 +84,7 @@
             </div>
         </div>
         <!-- Barra de busqueda -->
-        <form action="javascript:void(0);" oninput="appFuncionarioEstructura.busquedaFuncionarioEstructura()">
+        <form action="javascript:void(0);" oninput="appFuncionarioEstructura.busquedaFuncionarioEstructura(undefined, 0)">
             <div class="relative mb-1">
                 <div class="absolute flex items-center h-full text-gray-500 pl-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">

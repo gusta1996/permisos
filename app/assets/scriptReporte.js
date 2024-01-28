@@ -244,6 +244,7 @@ const appReporte = new (function () {
                   <td class="font-medium capitalize ${item.fs_estado == 'aprobado' ? 'text-green-600' : ''}${item.fs_estado == 'anulado' ? 'text-red-600' : ''}${item.fs_estado == 'pendiente' ? 'text-amber-600' : ''}">${item.fs_estado}</td>
                 </tr>
               `;
+            
           });
         } else {
           filas += `
