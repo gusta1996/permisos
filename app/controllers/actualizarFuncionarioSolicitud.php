@@ -10,7 +10,6 @@ $arrayName = array(
     'hora_salida' => $_POST['hora_salida'],
     'hora_entrada' => $_POST['hora_entrada'],
     'razon' => strtolower($_POST['razon']),
-    'estado' => strtolower($_POST['estado']),
     'observacion' => $_POST['observacion']
 );
 

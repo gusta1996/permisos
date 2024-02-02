@@ -7,6 +7,7 @@
             <th class="font-medium pr-4">Razón</th>
             <th class="font-medium pr-4">Fecha</th>
             <th class="font-medium pr-4">Estado</th>
+            <th class="font-medium pr-4">Firmas</th>
             <th class="font-medium pr-4 text-right">Opciones</th>
         </tr>
     </thead>

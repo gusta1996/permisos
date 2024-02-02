@@ -33,7 +33,7 @@ const appGenerar = new (function () {
                     <td class="text-slate-700 pr-4">${item[i].razon}</td>
                     <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
                     <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
-                        <button onclick="appGenerar.GenerarPDF(${item[i].id_funcionario_solicitud})" title="Generar PDF" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                        <button onclick="appGenerar.verPdfFirmado(${item[i].id_funcionario_solicitud})" title="Generar PDF" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM1.6 11.85H0v3.999h.791v-1.342h.803c.287 0 .531-.057.732-.173.203-.117.358-.275.463-.474a1.42 1.42 0 0 0 .161-.677c0-.25-.053-.476-.158-.677a1.176 1.176 0 0 0-.46-.477c-.2-.12-.443-.179-.732-.179Zm.545 1.333a.795.795 0 0 1-.085.38.574.574 0 0 1-.238.241.794.794 0 0 1-.375.082H.788V12.48h.66c.218 0 .389.06.512.181.123.122.185.296.185.522Zm1.217-1.333v3.999h1.46c.401 0 .734-.08.998-.237a1.45 1.45 0 0 0 .595-.689c.13-.3.196-.662.196-1.084 0-.42-.065-.778-.196-1.075a1.426 1.426 0 0 0-.589-.68c-.264-.156-.599-.234-1.005-.234H3.362Zm.791.645h.563c.248 0 .45.05.609.152a.89.89 0 0 1 .354.454c.079.201.118.452.118.753a2.3 2.3 0 0 1-.068.592 1.14 1.14 0 0 1-.196.422.8.8 0 0 1-.334.252 1.298 1.298 0 0 1-.483.082h-.563v-2.707Zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638H7.896Z"/>
                             </svg>
@@ -71,7 +71,7 @@ const appGenerar = new (function () {
                     <td class="text-slate-700 pr-4">${item[i].razon}</td>
                     <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
                     <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
-                        <button onclick="appGenerar.GenerarPDF(${item[i].id_funcionario_solicitud})" title="Generar PDF" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                        <button onclick="appGenerar.verPdfFirmado(${item[i].id_funcionario_solicitud})" title="Generar PDF" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM1.6 11.85H0v3.999h.791v-1.342h.803c.287 0 .531-.057.732-.173.203-.117.358-.275.463-.474a1.42 1.42 0 0 0 .161-.677c0-.25-.053-.476-.158-.677a1.176 1.176 0 0 0-.46-.477c-.2-.12-.443-.179-.732-.179Zm.545 1.333a.795.795 0 0 1-.085.38.574.574 0 0 1-.238.241.794.794 0 0 1-.375.082H.788V12.48h.66c.218 0 .389.06.512.181.123.122.185.296.185.522Zm1.217-1.333v3.999h1.46c.401 0 .734-.08.998-.237a1.45 1.45 0 0 0 .595-.689c.13-.3.196-.662.196-1.084 0-.42-.065-.778-.196-1.075a1.426 1.426 0 0 0-.589-.68c-.264-.156-.599-.234-1.005-.234H3.362Zm.791.645h.563c.248 0 .45.05.609.152a.89.89 0 0 1 .354.454c.079.201.118.452.118.753a2.3 2.3 0 0 1-.068.592 1.14 1.14 0 0 1-.196.422.8.8 0 0 1-.334.252 1.298 1.298 0 0 1-.483.082h-.563v-2.707Zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638H7.896Z"/>
                             </svg>
@@ -118,7 +118,7 @@ const appGenerar = new (function () {
                           <td class="text-slate-700 pr-4">${item[i].razon}</td>
                           <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
                           <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
-                              <button onclick="appGenerar.GenerarPDF(${item[i].id_funcionario_solicitud})" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                              <button onclick="appGenerar.verPdfFirmado(${item[i].id_funcionario_solicitud})" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
                                       <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM1.6 11.85H0v3.999h.791v-1.342h.803c.287 0 .531-.057.732-.173.203-.117.358-.275.463-.474a1.42 1.42 0 0 0 .161-.677c0-.25-.053-.476-.158-.677a1.176 1.176 0 0 0-.46-.477c-.2-.12-.443-.179-.732-.179Zm.545 1.333a.795.795 0 0 1-.085.38.574.574 0 0 1-.238.241.794.794 0 0 1-.375.082H.788V12.48h.66c.218 0 .389.06.512.181.123.122.185.296.185.522Zm1.217-1.333v3.999h1.46c.401 0 .734-.08.998-.237a1.45 1.45 0 0 0 .595-.689c.13-.3.196-.662.196-1.084 0-.42-.065-.778-.196-1.075a1.426 1.426 0 0 0-.589-.68c-.264-.156-.599-.234-1.005-.234H3.362Zm.791.645h.563c.248 0 .45.05.609.152a.89.89 0 0 1 .354.454c.079.201.118.452.118.753a2.3 2.3 0 0 1-.068.592 1.14 1.14 0 0 1-.196.422.8.8 0 0 1-.334.252 1.298 1.298 0 0 1-.483.082h-.563v-2.707Zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638H7.896Z"/>
                                   </svg>
@@ -182,46 +182,6 @@ const appGenerar = new (function () {
   this.formatearNumero = (numero, longitud) => {
     return String(numero).padStart(longitud, '0');
   }
-  this.convertirHTMLaPDF = async (elemento, numeroPermiso) => {
-    try {
-      // Usar html2canvas para crear un canvas con el contenido del elemento
-      const canvas = await html2canvas(elemento);
-      // Convertir el canvas en una imagen PNG
-      const imagen = canvas.toDataURL("image/png");
-
-      // Crear un nuevo documento PDF
-      const doc = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4"
-      });
-      // Obtener el ancho y el alto del documento PDF
-      const margin = 8;
-      const pageWidth = (doc.internal.pageSize.getWidth()) - margin * 2;
-      // Obtener las propiedades de la imagen
-      const imgProps = doc.getImageProperties(imagen);
-      // Calcular la relación de aspecto entre el ancho y el alto de la imagen
-      const ratioImg = imgProps.width / imgProps.height;
-      // Calcular el alto de la imagen según el ancho de la página y la relación de aspecto
-      const pageHeight = pageWidth / ratioImg;
-      // Agregar la imagen al documento PDF con el ancho y el alto calculados
-      doc.addImage(imagen, "PNG", margin, margin, pageWidth, pageHeight);
-
-      // Guardar el documento PDF
-      doc.save("Permiso_" + numeroPermiso + ".pdf");
-      // Quita el icono "Cargando"
-      document.getElementById('btn-descargar').innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-          <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-          <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-        </svg>
-        Descargar
-      `;
-    } catch (error) {
-      // Manejar el error
-      console.error("Error al convertir el elemento en imagen y PDF", error);
-    }
-  }
   this.descargarSolicitud = (numeroPermiso) => {
     // Actualiza boton descargando...
     var btnDescargar = document.getElementById('btn-descargar');
@@ -232,13 +192,29 @@ const appGenerar = new (function () {
     </svg>
     Descargando...
     `;
-    // Convertir el html en imagen y luego en pdf
-    this.convertirHTMLaPDF(this.generarPdf, numeroPermiso);
-  }
-  this.cerrarSolicitud = () => {
-    // ocultar vista previa de solicitud
-    this.visorPdf.classList.add('hidden');
-    this.generarPdf.innerHTML = ``;
+    // Genera y descarga PDF
+    var doc = new jsPDF('p', 'pt', 'a4');
+    var margin = 20;
+    var scale = (doc.internal.pageSize.width - margin * 2) / this.generarPdf.clientWidth;
+    doc.html(this.generarPdf, {
+      x: margin,
+      y: margin,
+      html2canvas: {
+        scale: scale,
+      },
+      callback: function (doc) {
+        // Descarga PDF
+        doc.save("solicitud_permiso_" + numeroPermiso + ".pdf");
+        // Quita el icono "Cargando"
+        btnDescargar.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+          </svg>
+          Descargar
+        `;
+      }
+    });
   }
   this.GenerarPDF = (id_funcionario_solicitud) => {
     var formGenerar = new FormData();
@@ -357,7 +333,7 @@ const appGenerar = new (function () {
                 <img class="h-28 m-auto" src="../../public/images/EscudoDeElGuaboParaPDF.png">
               </div>
               <div class="flex justify-center items-end w-1/4 p-4 -pt-2 pb-3 pl-3 border-r border-stone-600">
-                <b>SERVIDOR</b>
+                <b>FUNCIONARIO</b>
               </div>
               <div class="flex justify-center items-end w-1/4 p-4 -pt-2 pb-3 pl-3 border-r border-stone-600">
                 <b>JEFE INMEDIATO</b>
@@ -368,6 +344,52 @@ const appGenerar = new (function () {
             </div>
           </div
         `;
+      })
+      .catch((error) => console.log(error));
+  }
+  this.verPdfFirmado = (id_funcionario_solicitud) => {
+    var formGenerar = new FormData();
+    formGenerar.append('id_funcionario_solicitud', id_funcionario_solicitud);
+    fetch("../controllers/generarPdf.php", { method: "POST", body: formGenerar })
+      .then((resultado) => resultado.json())
+      .then((data) => {
+        // Mostrar vista previa de PDF
+        this.visorPdf.classList.remove('hidden');
+        // Generar botones
+        const btnGenerarPdf = document.getElementById('btn-generar-pdf');
+        btnGenerarPdf.innerHTML = `
+            <button onclick="appGenerar.cerrarSolicitud()" class="flex gap-2 items-center rounded-md shadow-sm bg-red-500 px-4 py-3 mb-4 text-base font-semibold text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+              </svg>
+              Cerrar
+            </button>
+          `;
+        // Generar Vista previa del PDF
+        this.generarPdf.innerHTML = `
+            <iframe style="width: 100%; height: calc(100vh - 150px)" src="../pdf/Solicitud_permiso_${data.numero}_firmado.pdf"></iframe>
+          `;
+      })
+      .catch((error) => console.log(error));
+  }
+  this.cerrarSolicitud = () => {
+    // ocultar vista previa de solicitud
+    this.visorPdf.classList.add('hidden');
+    this.generarPdf.innerHTML = ``;
+  }
+  this.vistaPreviaPdf = (id_funcionario_solicitud) => {
+    var formGenerar = new FormData();
+    formGenerar.append('id_funcionario_solicitud', id_funcionario_solicitud);
+    fetch("../controllers/vistaPreviaPdf.php", { method: "POST", body: formGenerar })
+      .then((resultado) => resultado.json())
+      .then((data) => {
+        if (data.firma_estandar == false) {
+          // genera pdf por primera vez
+          this.GenerarPDF(id_funcionario_solicitud);
+        } else {
+          // ver pdf firmado
+          this.verPdfFirmado(id_funcionario_solicitud);
+        }
       })
       .catch((error) => console.log(error));
   }

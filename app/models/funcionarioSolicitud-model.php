@@ -13,8 +13,9 @@ class funcionarioSolicitud extends Connection
             // Consulta para obtener los datos
             $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, 
                     funcionario_solicitud.estado AS fs_estado, 
-                    funcionario_solicitud.estado_autorizador AS estado_autorizador, 
-                    funcionario_solicitud.estado_validador AS estado_validador, 
+                    funcionario_solicitud.firma_estandar, 
+                    funcionario_solicitud.firma_autorizador, 
+                    funcionario_solicitud.firma_validador, 
                     funcionario_estructura.id_funcionario_fk,
                     funcionario.nombres, funcionario.apellidos, funcionario.cedula,
                     solicitud.numero, solicitud.fecha,
@@ -33,8 +34,10 @@ class funcionarioSolicitud extends Connection
             $resultado = $declaracion->fetchAll();
             // Capitalizar
             foreach ($resultado as $i => $item) {
-                if (isset($item['nombres']) || isset($item['apellidos']) ||
-                     isset($item['razon']) ) {
+                if (
+                    isset($item['nombres']) || isset($item['apellidos']) ||
+                    isset($item['razon'])
+                ) {
                     $resultado[$i]['nombres'] = ucwords($item['nombres']);
                     $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
                     $resultado[$i]['razon'] = ucfirst($item['razon']);
@@ -66,9 +69,13 @@ class funcionarioSolicitud extends Connection
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos 
 
             // Consulta para obtener los datos
-            $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado, funcionario_estructura.id_funcionario_fk,
+            $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado,
+                        funcionario_solicitud.firma_estandar, 
+                        funcionario_solicitud.firma_autorizador, 
+                        funcionario_solicitud.firma_validador, 
+                        funcionario_estructura.id_funcionario_fk,
                         funcionario.id_funcionario, funcionario.nombres, funcionario.apellidos,
-                        solicitud.numero, solicitud.fecha,
+                        solicitud.id_solicitud, solicitud.numero, solicitud.fecha,
                         razon.descripcion AS razon
                     FROM funcionario_solicitud
                     INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
@@ -86,8 +93,10 @@ class funcionarioSolicitud extends Connection
             $resultado = $declaracion->fetchAll();
             // Capitalizar
             foreach ($resultado as $i => $item) {
-                if (isset($item['nombres']) || isset($item['apellidos']) ||
-                     isset($item['razon']) ) {
+                if (
+                    isset($item['nombres']) || isset($item['apellidos']) ||
+                    isset($item['razon'])
+                ) {
                     $resultado[$i]['nombres'] = ucwords($item['nombres']);
                     $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
                     $resultado[$i]['razon'] = ucfirst($item['razon']);
@@ -123,7 +132,11 @@ class funcionarioSolicitud extends Connection
             $page = isset($data['pagina']) ? $data['pagina'] : 1; // Si $data['page'] esta vacio, entonces es 1
             $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos
             // Hacer busqueda
-            $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado, funcionario_estructura.id_funcionario_fk,
+            $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado, 
+                    funcionario_solicitud.firma_estandar, 
+                    funcionario_solicitud.firma_autorizador, 
+                    funcionario_solicitud.firma_validador, 
+                    funcionario_estructura.id_funcionario_fk,
                     funcionario.nombres, funcionario.apellidos, funcionario.cedula,
                     solicitud.numero, solicitud.fecha,
                     razon.descripcion AS razon
@@ -142,8 +155,10 @@ class funcionarioSolicitud extends Connection
             $resultado = $declaracion->fetchAll();
             // Capitalizar
             foreach ($resultado as $i => $item) {
-                if (isset($item['nombres']) || isset($item['apellidos']) ||
-                    isset($item['razon']) ) {
+                if (
+                    isset($item['nombres']) || isset($item['apellidos']) ||
+                    isset($item['razon'])
+                ) {
                     $resultado[$i]['nombres'] = ucwords($item['nombres']);
                     $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
                     $resultado[$i]['razon'] = ucfirst($item['razon']);
@@ -194,8 +209,10 @@ class funcionarioSolicitud extends Connection
             $resultado = $declaracion->fetchAll();
             // Capitalizar
             foreach ($resultado as $i => $item) {
-                if (isset($item['nombres']) || isset($item['apellidos']) ||
-                     isset($item['razon']) ) {
+                if (
+                    isset($item['nombres']) || isset($item['apellidos']) ||
+                    isset($item['razon'])
+                ) {
                     $resultado[$i]['nombres'] = ucwords($item['nombres']);
                     $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
                     $resultado[$i]['razon'] = ucfirst($item['razon']);
@@ -245,8 +262,10 @@ class funcionarioSolicitud extends Connection
             $resultado = $declaracion->fetchAll();
             // Capitalizar
             foreach ($resultado as $i => $item) {
-                if (isset($item['nombres']) || isset($item['apellidos']) ||
-                     isset($item['razon']) ) {
+                if (
+                    isset($item['nombres']) || isset($item['apellidos']) ||
+                    isset($item['razon'])
+                ) {
                     $resultado[$i]['nombres'] = ucwords($item['nombres']);
                     $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
                     $resultado[$i]['razon'] = ucfirst($item['razon']);
@@ -302,8 +321,10 @@ class funcionarioSolicitud extends Connection
             $resultado = $declaracion->fetchAll();
             // Capitalizar
             foreach ($resultado as $i => $item) {
-                if (isset($item['nombres']) || isset($item['apellidos']) ||
-                     isset($item['razon']) ) {
+                if (
+                    isset($item['nombres']) || isset($item['apellidos']) ||
+                    isset($item['razon'])
+                ) {
                     $resultado[$i]['nombres'] = ucwords($item['nombres']);
                     $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
                     $resultado[$i]['razon'] = ucfirst($item['razon']);
@@ -334,6 +355,9 @@ class funcionarioSolicitud extends Connection
     {
         try {
             $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado,
+                            funcionario_solicitud.firma_estandar, 
+                            funcionario_solicitud.firma_autorizador, 
+                            funcionario_solicitud.firma_validador,
                             funcionario.nombres, funcionario.apellidos, funcionario.direccion,
                             solicitud.numero, solicitud.observacion, solicitud.fecha,
                             tiempo.fecha_salida, tiempo.fecha_entrada, 
@@ -392,8 +416,10 @@ class funcionarioSolicitud extends Connection
             $resultado = $declaracion->fetchAll();
             // Capitalizar
             foreach ($resultado as $i => $item) {
-                if (isset($item['nombres']) || isset($item['apellidos']) ||
-                     isset($item['razon']) ) {
+                if (
+                    isset($item['nombres']) || isset($item['apellidos']) ||
+                    isset($item['razon'])
+                ) {
                     $resultado[$i]['nombres'] = ucwords($item['nombres']);
                     $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
                     $resultado[$i]['razon'] = ucfirst($item['razon']);
@@ -491,7 +517,7 @@ class funcionarioSolicitud extends Connection
             if ($data['direccion'] == 'todos') {
                 $direccion = "";
             } else {
-                $direccion = "  AND direccion.id_direccion=" . $data['direccion'] ;
+                $direccion = "  AND direccion.id_direccion=" . $data['direccion'];
             }
             // primera consulta
             $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado,
@@ -525,8 +551,10 @@ class funcionarioSolicitud extends Connection
 
             // Capitalizar
             foreach ($resultado as $i => $item) {
-                if (isset($item['nombres']) || isset($item['apellidos']) ||
-                    isset($item['direccion']) || isset($item['razon']) ) {
+                if (
+                    isset($item['nombres']) || isset($item['apellidos']) ||
+                    isset($item['direccion']) || isset($item['razon'])
+                ) {
                     $resultado[$i]['nombres'] = ucwords($item['nombres']);
                     $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
                     $resultado[$i]['direccion'] = ucfirst($item['direccion']);
@@ -572,8 +600,10 @@ class funcionarioSolicitud extends Connection
             $resultado = $declaracion->fetchAll();
             // Capitalizar
             foreach ($resultado as $i => $item) {
-                if (isset($item['nombres']) || isset($item['apellidos']) ||
-                     isset($item['razon']) ) {
+                if (
+                    isset($item['nombres']) || isset($item['apellidos']) ||
+                    isset($item['razon'])
+                ) {
                     $resultado[$i]['nombres'] = ucwords($item['nombres']);
                     $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
                     $resultado[$i]['razon'] = ucfirst($item['razon']);
@@ -597,7 +627,6 @@ class funcionarioSolicitud extends Connection
             echo $e->getMessage();
         }
     }
-
     public static function obtenerFuncionarioSolicitud($id_funcionario_solicitud)
     {
         try {
@@ -641,6 +670,7 @@ class funcionarioSolicitud extends Connection
             $obt_id_razon = null;
             $obt_id_tiempo = null;
             $obt_id_solicitud = null;
+            $obt_id_funcionario_solicitud = null;
 
             // Primera inserción
             $declaracion = $conn->prepare("INSERT INTO razon (descripcion) 
@@ -670,19 +700,32 @@ class funcionarioSolicitud extends Connection
             $obt_id_solicitud = $declaracion->fetchColumn();
 
             // Cuarta inserción
-            $declaracion = $conn->prepare("INSERT INTO funcionario_solicitud (estado, id_funcionario_estructura_fk, id_solicitud_fk, estado_autorizador, estado_validador) 
-            VALUES (:estado, :id_funcionario_estructura, :id_solicitud, :estado_autorizador, :estado_validador)");
+            $declaracion = $conn->prepare("INSERT INTO funcionario_solicitud (estado, id_funcionario_estructura_fk, id_solicitud_fk, firma_estandar, firma_autorizador, firma_validador) 
+            VALUES (:estado, :id_funcionario_estructura, :id_solicitud, :firma_estandar, :firma_autorizador, :firma_validador)
+            RETURNING id_funcionario_solicitud");
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->bindParam(':id_funcionario_estructura', $data['id_funcionario_estructura']);
             $declaracion->bindParam(':id_solicitud', $obt_id_solicitud);
-            $declaracion->bindParam(':estado_autorizador', $data['estado_autorizador']);
-            $declaracion->bindParam(':estado_validador', $data['estado_validador']);
+            $declaracion->bindValue(':firma_estandar', 'false');
+            $declaracion->bindValue(':firma_autorizador', 'false');
+            $declaracion->bindValue(':firma_validador', 'false');
             $declaracion->execute();
+            $obt_id_funcionario_solicitud = $declaracion->fetchColumn();
+
+            // Obtener
+            $declaracion = $conn->prepare("SELECT funcionario_solicitud.id_funcionario_solicitud, solicitud.numero AS numero_solicitud
+                FROM funcionario_solicitud
+                INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
+                WHERE id_funcionario_solicitud=:id_funcionario_solicitud
+            ");
+            $declaracion->bindParam(':id_funcionario_solicitud', $obt_id_funcionario_solicitud);
+            $declaracion->execute();
+            $resultado = $declaracion->fetch();
 
             // Confirmar la transacción
             $conn->commit();
 
-            return true;
+            return $resultado;
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
@@ -690,19 +733,6 @@ class funcionarioSolicitud extends Connection
     public static function actualizarFuncionarioSolicitud($data)
     {
         try {
-            // Actualiza la tabla funcionario_solicitud
-            if ($data['estado'] != '') {
-                $sqlFuncionarioSolicitud = 'UPDATE funcionario_solicitud
-                        SET estado=:estado,
-                            estado_autorizador=:estado,
-                            estado_validador=:estado
-                        WHERE id_funcionario_solicitud=:id_funcionario_solicitud;               
-                        ';
-                $decFuncionarioSolicitud = Connection::getConnection()->prepare($sqlFuncionarioSolicitud);
-                $decFuncionarioSolicitud->bindParam(':id_funcionario_solicitud', $data['id_funcionario_solicitud']);
-                $decFuncionarioSolicitud->bindParam(':estado', $data['estado']);
-                $decFuncionarioSolicitud->execute();
-            }
             $sqlSolicitud = 'UPDATE solicitud
                     SET observacion=:observacion
                     WHERE id_solicitud=:id_solicitud;               
@@ -743,31 +773,43 @@ class funcionarioSolicitud extends Connection
             echo $e->getMessage();
         }
     }
-    public static function aprobarSolicitudConAutorizador($data)
+    public static function guardarDocumentoFirmado($data)
     {
         try {
-            $sql = "UPDATE funcionario_solicitud SET estado_autorizador=:estado_autorizador
+            // consultar las firmas y estado
+            $sql = "SELECT estado, firma_estandar, firma_autorizador, firma_validador
+                    FROM funcionario_solicitud
                     WHERE id_funcionario_solicitud=:id_funcionario_solicitud";
             $declaracion = Connection::getConnection()->prepare($sql);
-            $declaracion->bindParam(':id_funcionario_solicitud', $data['id_funcionario_solicitud']);
-            $declaracion->bindParam(':estado_autorizador', $data['estado_autorizador']);
+            $declaracion->bindParam('id_funcionario_solicitud', $data['id_funcionario_solicitud']);
             $declaracion->execute();
+            $resultado = $declaracion->fetch();
+            // verifica que firma se debe convertir en true
+            if ($resultado['firma_estandar'] == false && 
+                $resultado['firma_autorizador'] == false && 
+                $resultado['firma_autorizador'] == false) {
+                // firma con usuario estandar
+                $firma_rol = 'firma_estandar=true';
 
-            return true;
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-    public static function aprobarSolicitudConValidador($data)
-    {
-        try {
-            $sql = "UPDATE funcionario_solicitud 
-                    SET estado_validador=:estado_validador,
-                        estado='aprobado'
+            } elseif ($resultado['firma_estandar'] == true && 
+                    $resultado['firma_autorizador'] == false && 
+                    $resultado['firma_validador'] == false) {
+                // firma con usuario autorizador
+                $firma_rol = 'firma_autorizador=true';
+
+            } elseif ($resultado['firma_estandar'] == true && 
+                    $resultado['firma_autorizador'] == true && 
+                    $resultado['firma_validador'] == false) {
+                // firma con usuario validador
+                $firma_rol = "firma_validador=true, estado='aprobado'";
+            }
+
+            // subir la firma segun el rol del usuario
+            $sql = "UPDATE funcionario_solicitud
+                    SET $firma_rol
                     WHERE id_funcionario_solicitud=:id_funcionario_solicitud";
             $declaracion = Connection::getConnection()->prepare($sql);
-            $declaracion->bindParam(':id_funcionario_solicitud', $data['id_funcionario_solicitud']);
-            $declaracion->bindParam(':estado_validador', $data['estado_validador']);
+            $declaracion->bindParam('id_funcionario_solicitud', $data['id_funcionario_solicitud']);
             $declaracion->execute();
 
             return true;
@@ -778,7 +820,9 @@ class funcionarioSolicitud extends Connection
     public static function eliminarFuncionarioSolicitud($data)
     {
         try {
-            $sql = "UPDATE funcionario_solicitud SET estado=:estado
+            $sql = "UPDATE funcionario_solicitud 
+                    SET estado=:estado, 
+                        firma_estandar=false, firma_autorizador=false, firma_validador=false
                     WHERE id_funcionario_solicitud=:id_funcionario_solicitud";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_funcionario_solicitud', $data['id_funcionario_solicitud']);

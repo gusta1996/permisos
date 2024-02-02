@@ -23,12 +23,12 @@ if ($userSession->userLoggedIn()) {
         $title = 'Crear nueva solicitud - Solicitudes de permisos';
         require '../template/header.php';
         require './page/solicitud-crear.php';
-    } else {
+    } elseif ($_GET['page'] == 'firmar') {
         // Titulo, header, contenido
-        $title = 'Pagina no encontrada';
+        $title = 'Firmar solicitud - Solicitudes de permisos';
         require '../template/header.php';
-        echo 'Pagina no escontrada';
-    }
+        require './page/solicitud-firmar.php';
+    } 
 
     // footer
     require '../template/footer.php';
