@@ -1,5 +1,7 @@
 <?php
 require '../config/connection.php';
+require 'email.php';
+
 
 class funcionarioSolicitud extends Connection
 {
@@ -713,17 +715,33 @@ class funcionarioSolicitud extends Connection
             $obt_id_funcionario_solicitud = $declaracion->fetchColumn();
 
             // Obtener
-            $declaracion = $conn->prepare("SELECT funcionario_solicitud.id_funcionario_solicitud, solicitud.numero AS numero_solicitud
+            $declaracion = $conn->prepare("SELECT funcionario_solicitud.id_funcionario_solicitud, 
+                                            solicitud.numero AS numero_solicitud,
+                                            funcionario.nombres,
+                                            funcionario.apellidos,
+                                            funcionario.email
                 FROM funcionario_solicitud
                 INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
+                INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
                 WHERE id_funcionario_solicitud=:id_funcionario_solicitud
             ");
             $declaracion->bindParam(':id_funcionario_solicitud', $obt_id_funcionario_solicitud);
             $declaracion->execute();
             $resultado = $declaracion->fetch();
+            // Capitalizar
+            if ( isset($resultado['nombres']) || isset($resultado['apellidos']) ) {
+                $resultado['nombres'] = ucwords($resultado['nombres']);
+                $resultado['apellidos'] = ucwords($resultado['apellidos']);
+            }
 
             // Confirmar la transacción
             $conn->commit();
+
+            if ($resultado) {
+                $mail = new email();
+                $mail::emailSolicitudCreada($resultado);
+            }
 
             return $resultado;
         } catch (PDOException $e) {
