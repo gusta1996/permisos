@@ -730,7 +730,7 @@ class funcionarioSolicitud extends Connection
             $declaracion->execute();
             $resultado = $declaracion->fetch();
             // Capitalizar
-            if ( isset($resultado['nombres']) || isset($resultado['apellidos']) ) {
+            if (isset($resultado['nombres']) || isset($resultado['apellidos'])) {
                 $resultado['nombres'] = ucwords($resultado['nombres']);
                 $resultado['apellidos'] = ucwords($resultado['apellidos']);
             }
@@ -794,7 +794,7 @@ class funcionarioSolicitud extends Connection
     public static function guardarDocumentoFirmado($data)
     {
         try {
-            // consultar las firmas y estado
+            // PRIMERA PARTE: consultar las firmas y estado para su actualizacion
             $sql = "SELECT estado, firma_estandar, firma_autorizador, firma_validador
                     FROM funcionario_solicitud
                     WHERE id_funcionario_solicitud=:id_funcionario_solicitud";
@@ -803,32 +803,83 @@ class funcionarioSolicitud extends Connection
             $declaracion->execute();
             $resultado = $declaracion->fetch();
             // verifica que firma se debe convertir en true
-            if ($resultado['firma_estandar'] == false && 
-                $resultado['firma_autorizador'] == false && 
-                $resultado['firma_autorizador'] == false) {
+            if (
+                $resultado['firma_estandar'] == false &&
+                $resultado['firma_autorizador'] == false &&
+                $resultado['firma_autorizador'] == false
+            ) {
                 // firma con usuario estandar
                 $firma_rol = 'firma_estandar=true';
-
-            } elseif ($resultado['firma_estandar'] == true && 
-                    $resultado['firma_autorizador'] == false && 
-                    $resultado['firma_validador'] == false) {
+            } elseif (
+                $resultado['firma_estandar'] == true &&
+                $resultado['firma_autorizador'] == false &&
+                $resultado['firma_validador'] == false
+            ) {
                 // firma con usuario autorizador
                 $firma_rol = 'firma_autorizador=true';
-
-            } elseif ($resultado['firma_estandar'] == true && 
-                    $resultado['firma_autorizador'] == true && 
-                    $resultado['firma_validador'] == false) {
+            } elseif (
+                $resultado['firma_estandar'] == true &&
+                $resultado['firma_autorizador'] == true &&
+                $resultado['firma_validador'] == false
+            ) {
                 // firma con usuario validador
                 $firma_rol = "firma_validador=true, estado='aprobado'";
             }
 
-            // subir la firma segun el rol del usuario
+            // SEGUNDA PARTE: Confirmar la firma que se ha enviado y actualizar estado si se consigue las 3 firmas
             $sql = "UPDATE funcionario_solicitud
                     SET $firma_rol
                     WHERE id_funcionario_solicitud=:id_funcionario_solicitud";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam('id_funcionario_solicitud', $data['id_funcionario_solicitud']);
             $declaracion->execute();
+
+            // TERCERA PARTE: consultar de nuevo las firmas y estado para enviar email
+            $sql = "SELECT funcionario_solicitud.estado, 
+                            funcionario_solicitud.firma_estandar, funcionario_solicitud.firma_autorizador, funcionario_solicitud.firma_validador,
+                            solicitud.numero AS numero_solicitud,
+                            funcionario.nombres, funcionario.apellidos, funcionario.email
+                    FROM funcionario_solicitud                    
+                    INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
+                    INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                    INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                    WHERE id_funcionario_solicitud=:id_funcionario_solicitud";
+            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->bindParam('id_funcionario_solicitud', $data['id_funcionario_solicitud']);
+            $declaracion->execute();
+            $resultado = $declaracion->fetch();
+            // Capitalizar
+            if (isset($resultado['nombres']) || isset($resultado['apellidos'])) {
+                $resultado['nombres'] = ucwords($resultado['nombres']);
+                $resultado['apellidos'] = ucwords($resultado['apellidos']);
+            }
+
+            // objeto para enviar email
+            $email = new email();
+
+            // verifica que firma se debe convertir en true
+            if (
+                $resultado['firma_estandar'] == true &&
+                $resultado['firma_autorizador'] == false &&
+                $resultado['firma_autorizador'] == false
+            ) {
+                // enviar email a funcionario y a autorizador
+                $email::emailSolicitudFirmada($resultado, 'estandar');
+            } elseif (
+                $resultado['firma_estandar'] == true &&
+                $resultado['firma_autorizador'] == true &&
+                $resultado['firma_validador'] == false
+            ) {
+                // enviar email a funcionario y a validador
+                $email::emailSolicitudFirmada($resultado, 'autorizador');
+            } elseif (
+                $resultado['firma_estandar'] == true &&
+                $resultado['firma_autorizador'] == true &&
+                $resultado['firma_validador'] == true && $resultado['estado'] == 'aprobado'
+            ) {
+                // enviar email a funcionario
+                $email::emailSolicitudFirmada($resultado, 'validador');
+            }
 
             return true;
         } catch (PDOException $e) {
@@ -847,8 +898,31 @@ class funcionarioSolicitud extends Connection
             $declaracion->bindParam(':estado', $data['estado']);
             $declaracion->execute();
 
-            $dataFuncionarioSolicitud = funcionarioSolicitud::obtenerFuncionarioSolicitud($data['id_funcionario_solicitud']);
-            return $dataFuncionarioSolicitud;
+            $sql = "SELECT funcionario_solicitud.estado, funcionario_solicitud.estado, 
+                    funcionario_solicitud.firma_estandar, funcionario_solicitud.firma_autorizador, funcionario_solicitud.firma_validador,
+                    solicitud.numero AS numero_solicitud,
+                    funcionario.nombres, funcionario.apellidos, funcionario.email
+                FROM funcionario_solicitud                    
+                INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
+                INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                WHERE id_funcionario_solicitud=:id_funcionario_solicitud";
+            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->bindParam('id_funcionario_solicitud', $data['id_funcionario_solicitud']);
+            $declaracion->execute();
+            $resultado = $declaracion->fetch();
+            // Capitalizar
+            if (isset($resultado['nombres']) || isset($resultado['apellidos'])) {
+                $resultado['nombres'] = ucwords($resultado['nombres']);
+                $resultado['apellidos'] = ucwords($resultado['apellidos']);
+            }
+
+            // objeto para enviar email
+            $email = new email();
+            // enviar email
+            $email::emailSolicitudAnulada($resultado);
+
+            return $resultado;
         } catch (PDOException $e) {
             echo $e->getMessage();
         }

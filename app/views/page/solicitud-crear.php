@@ -109,7 +109,7 @@
             </div>
 
             <div class="mt-6 flex items-center justify-end gap-x-6">
-                <button type="submit" class="rounded-md bg-indigo-500 px-4 py-2 m-auto text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Crear</button>
+                <button type="submit" id="btn-crear-solicitud" class="flex gap-2 rounded-md bg-indigo-500 px-4 py-2 m-auto text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Crear</button>
             </div>
         </form>
     </div>

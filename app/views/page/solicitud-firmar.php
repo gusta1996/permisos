@@ -68,9 +68,9 @@
             <span><b>Paso 2:</b> Sube el documento firmado</span>
             <div class="mt-4 border border-gray-900/10 rounded-md flex items-center justify-center h-36">
                 <!-- Formulario para subir pdf firmado -->
-                <form action="javascript:void(0);" onsubmit="appSolicitud.subirDocumentoFirmado(<?php echo $user->getIdFuncionario() . ', ' . $_GET['numero_solicitud'] . ', ' . $_GET['id_funcionario_solicitud']; ?>)">
+                <form action="javascript:void(0);" onsubmit="appSolicitud.subirDocumentoFirmado(<?php echo $user->getIdFuncionario() . ', ' . $_GET['numero_solicitud'] . ', ' . $_GET['id_funcionario_solicitud']; ?>)" class="flex items-center flex-col gap-2">
                     <input type="file" id="subir-doc-firmado" accept="application/pdf">
-                    <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Guardar</button>
+                    <button type="submit" id="btn-firmar-solicitud" class="flex gap-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Guardar</button>
                 </form>
             </div>
         </div>

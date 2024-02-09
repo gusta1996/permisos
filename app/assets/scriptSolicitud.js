@@ -21,12 +21,20 @@ const appSolicitud = new (function () {
     this.tablaValidador = document.querySelector('#tabla-completa.tabla-validador');
 
     this.subirDocumentoFirmado = (id_funcionario, numero_solicitud, id_funcionario_solicitud) => {
+        // enviar datos
         var docFirmado = document.getElementById('subir-doc-firmado');
         var formDocFirma = new FormData();
         formDocFirma.append('id_funcionario', id_funcionario);
         formDocFirma.append('numero_solicitud', numero_solicitud);
         formDocFirma.append('id_funcionario_solicitud', id_funcionario_solicitud);
         if (docFirmado.files[0]) {
+            // icono de boton cargando
+            document.getElementById('btn-firmar-solicitud').innerHTML = `
+                <svg class="animate-spin fill-white" xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512">
+                    <path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"/>
+                </svg> Guardando
+            `;
+            // guarda documento firmado
             formDocFirma.append('docFirmado', docFirmado.files[0]);
         } else {        
             alert('¡No has seleccionado el documento firmado!');
@@ -490,6 +498,12 @@ const appSolicitud = new (function () {
             .catch((error) => console.log(error));
     }
     this.guardarSolicitud = () => {
+        // icono de boton cargando
+        document.getElementById('btn-crear-solicitud').innerHTML = `
+            <svg class="animate-spin fill-white" xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512">
+                <path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"/>
+            </svg> Creando
+        `;
         // obtener la id_funcionario_estructura
         if (this.funcionarioSolicitud) {
             // enviar el id_funcionario_estructura (para administrador y autorizador)
