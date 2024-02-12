@@ -508,12 +508,6 @@ const appSolicitud = new (function () {
             .catch((error) => console.log(error));
     }
     this.guardarSolicitud = () => {
-        // icono de boton cargando
-        document.getElementById('btn-crear-solicitud').innerHTML = `
-            <svg class="animate-spin fill-white" xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512">
-                <path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"/>
-            </svg> Creando
-        `;
         // obtener la id_funcionario_estructura
         if (this.funcionarioSolicitud) {
             // enviar el id_funcionario_estructura (para administrador y autorizador)
@@ -542,6 +536,12 @@ const appSolicitud = new (function () {
             alert('¡La fecha de salida debe ser anterior o igual a la fecha entrada!');
             return;
         }
+        // icono de boton cargando
+        document.getElementById('btn-crear-solicitud').innerHTML = `
+            <svg class="animate-spin fill-white" xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512">
+                <path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"/>
+            </svg> Creando
+        `;
         var formSolicitud = new FormData();
         formSolicitud.append('id_funcionario_estructura', this.idFuncionarioSolicitud.value);
         formSolicitud.append('fechaSalida', this.fechaSalidaSolicitud.value);
