@@ -43,8 +43,18 @@ const appSolicitud = new (function () {
         fetch("../controllers/subirDocumentoFirmado.php", { method: "POST", body: formDocFirma })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                window.location.href = '../views/solicitud.php';
+                if (data == true) {
+                    window.location.href = '../views/solicitud.php';
+                } else {
+                    // Mensaje de error para cuando una firma ya fue subida
+                    this.mensajeError.innerHTML = '';
+                    // Mostrar mensaje
+                    this.mensajeError.classList.remove('hidden');
+                    this.mensajeError.innerHTML = `
+                        <p class="font-medium rounded-md p-4 bg-red-100">${data}</p>
+                    `;
 
+                }
             })
             .catch((error) => alert('¡Error! ' + error));
     }
@@ -547,8 +557,14 @@ const appSolicitud = new (function () {
         fetch("../controllers/guardarFuncionarioSolicitud.php", { method: "POST", body: formSolicitud })
             .then((respuesta) => respuesta.json())
             .then((data) => {
-                alert('¡Solicitud generada con éxito, firme el documento para su aprobación!');
-                window.location.href = '../views/solicitud.php?page=firmar&numero_solicitud=' + data.numero_solicitud + '&id_funcionario_solicitud=' + data.id_funcionario_solicitud;
+                if (data.id_funcionario == this.cuentaIdFuncionario.innerHTML) {
+                    alert('¡Solicitud generada con éxito, firme el documento para su aprobación!');
+                    window.location.href = '../views/solicitud.php?page=firmar&numero_solicitud=' + data.numero_solicitud + '&id_funcionario_solicitud=' + data.id_funcionario_solicitud;
+                } else {
+                    alert('¡Solicitud generada con éxito, firme el documento para su aprobación!');
+                    window.location.href = '../views/solicitud.php';
+
+                }
             })
             .catch((error) => console.log(error));
     }

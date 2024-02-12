@@ -717,6 +717,7 @@ class funcionarioSolicitud extends Connection
             // Obtener
             $declaracion = $conn->prepare("SELECT funcionario_solicitud.id_funcionario_solicitud, 
                                             solicitud.numero AS numero_solicitud,
+                                            funcionario.id_funcionario,
                                             funcionario.nombres,
                                             funcionario.apellidos,
                                             funcionario.email
@@ -794,36 +795,58 @@ class funcionarioSolicitud extends Connection
     public static function guardarDocumentoFirmado($data)
     {
         try {
-            // PRIMERA PARTE: consultar las firmas y estado para su actualizacion
-            $sql = "SELECT estado, firma_estandar, firma_autorizador, firma_validador
+            // PRIMERA PARTE: 
+            // consultar las firmas y estado
+            $firmas = "SELECT estado, firma_estandar, firma_autorizador, firma_validador
                     FROM funcionario_solicitud
                     WHERE id_funcionario_solicitud=:id_funcionario_solicitud";
-            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion = Connection::getConnection()->prepare($firmas);
             $declaracion->bindParam('id_funcionario_solicitud', $data['id_funcionario_solicitud']);
             $declaracion->execute();
-            $resultado = $declaracion->fetch();
+            $firm_est = $declaracion->fetch();
+            // consultar rol de funcionario
+            $rol = "SELECT rol.detalle AS rol
+                    FROM usuario
+                    INNER JOIN rol ON usuario.id_rol_fk = rol.id_rol
+                    WHERE id_funcionario_fk=:id_funcionario";
+            $declaracion = Connection::getConnection()->prepare($rol);
+            $declaracion->bindParam('id_funcionario', $data['id_funcionario']);
+            $declaracion->execute();
+            $rol = $declaracion->fetch();
+            
             // verifica que firma se debe convertir en true
-            if (
-                $resultado['firma_estandar'] == false &&
-                $resultado['firma_autorizador'] == false &&
-                $resultado['firma_autorizador'] == false
-            ) {
+            if ( ($rol['rol'] == 'administrador' || $rol['rol'] == 'estandar' ||
+                  $rol['rol'] == 'autorizador' || $rol['rol'] == 'validador' ) &&
+                    $firm_est['firma_estandar'] == false &&
+                    $firm_est['firma_autorizador'] == false &&
+                    $firm_est['firma_validador'] == false ) 
+            {
                 // firma con usuario estandar
                 $firma_rol = 'firma_estandar=true';
-            } elseif (
-                $resultado['firma_estandar'] == true &&
-                $resultado['firma_autorizador'] == false &&
-                $resultado['firma_validador'] == false
-            ) {
+            } elseif ( $rol['rol'] == 'autorizador' &&
+                    $firm_est['firma_estandar'] == true &&
+                    $firm_est['firma_autorizador'] == false &&
+                    $firm_est['firma_validador'] == false ) 
+            {
                 // firma con usuario autorizador
                 $firma_rol = 'firma_autorizador=true';
-            } elseif (
-                $resultado['firma_estandar'] == true &&
-                $resultado['firma_autorizador'] == true &&
-                $resultado['firma_validador'] == false
-            ) {
+            } elseif (  $rol['rol'] == 'validador' &&
+                    $firm_est['firma_estandar'] == true &&
+                    $firm_est['firma_autorizador'] == true &&
+                    $firm_est['firma_validador'] == false ) 
+            {
                 // firma con usuario validador
                 $firma_rol = "firma_validador=true, estado='aprobado'";
+            } else {
+                if (($rol['rol'] == 'administrador' && $firm_est['firma_estandar'] == true) ||
+                    ($rol['rol'] == 'estandar' && $firm_est['firma_estandar'] == true) ||
+                    ($rol['rol'] == 'autorizador' && $firm_est['firma_autorizador'] == true) ||
+                    ($rol['rol'] == 'validador' && $firm_est['firma_validador'] == true))
+                {
+                    return '¡Su documento firmado ya está en el sistema!';
+                } else {
+                    return '¡Se ha producido un error!';
+                }
             }
 
             // SEGUNDA PARTE: Confirmar la firma que se ha enviado y actualizar estado si se consigue las 3 firmas
