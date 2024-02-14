@@ -10,13 +10,13 @@ require '../phpMailer/src/SMTP.php';
 
 class email
 {
-    private static $host = 'smtp.gmail.com'; // Servidor SMTP
+    private static $host = 'mail.elguabo.gob.ec'; // Servidor SMTP
     private static $SMTPAuth = true; // Habilitar autenticación SMTP
-    private static $Username = 'gustasama1996@gmail.com'; // Nombre de usuario SMTP
-    private static $Password = 'itvjcqvnzfbgpbjj'; // Contraseña SMTP
+    private static $Username = 'permisos@elguabo.gob.ec'; // Nombre de usuario SMTP
+    private static $Password = 'Admin*2024'; // Contraseña SMTP
     private static $Port = 465; // Puerto SMTP
     private static $SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // Habilitar SSL
-    private static $email = 'gustasama1996@gmail.com'; // Dirección de correo del remitente
+    private static $email = 'permisos@elguabo.gob.ec'; // Dirección de correo del remitente
 
     public static function conexionSMTP()
     {
