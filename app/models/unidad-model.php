@@ -25,8 +25,8 @@ class Unidad extends Connection
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
                 if (isset($item['unidad_detalle']) && isset($item['direccion_detalle'])) {
-                    $resultado[$i]['unidad_detalle'] = ucfirst($item['unidad_detalle']);
-                    $resultado[$i]['direccion_detalle'] = ucfirst($item['direccion_detalle']);
+                    $resultado[$i]['unidad_detalle'] = ucwords($item['unidad_detalle']);
+                    $resultado[$i]['direccion_detalle'] = ucwords($item['direccion_detalle']);
                 }
             }
             // Consulta para obtener el número total de registros
@@ -66,8 +66,8 @@ class Unidad extends Connection
             $resultado = $declaracion->fetchAll();
             foreach ($resultado as $i => $item) {
                 if (isset($item['unidad_detalle']) && isset($item['direccion_detalle'])) {
-                    $resultado[$i]['unidad_detalle'] = ucfirst($item['unidad_detalle']);
-                    $resultado[$i]['direccion_detalle'] = ucfirst($item['direccion_detalle']);
+                    $resultado[$i]['unidad_detalle'] = ucwords($item['unidad_detalle']);
+                    $resultado[$i]['direccion_detalle'] = ucwords($item['direccion_detalle']);
                 }
             }
             // Consulta para obtener el número total de registros
@@ -99,7 +99,7 @@ class Unidad extends Connection
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
                 if (isset($item['detalle'])) {
-                    $resultado[$i]['detalle'] = ucfirst($item['detalle']);
+                    $resultado[$i]['detalle'] = ucwords($item['detalle']);
                 }
             }
             return $resultado;
@@ -119,7 +119,7 @@ class Unidad extends Connection
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
                 if (isset($item['detalle'])) {
-                    $resultado[$i]['detalle'] = ucfirst($item['detalle']);
+                    $resultado[$i]['detalle'] = ucwords($item['detalle']);
                 }
             }
             return $resultado;
@@ -137,7 +137,7 @@ class Unidad extends Connection
             $resultado = $declaracion->fetch();
             // Convertir la primera letra a mayúsculas, solo campo detalle
             if (isset($resultado['detalle'])) {
-                $resultado['detalle'] = ucfirst($resultado['detalle']);
+                $resultado['detalle'] = ucwords($resultado['detalle']);
             }
             return $resultado;
         } catch (PDOException $e) {

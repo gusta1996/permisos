@@ -25,8 +25,8 @@ class Direccion extends Connection
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
                 if (isset($item['direccion_detalle']) && isset($item['proceso_detalle'])) {
-                    $resultado[$i]['direccion_detalle'] = ucfirst($item['direccion_detalle']);
-                    $resultado[$i]['proceso_detalle'] = ucfirst($item['proceso_detalle']);
+                    $resultado[$i]['direccion_detalle'] = ucwords($item['direccion_detalle']);
+                    $resultado[$i]['proceso_detalle'] = ucwords($item['proceso_detalle']);
                 }
             }
             // Consulta para obtener el número total de registros
@@ -67,8 +67,8 @@ class Direccion extends Connection
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
                 if (isset($item['direccion_detalle']) && isset($item['proceso_detalle'])) {
-                    $resultado[$i]['direccion_detalle'] = ucfirst($item['direccion_detalle']);
-                    $resultado[$i]['proceso_detalle'] = ucfirst($item['proceso_detalle']);
+                    $resultado[$i]['direccion_detalle'] = ucwords($item['direccion_detalle']);
+                    $resultado[$i]['proceso_detalle'] = ucwords($item['proceso_detalle']);
                 }
             }
             // Consulta para obtener el número total de registros
@@ -99,7 +99,7 @@ class Direccion extends Connection
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
                 if (isset($item['detalle'])) {
-                    $resultado[$i]['detalle'] = ucfirst($item['detalle']);
+                    $resultado[$i]['detalle'] = ucwords($item['detalle']);
                 }
             }
             return $resultado;
@@ -117,7 +117,7 @@ class Direccion extends Connection
             $resultado = $declaracion->fetch();
             // Convertir la primera letra a mayúsculas, solo campo detalle
             if (isset($resultado['detalle'])) {
-                $resultado['detalle'] = ucfirst($resultado['detalle']);
+                $resultado['detalle'] = ucwords($resultado['detalle']);
             }
             return $resultado;
         } catch (PDOException $e) {

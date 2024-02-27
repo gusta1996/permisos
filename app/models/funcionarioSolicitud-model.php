@@ -360,13 +360,13 @@ class funcionarioSolicitud extends Connection
                             funcionario_solicitud.firma_estandar, 
                             funcionario_solicitud.firma_autorizador, 
                             funcionario_solicitud.firma_validador,
-                            funcionario.nombres, funcionario.apellidos, funcionario.direccion,
+                            funcionario.nombres, funcionario.apellidos,
                             solicitud.numero, solicitud.observacion, solicitud.fecha,
                             tiempo.fecha_salida, tiempo.fecha_entrada, 
                             tiempo.hora_salida,
                             tiempo.hora_entrada,
                             razon.id_razon, razon.descripcion,
-                            cargo.detalle
+                            cargo.detalle, direccion.detalle AS direccion
                 FROM funcionario_solicitud 
                 INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
                 INNER JOIN tiempo ON solicitud.id_tiempo_fk = tiempo.id_tiempo
@@ -375,6 +375,7 @@ class funcionarioSolicitud extends Connection
                 INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
                 INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
                 INNER JOIN cargo ON estructura.id_cargo_fk = cargo.id_cargo
+                INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
                 WHERE id_funcionario_solicitud=:id_funcionario_solicitud";
             $declaracion = Connection::getConnection()->prepare($sql);
             $declaracion->bindParam(':id_funcionario_solicitud', $id_funcionario_solicitud);

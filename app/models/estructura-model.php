@@ -32,10 +32,10 @@ class Estructura extends Connection
             foreach ($resultado as $i => $item) {
                 if (isset($item['direccion_detalle']) && isset($item['unidad_detalle']) &&
                     isset($item['seccion_detalle']) && isset($item['cargo_detalle']) ) {
-                    $resultado[$i]['direccion_detalle'] = ucfirst($item['direccion_detalle']);
-                    $resultado[$i]['unidad_detalle'] = ucfirst($item['unidad_detalle']);
-                    $resultado[$i]['seccion_detalle'] = ucfirst($item['seccion_detalle']);
-                    $resultado[$i]['cargo_detalle'] = ucfirst($item['cargo_detalle']);
+                    $resultado[$i]['direccion_detalle'] = ucwords($item['direccion_detalle']);
+                    $resultado[$i]['unidad_detalle'] = ucwords($item['unidad_detalle']);
+                    $resultado[$i]['seccion_detalle'] = ucwords($item['seccion_detalle']);
+                    $resultado[$i]['cargo_detalle'] = ucwords($item['cargo_detalle']);
                 }
             }
             // Consulta para obtener el número total de registros
@@ -84,10 +84,10 @@ class Estructura extends Connection
             foreach ($resultado as $i => $item) {
                 if (isset($item['direccion_detalle']) && isset($item['unidad_detalle']) &&
                     isset($item['seccion_detalle']) && isset($item['cargo_detalle']) ) {
-                    $resultado[$i]['direccion_detalle'] = ucfirst($item['direccion_detalle']);
-                    $resultado[$i]['unidad_detalle'] = ucfirst($item['unidad_detalle']);
-                    $resultado[$i]['seccion_detalle'] = ucfirst($item['seccion_detalle']);
-                    $resultado[$i]['cargo_detalle'] = ucfirst($item['cargo_detalle']);
+                    $resultado[$i]['direccion_detalle'] = ucwords($item['direccion_detalle']);
+                    $resultado[$i]['unidad_detalle'] = ucwords($item['unidad_detalle']);
+                    $resultado[$i]['seccion_detalle'] = ucwords($item['seccion_detalle']);
+                    $resultado[$i]['cargo_detalle'] = ucwords($item['cargo_detalle']);
                 }
             }
             // Consulta para obtener el número total de registros
@@ -133,10 +133,10 @@ class Estructura extends Connection
             foreach ($resultado as $i => $item) {
                 if (isset($item['direccion_detalle']) && isset($item['unidad_detalle']) &&
                     isset($item['seccion_detalle']) && isset($item['cargo_detalle']) ) {
-                    $resultado[$i]['direccion_detalle'] = ucfirst($item['direccion_detalle']);
-                    $resultado[$i]['unidad_detalle'] = ucfirst($item['unidad_detalle']);
-                    $resultado[$i]['seccion_detalle'] = ucfirst($item['seccion_detalle']);
-                    $resultado[$i]['cargo_detalle'] = ucfirst($item['cargo_detalle']);
+                    $resultado[$i]['direccion_detalle'] = ucwords($item['direccion_detalle']);
+                    $resultado[$i]['unidad_detalle'] = ucwords($item['unidad_detalle']);
+                    $resultado[$i]['seccion_detalle'] = ucwords($item['seccion_detalle']);
+                    $resultado[$i]['cargo_detalle'] = ucwords($item['cargo_detalle']);
                 }
             }
             return $resultado;

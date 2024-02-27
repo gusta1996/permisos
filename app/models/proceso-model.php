@@ -23,7 +23,7 @@ class Proceso extends Connection
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
                 if (isset($item['detalle'])) {
-                    $resultado[$i]['detalle'] = ucfirst($item['detalle']);
+                    $resultado[$i]['detalle'] = ucwords($item['detalle']);
                 }
             }
             // Consulta para obtener el número total de registros
@@ -62,7 +62,7 @@ class Proceso extends Connection
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
                 if (isset($item['detalle'])) {
-                    $resultado[$i]['detalle'] = ucfirst($item['detalle']);
+                    $resultado[$i]['detalle'] = ucwords($item['detalle']);
                 }
             }
             // Consulta para obtener el número total de registros
@@ -93,7 +93,7 @@ class Proceso extends Connection
             // Convertir la primera letra a mayúsculas, solo campo detalle
             foreach ($resultado as $i => $item) {
                 if (isset($item['detalle'])) {
-                    $resultado[$i]['detalle'] = ucfirst($item['detalle']);
+                    $resultado[$i]['detalle'] = ucwords($item['detalle']);
                 }
             }
             return $resultado;
@@ -111,7 +111,7 @@ class Proceso extends Connection
             $resultado = $declaracion->fetch();
             // Convertir la primera letra a mayúsculas, solo campo detalle
             if (isset($resultado['detalle'])) {
-                $resultado['detalle'] = ucfirst($resultado['detalle']);
+                $resultado['detalle'] = ucwords($resultado['detalle']);
             }
             return $resultado;
         } catch (PDOException $e) {
