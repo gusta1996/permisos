@@ -13,7 +13,7 @@ if ($userSession->userLoggedIn()) {
     $autorizador = $user->getRol() == 'autorizador' ? true : false;
     $validador = $user->getRol() == 'validador' ? true : false;
 
-    if ($administrador || $autorizador || $validador) {
+    if ($administrador || $validador) {
         if (!isset($_GET['page'])) {
             // Titulo, header, contenido
             $title = 'Reportes';

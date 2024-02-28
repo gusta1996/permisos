@@ -12,6 +12,7 @@ if ($userSession->userLoggedIn()) {
     $administrador = $user->getRol() == 'administrador' ? true : false;
     $autorizador = $user->getRol() == 'autorizador' ? true : false;
     $validador = $user->getRol() == 'validador' ? true : false;
+    $estandar = $user->getRol() == 'estandar' ? true : false;
 
     if (!isset($_GET['page'])) {
         // Titulo, header, contenido

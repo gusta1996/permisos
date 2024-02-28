@@ -6,4 +6,8 @@ $arrayName = array(
     'pagina' => $_POST['pagina']
 );
 
-echo json_encode(funcionarioSolicitud::busquedaFuncionarioSolicitud($arrayName));
+if (isset($_POST['id']) && $_POST['rol'] == 'autorizador') {
+    echo json_encode(funcionarioSolicitud::busquedaFuncionarioSolicitudAutorizador($arrayName, $_POST['id']));
+} else {
+    echo json_encode(funcionarioSolicitud::busquedaFuncionarioSolicitud($arrayName));
+}

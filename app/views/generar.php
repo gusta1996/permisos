@@ -64,7 +64,9 @@ if ($userSession->userLoggedIn()) {
                 <?php endif; ?>
             </div>
             <?php if ($administrador || $autorizador || $validador) : ?>
-                <form action="javascript:void(0);" oninput="appGenerar.busquedaGenerarPDF()">
+                <?php if ($autorizador) { $funcionBusqueda = 'busquedaGenerarPDFAutorizador';
+                } else { $funcionBusqueda = 'busquedaGenerarPDF'; } ?>
+                <form action="javascript:void(0);" oninput="appGenerar.<?php echo $funcionBusqueda; ?>()">
                     <div class="relative mt-5 mb-1">
                         <div class="absolute flex items-center h-full text-gray-500 pl-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -80,7 +82,14 @@ if ($userSession->userLoggedIn()) {
         <div class="bg-white rounded-md shadow-sm mb-6">
             <div class="p-4 rounded-md mb-4">
                 <!-- Tabla Generar PDF -->
-                <?php if ($administrador || $autorizador || $validador) {
+                <?php if ($administrador) {
+                    $administrador = 'administrador';
+                    require './table/generar-tabla-completa.php';
+                } elseif ($autorizador) {
+                    $autorizador = 'autorizador';
+                    require './table/generar-tabla-completa.php';
+                } elseif ($validador) {
+                    $validador = 'validador';
                     require './table/generar-tabla-completa.php';
                 } else {
                     require './table/generar-tabla-simple.php';

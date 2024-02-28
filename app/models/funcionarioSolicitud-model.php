@@ -51,8 +51,85 @@ class funcionarioSolicitud extends Connection
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
-
             $totalPaginas = ceil($totalRegistros / $limit); // Redondea hacia arriba para obtener el número total de páginas
+
+            return array(
+                'resultado' => $resultado,
+                'totalPaginas' => $totalPaginas
+            );
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+    // Lista de solicitudes autorizador (para usuarios con permisos de autorizador)
+    public static function listaFuncionarioSolicitudAutorizador($page, $id_funcionario)
+    {
+        try {
+            // Consulta la direccion del autorizador
+            $sqlDireccion = "SELECT direccion.detalle AS direccion_aut
+                    FROM funcionario_estructura
+                    INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                    INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                    WHERE funcionario_estructura.estado='activo' AND funcionario_estructura.id_funcionario_fk=:id_funcionario";
+            $declaracion = Connection::getConnection()->prepare($sqlDireccion);
+            $declaracion->bindParam(':id_funcionario', $id_funcionario);
+            $declaracion->execute();
+            $direccion_aut = $declaracion->fetchColumn();
+
+            $limit = 10; // Número de registros a mostrar por página
+            $page = isset($page) ? $page : 1; // Si $page esta vacio, entonces es 1
+            $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos  
+            // Consulta para obtener los datos
+            $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, 
+                    funcionario_solicitud.estado AS fs_estado, 
+                    funcionario_solicitud.firma_estandar, 
+                    funcionario_solicitud.firma_autorizador, 
+                    funcionario_solicitud.firma_validador, 
+                    funcionario_estructura.id_funcionario_fk,
+                    funcionario.nombres, funcionario.apellidos, funcionario.cedula,
+                    solicitud.numero, solicitud.fecha,
+                    razon.descripcion AS razon,
+                    direccion.detalle AS direccion
+                    FROM funcionario_solicitud
+                    INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                    INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                    INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                    INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                    INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
+                    INNER JOIN razon ON solicitud.id_razon_fk = razon.id_razon
+                    WHERE funcionario_estructura.estado='activo' AND direccion.detalle=:direccion_aut 
+                    ORDER BY funcionario_solicitud.id_funcionario_solicitud DESC
+                    LIMIT :limit OFFSET :start";
+            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->bindParam(':limit', $limit);
+            $declaracion->bindParam(':start', $start);
+            $declaracion->bindParam(':direccion_aut', $direccion_aut);
+            $declaracion->execute();
+            $resultado = $declaracion->fetchAll();
+            // Capitalizar
+            foreach ($resultado as $i => $item) {
+                if (
+                    isset($item['nombres']) || isset($item['apellidos']) ||
+                    isset($item['razon'])
+                ) {
+                    $resultado[$i]['nombres'] = ucwords($item['nombres']);
+                    $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
+                    $resultado[$i]['razon'] = ucfirst($item['razon']);
+                }
+            }
+
+            // Consulta para obtener el número total de registros
+            $sqlTotal = "SELECT COUNT(*) FROM funcionario_solicitud
+                        INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                        INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                        INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                        WHERE funcionario_estructura.estado='activo' AND direccion.detalle=:direccion_aut";
+            $declaracion = Connection::getConnection()->prepare($sqlTotal);
+            $declaracion->bindParam(':direccion_aut', $direccion_aut);
+            $declaracion->execute();
+            $totalRegistros = $declaracion->fetchColumn();
+            $totalPaginas = ceil($totalRegistros / $limit); // Redondea hacia arriba para obtener el número total de páginas
+
             return array(
                 'resultado' => $resultado,
                 'totalPaginas' => $totalPaginas
@@ -184,6 +261,85 @@ class funcionarioSolicitud extends Connection
             echo $e->getMessage();
         }
     }
+    // Busqueda de solicitudes autorizador (para usuarios con permisos de autorizador)
+    public static function busquedaFuncionarioSolicitudAutorizador($data, $id_funcionario)
+    {
+        try {
+            // Consulta la direccion del autorizador
+            $sqlDireccion = "SELECT direccion.detalle AS direccion_aut
+                    FROM funcionario_estructura
+                    INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                    INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                    WHERE funcionario_estructura.estado='activo' AND funcionario_estructura.id_funcionario_fk=:id_funcionario";
+            $declaracion = Connection::getConnection()->prepare($sqlDireccion);
+            $declaracion->bindParam(':id_funcionario', $id_funcionario);
+            $declaracion->execute();
+            $direccion_aut = $declaracion->fetchColumn();
+
+            $busqueda = $data['busqueda'];
+            $tipoBusqueda = $data['tipo'];
+            $limit = 10; // Número de registros a mostrar por página
+            $page = isset($data['pagina']) ? $data['pagina'] : 1; // Si $data['page'] esta vacio, entonces es 1
+            $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos
+            // Hacer busqueda
+            $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado, 
+                    funcionario_solicitud.firma_estandar, 
+                    funcionario_solicitud.firma_autorizador, 
+                    funcionario_solicitud.firma_validador, 
+                    funcionario_estructura.id_funcionario_fk,
+                    funcionario.nombres, funcionario.apellidos, funcionario.cedula,
+                    solicitud.numero, solicitud.fecha,
+                    razon.descripcion AS razon
+                    FROM funcionario_solicitud
+                    INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                    INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                    INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                    INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                    INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
+                    INNER JOIN razon ON solicitud.id_razon_fk = razon.id_razon
+                    WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%' 
+                    AND funcionario_estructura.estado='activo' AND direccion.detalle=:direccion_aut 
+                    ORDER BY funcionario_solicitud.id_funcionario_solicitud DESC
+                    LIMIT :limit OFFSET :start";
+            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->bindParam(':limit', $limit);
+            $declaracion->bindParam(':start', $start);
+            $declaracion->bindParam(':direccion_aut', $direccion_aut);
+            $declaracion->execute();
+            $resultado = $declaracion->fetchAll();
+            // Capitalizar
+            foreach ($resultado as $i => $item) {
+                if (
+                    isset($item['nombres']) || isset($item['apellidos']) ||
+                    isset($item['razon'])
+                ) {
+                    $resultado[$i]['nombres'] = ucwords($item['nombres']);
+                    $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
+                    $resultado[$i]['razon'] = ucfirst($item['razon']);
+                }
+            }
+            // Consulta para obtener el número total de registros
+            $sqlTotal = "SELECT COUNT(*) FROM funcionario_solicitud
+                        INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                        INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                        INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                        INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                        WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%'
+                        AND funcionario_estructura.estado='activo' AND direccion.detalle=:direccion_aut ";
+            $declaracion = Connection::getConnection()->prepare($sqlTotal);
+            $declaracion->bindParam(':direccion_aut', $direccion_aut);
+            $declaracion->execute();
+            $totalRegistros = $declaracion->fetchColumn();
+
+            $totalPaginas = ceil($totalRegistros / $limit); // Redondea hacia arriba para obtener el número total de páginas
+            return array(
+                'resultado' => $resultado,
+                'totalPaginas' => $totalPaginas
+            );
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
     // Lista de solicitudes para genera PDF
     public static function ListadoGenerarCompleto($page)
     {
@@ -224,6 +380,79 @@ class funcionarioSolicitud extends Connection
             // Consulta para obtener el número total de registros
             $sqlTotal = "SELECT COUNT(*) FROM funcionario_solicitud WHERE funcionario_solicitud.estado = 'aprobado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
+            $declaracion->execute();
+            $totalRegistros = $declaracion->fetchColumn();
+
+            $totalPaginas = ceil($totalRegistros / $limit); // Redondea hacia arriba para obtener el número total de páginas
+            return array(
+                'resultado' => $resultado,
+                'totalPaginas' => $totalPaginas
+            );
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+    // Lista de solicitudes para genera PDF (para usuarios con permisos de autorizador)
+    public static function ListadoGenerarAutorizador($page, $id_funcionario)
+    {
+        try {
+            // Consulta la direccion del autorizador
+            $sqlDireccion = "SELECT direccion.detalle AS direccion_aut
+                    FROM funcionario_estructura
+                    INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                    INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                    WHERE funcionario_estructura.estado='activo' AND funcionario_estructura.id_funcionario_fk=:id_funcionario";
+            $declaracion = Connection::getConnection()->prepare($sqlDireccion);
+            $declaracion->bindParam(':id_funcionario', $id_funcionario);
+            $declaracion->execute();
+            $direccion_aut = $declaracion->fetchColumn();
+
+            $limit = 10; // Número de registros a mostrar por página
+            $page = isset($page) ? $page : 1; // Si $page esta vacio, entonces es 1
+            $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos  
+            // Consulta para obtener los datos
+            $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado, funcionario_estructura.id_funcionario_fk,
+                    funcionario.nombres, funcionario.apellidos, funcionario.cedula,
+                    solicitud.numero, solicitud.fecha,
+                    razon.descripcion AS razon
+                    FROM funcionario_solicitud
+                    INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                    INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                    INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                    INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                    INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
+                    INNER JOIN razon ON solicitud.id_razon_fk = razon.id_razon
+                    WHERE funcionario_solicitud.estado = 'aprobado'
+                    AND funcionario_estructura.estado='activo' AND direccion.detalle=:direccion_aut 
+                    ORDER BY funcionario_solicitud.id_funcionario_solicitud DESC
+                    LIMIT :limit OFFSET :start";
+            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->bindParam(':limit', $limit);
+            $declaracion->bindParam(':start', $start);
+            $declaracion->bindParam(':direccion_aut', $direccion_aut);
+            $declaracion->execute();
+            $resultado = $declaracion->fetchAll();
+            // Capitalizar
+            foreach ($resultado as $i => $item) {
+                if (
+                    isset($item['nombres']) || isset($item['apellidos']) ||
+                    isset($item['razon'])
+                ) {
+                    $resultado[$i]['nombres'] = ucwords($item['nombres']);
+                    $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
+                    $resultado[$i]['razon'] = ucfirst($item['razon']);
+                }
+            }
+
+            // Consulta para obtener el número total de registros
+            $sqlTotal = "SELECT COUNT(*) FROM funcionario_solicitud 
+                        INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                        INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                        INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                        WHERE funcionario_solicitud.estado = 'aprobado'
+                        AND funcionario_estructura.estado='activo' AND direccion.detalle=:direccion_aut";
+            $declaracion = Connection::getConnection()->prepare($sqlTotal);
+            $declaracion->bindParam(':direccion_aut', $direccion_aut);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
 
@@ -340,6 +569,84 @@ class funcionarioSolicitud extends Connection
                         WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%'
                         AND funcionario_solicitud.estado = 'aprobado'";
             $declaracion = Connection::getConnection()->prepare($sqlTotal);
+            $declaracion->execute();
+            $totalRegistros = $declaracion->fetchColumn();
+
+            $totalPaginas = ceil($totalRegistros / $limit); // Redondea hacia arriba para obtener el número total de páginas
+            return array(
+                'resultado' => $resultado,
+                'totalPaginas' => $totalPaginas
+            );
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+    // Busqueda de solicitudes para generar PFD (para usuarios con permisos de autorizador)
+    public static function busquedaGenerarPDFAutorizador($data, $id_funcionario)
+    {
+        try {
+            // Consulta la direccion del autorizador
+            $sqlDireccion = "SELECT direccion.detalle AS direccion_aut
+                    FROM funcionario_estructura
+                    INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                    INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                    WHERE funcionario_estructura.estado='activo' AND funcionario_estructura.id_funcionario_fk=:id_funcionario";
+            $declaracion = Connection::getConnection()->prepare($sqlDireccion);
+            $declaracion->bindParam(':id_funcionario', $id_funcionario);
+            $declaracion->execute();
+            $direccion_aut = $declaracion->fetchColumn();
+
+            $busqueda = $data['busqueda'];
+            $tipoBusqueda = $data['tipo'];
+            $limit = 10; // Número de registros a mostrar por página
+            $page = isset($data['pagina']) ? $data['pagina'] : 1; // Si $data['page'] esta vacio, entonces es 1
+            $start = ($page - 1) * $limit; // Punto de inicio para la consulta de la base de datos
+            // Hacer busqueda
+            $sql = "SELECT funcionario_solicitud.id_funcionario_solicitud, funcionario_solicitud.estado AS fs_estado, funcionario_estructura.id_funcionario_fk,
+                        funcionario.nombres, funcionario.apellidos, funcionario.cedula,
+                        solicitud.numero, solicitud.fecha,
+                        razon.descripcion AS razon
+                    FROM funcionario_solicitud
+                    INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                    INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                    INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                    INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                    INNER JOIN solicitud ON funcionario_solicitud.id_solicitud_fk = solicitud.id_solicitud
+                    INNER JOIN razon ON solicitud.id_razon_fk = razon.id_razon
+                    WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%'
+                    AND funcionario_solicitud.estado = 'aprobado'
+                    AND funcionario_estructura.estado='activo' AND direccion.detalle=:direccion_aut 
+                    ORDER BY funcionario_solicitud.id_funcionario_solicitud DESC
+                    LIMIT :limit OFFSET :start";
+            $declaracion = Connection::getConnection()->prepare($sql);
+            $declaracion->bindParam(':limit', $limit);
+            $declaracion->bindParam(':start', $start);
+            $declaracion->bindParam(':direccion_aut', $direccion_aut);
+            $declaracion->execute();
+            $resultado = $declaracion->fetchAll();
+            // Capitalizar
+            foreach ($resultado as $i => $item) {
+                if (
+                    isset($item['nombres']) || isset($item['apellidos']) ||
+                    isset($item['razon'])
+                ) {
+                    $resultado[$i]['nombres'] = ucwords($item['nombres']);
+                    $resultado[$i]['apellidos'] = ucwords($item['apellidos']);
+                    $resultado[$i]['razon'] = ucfirst($item['razon']);
+                }
+            }
+
+            // Consulta para obtener el número total de registros
+            $sqlTotal = "SELECT COUNT(*) FROM funcionario_solicitud
+                        INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                        INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                        INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                        INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                        WHERE funcionario.$tipoBusqueda ILIKE '%$busqueda%'
+                        AND funcionario_solicitud.estado = 'aprobado'
+                        AND funcionario_estructura.estado='activo' AND direccion.detalle=:direccion_aut ";
+            $declaracion = Connection::getConnection()->prepare($sqlTotal);
+            $declaracion->bindParam(':direccion_aut', $direccion_aut);
             $declaracion->execute();
             $totalRegistros = $declaracion->fetchColumn();
 

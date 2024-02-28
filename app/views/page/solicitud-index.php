@@ -28,8 +28,11 @@
             <?php endif; ?>
         </div>
         <?php if ($administrador || $autorizador || $validador) : ?>
-            <!-- Buscardor -->
-            <form action="javascript:void(0);" oninput="appSolicitud.busquedaSolicitud()">
+            <?php if ($autorizador) { $funcionBusqueda = 'busquedaSolicitudAutorizador';
+            } else { $funcionBusqueda = 'busquedaSolicitud'; } ?>
+
+            <!-- Buscador -->
+            <form action="javascript:void(0);" oninput="appSolicitud.<?php echo $funcionBusqueda; ?>()">
                 <div class="relative mt-5 mb-1">
                     <div class="absolute flex items-center h-full text-gray-500 pl-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -54,7 +57,7 @@
             } elseif ($validador) {
                 $validador = 'validador';
                 require './table/solicitud-tabla-completa.php';
-            } else {
+            } elseif ($estandar) {
                 require './table/solicitud-tabla-simple.php';
             } ?>
 

@@ -50,11 +50,53 @@ const appGenerar = new (function () {
         this.paginacionGenerarPDF(pagina, totalPaginas, false);
       });
   }
+  this.listadoGenerarAutorizador = (pagina) => {
+    // al cargar la pagina, la variable pagina es igual 1
+    var pagina = !pagina ? 1 : pagina;
+    var cuentaIdFuncionario = this.cuentaIdFuncionario.innerHTML;
+    fetch("../controllers/listadoGenerarPDF.php?page=" + pagina + "&id=" + cuentaIdFuncionario + "&rol=autorizador")
+      .then(response => response.json())
+      .then(data => {
+        // Datos de la lista y total de paginas
+        let item = data.resultado;
+        let totalPaginas = data.totalPaginas;
+
+        let html = '';
+        if (item != '') {
+          for (let i = 0; i < item.length; i++) {
+            html += `
+              <tr class="h-16 border-b last:border-b-0 border-b-white-100">
+                  <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
+                  <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
+                  <td class="text-slate-700 pr-4 leading-6">
+                      <div>${item[i].apellidos} ${item[i].nombres}</div>
+                      <div>CI: ${item[i].cedula}</div>
+                  </td>
+                  <td class="text-slate-700 pr-4">${item[i].razon}</td>
+                  <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
+                  <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
+                      <button onclick="appGenerar.verPdfFirmado(${item[i].id_funcionario_solicitud})" title="Generar PDF" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM1.6 11.85H0v3.999h.791v-1.342h.803c.287 0 .531-.057.732-.173.203-.117.358-.275.463-.474a1.42 1.42 0 0 0 .161-.677c0-.25-.053-.476-.158-.677a1.176 1.176 0 0 0-.46-.477c-.2-.12-.443-.179-.732-.179Zm.545 1.333a.795.795 0 0 1-.085.38.574.574 0 0 1-.238.241.794.794 0 0 1-.375.082H.788V12.48h.66c.218 0 .389.06.512.181.123.122.185.296.185.522Zm1.217-1.333v3.999h1.46c.401 0 .734-.08.998-.237a1.45 1.45 0 0 0 .595-.689c.13-.3.196-.662.196-1.084 0-.42-.065-.778-.196-1.075a1.426 1.426 0 0 0-.589-.68c-.264-.156-.599-.234-1.005-.234H3.362Zm.791.645h.563c.248 0 .45.05.609.152a.89.89 0 0 1 .354.454c.079.201.118.452.118.753a2.3 2.3 0 0 1-.068.592 1.14 1.14 0 0 1-.196.422.8.8 0 0 1-.334.252 1.298 1.298 0 0 1-.483.082h-.563v-2.707Zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638H7.896Z"/>
+                          </svg>
+                      </button>
+                  </td>
+              </tr>
+              `;
+          }
+        } else {
+          html += '<tr class="h-16"><td colspan="5">No se encontró resultados.</td></tr>';
+        }
+
+        this.tbodyGenerar.innerHTML = html;
+        this.paginacionGenerarPDF(pagina, totalPaginas, false);
+      });
+  }
   this.listadoGenerarSimple = (pagina) => {
     // al cargar la pagina, la variable pagina es igual 1
     var pagina = !pagina ? 1 : pagina;
     var cuentaIdFuncionario = this.cuentaIdFuncionario.innerHTML;
-    fetch("../controllers/listadoGenerarPDF.php?page=" + pagina + "&id=" + cuentaIdFuncionario)
+    fetch("../controllers/listadoGenerarPDF.php?page=" + pagina + "&id=" + cuentaIdFuncionario + "&rol=estandar")
       .then(response => response.json())
       .then(data => {
         // Datos de la lista y total de paginas
@@ -135,15 +177,76 @@ const appGenerar = new (function () {
         this.paginacionGenerarPDF(pagina, totalPaginas, true);
       });
   }
+  this.busquedaGenerarPDFAutorizador = (pagina) => {
+    // al cargar la pagina, la variable pagina es igual 1
+    var pagina = !pagina ? 1 : pagina;
+    // Si existe texto de busqueda, buscar
+    var text = this.busqueda.value;
+    var formBusqueda = new FormData();
+    formBusqueda.append('busqueda', text);
+    formBusqueda.append('tipo', this.busquedaTipo.value);
+    formBusqueda.append('pagina', pagina);
+    formBusqueda.append('id', this.cuentaIdFuncionario.innerHTML);
+    formBusqueda.append('rol', 'autorizador');
+    fetch("../controllers/busquedaGenerarPDF.php", { method: "POST", body: formBusqueda })
+      .then(response => response.json())
+      .then(data => {
+        // Datos de la lista y total de paginas
+        let item = data.resultado;
+        let totalPaginas = data.totalPaginas;
+
+        let html = '';
+        if (item != '') {
+          for (let i = 0; i < item.length; i++) {
+            html += `
+              <tr class="h-16 border-b last:border-b-0 border-b-white-100">
+                  <td class="hidden text-slate-700 pr-4">${item[i].id_funcionario_solicitud}</td>
+                  <td id="numero-solicitud" class="text-slate-700 pr-4">${item[i].numero}</td>
+                  <td class="text-slate-700 pr-4 leading-6">
+                      <div>${item[i].apellidos} ${item[i].nombres}</div>
+                      <div>CI: ${item[i].cedula}</div>
+                  </td>
+                  <td class="text-slate-700 pr-4">${item[i].razon}</td>
+                  <td class="text-slate-700 pr-4 whitespace-nowrap">${item[i].fecha}</td>
+                  <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
+                      <button onclick="appGenerar.verPdfFirmado(${item[i].id_funcionario_solicitud})" class="btn-editar flex items-center gap-2 min-h-fit rounded-md bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM1.6 11.85H0v3.999h.791v-1.342h.803c.287 0 .531-.057.732-.173.203-.117.358-.275.463-.474a1.42 1.42 0 0 0 .161-.677c0-.25-.053-.476-.158-.677a1.176 1.176 0 0 0-.46-.477c-.2-.12-.443-.179-.732-.179Zm.545 1.333a.795.795 0 0 1-.085.38.574.574 0 0 1-.238.241.794.794 0 0 1-.375.082H.788V12.48h.66c.218 0 .389.06.512.181.123.122.185.296.185.522Zm1.217-1.333v3.999h1.46c.401 0 .734-.08.998-.237a1.45 1.45 0 0 0 .595-.689c.13-.3.196-.662.196-1.084 0-.42-.065-.778-.196-1.075a1.426 1.426 0 0 0-.589-.68c-.264-.156-.599-.234-1.005-.234H3.362Zm.791.645h.563c.248 0 .45.05.609.152a.89.89 0 0 1 .354.454c.079.201.118.452.118.753a2.3 2.3 0 0 1-.068.592 1.14 1.14 0 0 1-.196.422.8.8 0 0 1-.334.252 1.298 1.298 0 0 1-.483.082h-.563v-2.707Zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638H7.896Z"/>
+                          </svg>
+                      </button>
+                  </td>
+              </tr>
+              `;
+          }
+        } else {
+          html += '<tr class="h-16"><td colspan="5">No se encontró resultados.</td></tr>';
+        }
+
+        this.tbodyGenerar.innerHTML = html;
+        this.paginacionGenerarPDF(pagina, totalPaginas, true);
+      });
+  }
   this.paginacionGenerarPDF = (pagina_actual, total_paginas, buscador) => {
     let html = '';
     var listadoGenerar = this.tablaCompleta ? 'listadoGenerarCompleta' : 'listadoGenerarSimple';
+    if (this.tablaCompleta) {
+      if (this.tablaCompleta.classList[0] == 'tabla-autorizador') {
+        var listadoGenerar = 'listadoGenerarAutorizador';
+        var busquedaGenerarPDF = 'busquedaGenerarPDFAutorizador';
+      } else {
+        var listadoGenerar = 'listadoGenerarCompleta';
+        var busquedaGenerarPDF = 'busquedaGenerarPDF';
+      }
+    } else if (this.tablaSimple) {
+      var listadoGenerar = 'listadoGenerarSimple';
+      var busquedaGenerarPDF = 'busquedaGenerarPDF';
+    }
     if (buscador == false) {
       // Paginacion para la lista
       if (pagina_actual > 1) {
         html += `
-                  <a href="javascript:appGenerar.${listadoGenerar}(${pagina_actual - 1})" class="btn-anterior border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Anterior</a>
-              `;
+          <a href="javascript:appGenerar.${listadoGenerar}(${pagina_actual - 1})" class="btn-anterior border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Anterior</a>
+        `;
       }
       if (total_paginas > 1) {
         html += `
@@ -161,8 +264,8 @@ const appGenerar = new (function () {
       // Paginacion para la busqueda en la lista
       if (pagina_actual > 1) {
         html += `
-                  <a href="javascript:appGenerar.busquedaGenerarPDF(${pagina_actual - 1})" class="btn-anterior border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Anterior</a>
-              `;
+            <a href="javascript:appGenerar.${busquedaGenerarPDF}(${pagina_actual - 1})" class="btn-anterior border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Anterior</a>
+        `;
       }
       if (total_paginas > 1) {
         html += `
@@ -173,8 +276,8 @@ const appGenerar = new (function () {
       }
       if (pagina_actual < total_paginas) {
         html += `
-                  <a href="javascript:appGenerar.busquedaGenerarPDF(${pagina_actual + 1})" class="btn-siguiente border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Siguiente</a>
-              `;
+            <a href="javascript:appGenerar.${busquedaGenerarPDF}(${pagina_actual + 1})" class="btn-siguiente border border-slate-200 bg-slate-100 color-slate-600 p-4 rounded-md">Siguiente</a>
+        `;
       }
     }
     this.paginacion.innerHTML = html;
@@ -398,8 +501,16 @@ const appGenerar = new (function () {
 // Solo existe en: solicitud-index.php
 var tablaCompleta = document.getElementById('tabla-completa');
 var tablaSimple = document.getElementById('tabla-simple');
-if (tablaCompleta) {
+
+var tablaAdministrador = document.querySelector('#tabla-completa.tabla-administrador');
+var tablaValidador = document.querySelector('#tabla-completa.tabla-validador');
+var tablaAutorizador = document.querySelector('#tabla-completa.tabla-autorizador');
+var tablaEstandar = document.querySelector('#tabla-simple');
+
+if (tablaAdministrador || tablaValidador) {
   appGenerar.listadoGenerarCompleta();
-} else if (tablaSimple) {
+} else if (tablaAutorizador) {
+  appGenerar.listadoGenerarAutorizador();
+} else if (tablaEstandar) {
   appGenerar.listadoGenerarSimple();
 }

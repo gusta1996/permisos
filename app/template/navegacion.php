@@ -29,7 +29,7 @@ $validador = $user->getRol() == 'validador' ? true : false;
                     </svg>Imprimir permiso
                 </a>
             </li>
-            <?php if ($administrador || $autorizador || $validador) : ?>
+            <?php if ($administrador || $validador) : ?>
                 <li class="mb-1 rounded-lg hover:bg-slate-50">
                     <a class="flex items-center gap-2 px-3 py-2" href="../views/reporte.php">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard2" viewBox="0 0 16 16">
