@@ -1109,7 +1109,7 @@ class funcionarioSolicitud extends Connection
                     FROM funcionario_solicitud
                     WHERE id_funcionario_solicitud=:id_funcionario_solicitud";
             $declaracion = Connection::getConnection()->prepare($firmas);
-            $declaracion->bindParam('id_funcionario_solicitud', $data['id_funcionario_solicitud']);
+            $declaracion->bindParam(':id_funcionario_solicitud', $data['id_funcionario_solicitud']);
             $declaracion->execute();
             $firm_est = $declaracion->fetch();
             // consultar rol de funcionario
@@ -1118,39 +1118,41 @@ class funcionarioSolicitud extends Connection
                     INNER JOIN rol ON usuario.id_rol_fk = rol.id_rol
                     WHERE id_funcionario_fk=:id_funcionario";
             $declaracion = Connection::getConnection()->prepare($rol);
-            $declaracion->bindParam('id_funcionario', $data['id_funcionario']);
+            $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
             $declaracion->execute();
             $rol = $declaracion->fetch();
-            
+
             // verifica que firma se debe convertir en true
-            if ( ($rol['rol'] == 'administrador' || $rol['rol'] == 'estandar' ||
-                  $rol['rol'] == 'autorizador' || $rol['rol'] == 'validador' ) &&
-                    $firm_est['firma_estandar'] == false &&
-                    $firm_est['firma_autorizador'] == false &&
-                    $firm_est['firma_validador'] == false ) 
-            {
+            if (($rol['rol'] == 'administrador' || $rol['rol'] == 'estandar' ||
+                    $rol['rol'] == 'autorizador' || $rol['rol'] == 'validador') &&
+                $firm_est['firma_estandar'] == false &&
+                $firm_est['firma_autorizador'] == false &&
+                $firm_est['firma_validador'] == false
+            ) {
                 // firma con usuario estandar
                 $firma_rol = 'firma_estandar=true';
-            } elseif ( $rol['rol'] == 'autorizador' &&
-                    $firm_est['firma_estandar'] == true &&
-                    $firm_est['firma_autorizador'] == false &&
-                    $firm_est['firma_validador'] == false ) 
-            {
+            } elseif (
+                $rol['rol'] == 'autorizador' &&
+                $firm_est['firma_estandar'] == true &&
+                $firm_est['firma_autorizador'] == false &&
+                $firm_est['firma_validador'] == false
+            ) {
                 // firma con usuario autorizador
                 $firma_rol = 'firma_autorizador=true';
-            } elseif (  $rol['rol'] == 'validador' &&
-                    $firm_est['firma_estandar'] == true &&
-                    $firm_est['firma_autorizador'] == true &&
-                    $firm_est['firma_validador'] == false ) 
-            {
+            } elseif (
+                $rol['rol'] == 'validador' &&
+                $firm_est['firma_estandar'] == true &&
+                $firm_est['firma_autorizador'] == true &&
+                $firm_est['firma_validador'] == false
+            ) {
                 // firma con usuario validador
                 $firma_rol = "firma_validador=true, estado='aprobado'";
             } else {
                 if (($rol['rol'] == 'administrador' && $firm_est['firma_estandar'] == true) ||
                     ($rol['rol'] == 'estandar' && $firm_est['firma_estandar'] == true) ||
                     ($rol['rol'] == 'autorizador' && $firm_est['firma_autorizador'] == true) ||
-                    ($rol['rol'] == 'validador' && $firm_est['firma_validador'] == true))
-                {
+                    ($rol['rol'] == 'validador' && $firm_est['firma_validador'] == true)
+                ) {
                     return '¡Su documento firmado ya está en el sistema!';
                 } else {
                     return '¡Se ha producido un error!';
@@ -1162,7 +1164,7 @@ class funcionarioSolicitud extends Connection
                     SET $firma_rol
                     WHERE id_funcionario_solicitud=:id_funcionario_solicitud";
             $declaracion = Connection::getConnection()->prepare($sql);
-            $declaracion->bindParam('id_funcionario_solicitud', $data['id_funcionario_solicitud']);
+            $declaracion->bindParam(':id_funcionario_solicitud', $data['id_funcionario_solicitud']);
             $declaracion->execute();
 
             // TERCERA PARTE: consultar de nuevo las firmas y estado para enviar email
@@ -1176,7 +1178,7 @@ class funcionarioSolicitud extends Connection
                     INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
                     WHERE id_funcionario_solicitud=:id_funcionario_solicitud";
             $declaracion = Connection::getConnection()->prepare($sql);
-            $declaracion->bindParam('id_funcionario_solicitud', $data['id_funcionario_solicitud']);
+            $declaracion->bindParam(':id_funcionario_solicitud', $data['id_funcionario_solicitud']);
             $declaracion->execute();
             $resultado = $declaracion->fetch();
             // Capitalizar
@@ -1192,17 +1194,87 @@ class funcionarioSolicitud extends Connection
             if (
                 $resultado['firma_estandar'] == true &&
                 $resultado['firma_autorizador'] == false &&
-                $resultado['firma_autorizador'] == false
+                $resultado['firma_validador'] == false
             ) {
-                // enviar email a funcionario y a autorizador
+                // enviar email a funcionario
                 $email::emailSolicitudFirmada($resultado, 'estandar');
+
+                // Enviar email de notificacion para autorizador
+                // consulta la direccion del funcionario de la solicitud
+                $sql = "SELECT direccion.detalle
+                    FROM funcionario_solicitud            
+                    INNER JOIN funcionario_estructura ON funcionario_solicitud.id_funcionario_estructura_fk = funcionario_estructura.id_funcionario_estructura
+                    INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                    INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                    WHERE funcionario_estructura.estado='activo'
+                    AND funcionario_estructura.id_funcionario_fk=:id_funcionario";
+                $declaracion = Connection::getConnection()->prepare($sql);
+                $declaracion->bindParam(':id_funcionario', $data['id_funcionario']);
+                $declaracion->execute();
+                $direccion = $declaracion->fetchColumn();
+
+                // consulta los funcionarios con la misma direccion consultada
+                $sql = "SELECT funcionario.*
+                    FROM funcionario_estructura
+                    INNER JOIN funcionario ON funcionario_estructura.id_funcionario_fk = funcionario.id_funcionario
+                    INNER JOIN estructura ON funcionario_estructura.id_estructura_fk = estructura.id_estructura
+                    INNER JOIN direccion ON estructura.id_direccion_fk = direccion.id_direccion
+                    WHERE funcionario_estructura.estado='activo'
+                    AND direccion.detalle=:direccion";
+                $declaracion = Connection::getConnection()->prepare($sql);
+                $declaracion->bindParam(':direccion', $direccion);
+                $declaracion->execute();
+                $funcionariosDireccion = $declaracion->fetchAll();
+
+                // consulta funcionarios con rol autorizador
+                $sql = "SELECT funcionario.*
+                    FROM usuario
+                    INNER JOIN rol ON usuario.id_rol_fk = rol.id_rol
+                    INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario
+                    WHERE rol.detalle='autorizador'";
+                $declaracion = Connection::getConnection()->prepare($sql);
+                $declaracion->execute();
+                $funcionariosRol = $declaracion->fetchAll();
+
+                foreach ($funcionariosDireccion as $i => $item1) {
+                    foreach ($funcionariosRol as $i => $item2) {
+                        if ($item1['id_funcionario'] == $item2['id_funcionario']) {
+                            // Capitalizar
+                            $item2['nombres'] = ucwords($item2['nombres']);
+                            $item2['apellidos'] = ucwords($item2['apellidos']);
+                            // enviar email
+                            $email::emailSolicitudesNuevas($item2, $data['numero_solicitud']);
+                        }
+                    }
+                }
+
             } elseif (
                 $resultado['firma_estandar'] == true &&
                 $resultado['firma_autorizador'] == true &&
                 $resultado['firma_validador'] == false
             ) {
-                // enviar email a funcionario y a validador
+                // enviar email a funcionario
                 $email::emailSolicitudFirmada($resultado, 'autorizador');
+
+                // Enviar email de notificacion para validador
+                // consulta funcionarios con rol autorizador
+                $sql = "SELECT funcionario.*
+                    FROM usuario
+                    INNER JOIN rol ON usuario.id_rol_fk = rol.id_rol
+                    INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario
+                    WHERE rol.detalle='validador'";
+                $declaracion = Connection::getConnection()->prepare($sql);
+                $declaracion->execute();
+                $funcionariosValidador = $declaracion->fetchAll();
+
+                foreach ($funcionariosValidador as $i => $item) {
+                    // Capitalizar
+                    $item['nombres'] = ucwords($item['nombres']);
+                    $item['apellidos'] = ucwords($item['apellidos']);
+                    // enviar email
+                    $email::emailSolicitudesNuevas($item, $data['numero_solicitud']);
+                }
+
             } elseif (
                 $resultado['firma_estandar'] == true &&
                 $resultado['firma_autorizador'] == true &&

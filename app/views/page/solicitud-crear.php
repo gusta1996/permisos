@@ -77,7 +77,7 @@
                     <label class="block text-sm font-medium leading-6 text-gray-900">Razón:</label>
                     <div class="mt-2">
                         <div class="flex items-center mt-2">
-                            <input type="radio" id="particular" name="razon-solicitud" value="Particular" class="mr-2">
+                            <input type="radio" id="particular" name="razon-solicitud" required value="Particular" class="mr-2">
                             <label for="particular" class="cursor-pointer">Particular</label>
                         </div>
                         <div class="flex items-center mt-2">

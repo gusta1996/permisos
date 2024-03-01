@@ -1,6 +1,7 @@
 <?php
 $title = 'Pagina principal';
-require '../template/header.php'; ?>
+require '../template/header.php'; 
+?>
 
 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5">
     <a class="flex items-center flex-col gap-4 bg-white py-12 sm:py-20 rounded-md shadow-sm" href="../views/solicitud.php">

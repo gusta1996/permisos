@@ -36,13 +36,14 @@ const appSolicitud = new (function () {
             `;
             // guarda documento firmado
             formDocFirma.append('docFirmado', docFirmado.files[0]);
-        } else {        
+        } else {
             alert('¡No has seleccionado el documento firmado!');
             return;
         }
         fetch("../controllers/subirDocumentoFirmado.php", { method: "POST", body: formDocFirma })
             .then((respuesta) => respuesta.json())
             .then((data) => {
+                console.log(data);
                 if (data == true) {
                     window.location.href = '../views/solicitud.php';
                 } else {
@@ -111,7 +112,7 @@ const appSolicitud = new (function () {
                                 </div>
                             </td>
                             <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
-                                ${(this.tablaAdministrador || this.tablaValidador) && ((item[i].firma_estandar == false && item[i].fs_estado == 'pendiente' ) && item[i].id_funcionario_fk == this.cuentaIdFuncionario.innerHTML) ? `
+                                ${(this.tablaAdministrador || this.tablaValidador) && ((item[i].firma_estandar == false && item[i].fs_estado == 'pendiente') && item[i].id_funcionario_fk == this.cuentaIdFuncionario.innerHTML) ? `
                                     <!-- Firmar como funcionario -->
                                     <a href="./solicitud.php?page=firmar&numero_solicitud=${item[i].numero}&id_funcionario_solicitud=${item[i].id_funcionario_solicitud}" title="Firmar como funcionario" class="btn-aprobar flex items-center gap-2 min-h-fit rounded-md bg-green-50 px-3 py-2 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-feather" viewBox="0 0 16 16">
@@ -147,7 +148,7 @@ const appSolicitud = new (function () {
                                         </svg>
                                     </button>
                                 ` : ``}
-                                ${ (item[i].firma_estandar == true || item[i].fs_estado == 'anulado') ? `
+                                ${(item[i].firma_estandar == true || item[i].fs_estado == 'anulado') ? `
                                     <!-- Boton editar BLOQUEADO -->
                                     <button title="Una solicitud firmada, aprobada o anulada no se puede editar" class="btn-editar cursor-no-drop flex items-center gap-2 min-h-fit rounded-md px-3 py-2 text-xs font-medium bg-gray-50 text-gray-700 ring-gray-700/10 ring-1 ring-inset">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -188,7 +189,7 @@ const appSolicitud = new (function () {
                 // Datos de la lista y total de paginas
                 let item = data.resultado;
                 let totalPaginas = data.totalPaginas;
-                
+
                 let html = '';
                 if (item != '') {
                     for (let i = 0; i < item.length; i++) {
@@ -232,7 +233,7 @@ const appSolicitud = new (function () {
                                 </div>
                             </td>
                             <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
-                                ${ ((item[i].firma_estandar == false && item[i].fs_estado == 'pendiente' ) && item[i].id_funcionario_fk == this.cuentaIdFuncionario.innerHTML) ? `
+                                ${((item[i].firma_estandar == false && item[i].fs_estado == 'pendiente') && item[i].id_funcionario_fk == this.cuentaIdFuncionario.innerHTML) ? `
                                     <!-- Firmar como funcionario -->
                                     <a href="./solicitud.php?page=firmar&numero_solicitud=${item[i].numero}&id_funcionario_solicitud=${item[i].id_funcionario_solicitud}" title="Firmar como funcionario" class="btn-aprobar flex items-center gap-2 min-h-fit rounded-md bg-green-50 px-3 py-2 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-feather" viewBox="0 0 16 16">
@@ -240,7 +241,7 @@ const appSolicitud = new (function () {
                                         </svg>
                                     </a>
                                 ` : ``}
-                                ${((item[i].firma_estandar == true &&  item[i].firma_autorizador == false )) ? `
+                                ${((item[i].firma_estandar == true && item[i].firma_autorizador == false)) ? `
                                     <!-- Aprobar como autorizador -->
                                     <a href="./solicitud.php?page=firmar&numero_solicitud=${item[i].numero}&id_funcionario_solicitud=${item[i].id_funcionario_solicitud}" title="Aprobar como autorizador" class="btn-aprobar flex items-center gap-2 min-h-fit rounded-md bg-green-50 px-3 py-2 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
@@ -581,7 +582,7 @@ const appSolicitud = new (function () {
                                 </div>
                             </td>
                             <td class="flex justify-end flex-row items-center gap-4 h-16 w-fit ml-auto">
-                                ${ ((item[i].firma_estandar == false && item[i].fs_estado == 'pendiente' ) && item[i].id_funcionario_fk == this.cuentaIdFuncionario.innerHTML) ? `
+                                ${((item[i].firma_estandar == false && item[i].fs_estado == 'pendiente') && item[i].id_funcionario_fk == this.cuentaIdFuncionario.innerHTML) ? `
                                     <!-- Firmar como funcionario -->
                                     <a href="./solicitud.php?page=firmar&numero_solicitud=${item[i].numero}&id_funcionario_solicitud=${item[i].id_funcionario_solicitud}" title="Firmar como funcionario" class="btn-aprobar flex items-center gap-2 min-h-fit rounded-md bg-green-50 px-3 py-2 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-feather" viewBox="0 0 16 16">
@@ -589,7 +590,7 @@ const appSolicitud = new (function () {
                                         </svg>
                                     </a>
                                 ` : ``}
-                                ${((item[i].firma_estandar == true &&  item[i].firma_autorizador == false )) ? `
+                                ${((item[i].firma_estandar == true && item[i].firma_autorizador == false)) ? `
                                     <!-- Aprobar como autorizador -->
                                     <a href="./solicitud.php?page=firmar&numero_solicitud=${item[i].numero}&id_funcionario_solicitud=${item[i].id_funcionario_solicitud}" title="Aprobar como autorizador" class="btn-aprobar flex items-center gap-2 min-h-fit rounded-md bg-green-50 px-3 py-2 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
@@ -1026,8 +1027,19 @@ const appSolicitud = new (function () {
             .catch((error) => console.log(error));
     }
     this.eliminarSolicitud = (numero_solicitud, id_funcionario_solicitud, usuario) => {
+        // preguntar
         var confirmar = confirm('¿Estas seguro que quieres anular?');
+        // confirmar
         if (confirmar == true) {
+            // Actualiza boton descargando...
+            let buttonEliminar = document.querySelector(`button[onclick="appSolicitud.eliminarSolicitud(${numero_solicitud}, ${id_funcionario_solicitud})"]`);
+            buttonEliminar.innerHTML = `
+                <svg class="animate-spin fill-red-700" xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512">
+                    <path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"/>
+                </svg>
+            `;
+
+            // enviar solicitud de eliminacion
             var formSolicitud = new FormData();
             formSolicitud.append('numero_solicitud', numero_solicitud);
             formSolicitud.append('id_funcionario_solicitud', id_funcionario_solicitud);
@@ -1039,7 +1051,7 @@ const appSolicitud = new (function () {
                         return;
                     }
                     app.notificacion('¡Solicitud eliminada!', 'Se ha eliminado una solicitud.', 'eliminar');
-                    if (usuario == 'estandar') { this.listadoSolicitudSimple(); } 
+                    if (usuario == 'estandar') { this.listadoSolicitudSimple(); }
                     else { this.listadoSolicitudCompleta(); }
                     if (this.busqueda) { this.busqueda.value = null; }
                 })

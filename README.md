@@ -5,6 +5,7 @@ Sistema de permisos para el G.A.D. de El Guabo
 Sistema para administrar permisos de salida de los empleados del G.A.D de El Guabo
 
 ## Requisitos
+php 8.2.4
 Habilitar "extension=pdo_pgsql" en el archivo php.ini
 
 ## Creditos

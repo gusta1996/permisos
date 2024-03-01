@@ -23,7 +23,7 @@
                 <?php echo $user->getNombres(); ?> <?php echo $user->getApellidos(); ?>
 
                 <!-- Imagen de perfil -->
-                <img src="data:image/jpeg;base64,<?php echo $user->getImagen(); ?>" class="rounded-full overflow-hidden w-8 h-8" />
+                <img src="data:image/jpeg;base64,<?php echo $user->getImagen(); ?>" class="object-cover rounded-full overflow-hidden w-8 h-8" />
             </a>
             <a href="../models/logout.php" class="hover:text-red-500">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
