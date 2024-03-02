@@ -12,7 +12,7 @@ if (isset($_SESSION['user'])) {
 
 } else if (isset($_POST['username']) && isset($_POST['password'])) {
     // Inicia sesion, validación de login
-    $userForm = $_POST['username'];
+    $userForm = strtoupper($_POST['username']); // convierte el username en mayusculas
     $passForm = $_POST['password'];
 
     if ($user->userExists($userForm, $passForm)) {

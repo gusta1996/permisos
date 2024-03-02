@@ -8,6 +8,8 @@ const appSeccion = new (function () {
     this.paginacion = document.getElementById('paginacion');
 
     this.checkboxSeccionSinNombre = () => {
+        // quita la seleccion de direccion
+        $('#unidad-seccion').val(null).trigger('change');
         // comprueba el checkbox
         if (this.seccionSinNombre.checked == true) {
             // si el checkbox es esta activo, desabilita el input detalle

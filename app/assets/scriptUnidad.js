@@ -8,6 +8,8 @@ const appUnidad = new (function () {
     this.paginacion = document.getElementById('paginacion');
 
     this.checkboxUnidadSinNombre = () => {
+        // quita la seleccion de direccion
+        $('#direccion-unidad').val(null).trigger('change');
         // comprueba el checkbox
         if (this.unidadSinNombre.checked == true) {
             // si el checkbox es esta activo, desabilita el input detalle
@@ -365,3 +367,4 @@ const appUnidad = new (function () {
 });
 appUnidad.selectDireccion();
 appUnidad.listadoUnidad();
+appUnidad.checkboxUnidadSinNombre();

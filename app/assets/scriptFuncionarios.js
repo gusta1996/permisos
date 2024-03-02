@@ -401,7 +401,7 @@ const appFuncionarios = new (function () {
                                         <!-- username -->
                                         <div class="sm:col-span-6">
                                             <label class="block text-sm font-medium leading-6 text-gray-900">Username:</label>
-                                            <input type="text" id="editar-username-funcionarios" value="${data.nick}" class="block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+                                            <input type="text" id="editar-username-funcionarios" value="${data.nick}" class="uppercase block w-full mt-2 rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
                                         </div>
                                         <!-- Email -->
                                         <div class="sm:col-span-6">

@@ -18,13 +18,13 @@ class User extends Connection
     private $rol;
     private $idFuncionarioEstructura;
 
-    public function userExists($user, $pass)
+    public function userExists($username, $pass)
     {
         $md5pass = md5($pass);
 
-        $sql = "SELECT * FROM usuario WHERE nick=:user AND clave=:pass";
+        $sql = "SELECT * FROM usuario WHERE nick=:username AND clave=:pass";
         $declaracion = $this->getConnection()->prepare($sql);
-        $declaracion->bindParam(':user', $user);
+        $declaracion->bindParam(':username', $username);
         $declaracion->bindParam(':pass', $md5pass);
         $declaracion->execute();
 
@@ -34,7 +34,7 @@ class User extends Connection
             return false;
         }
     }
-    public function setUser($user)
+    public function setUser($username)
     {
         // consulta tabla usurio, funcionario y rol
         $sql = 'SELECT  usuario.id_usuario, usuario.nick, usuario.estado AS u_estado,
@@ -45,9 +45,9 @@ class User extends Connection
                 FROM usuario 
                 INNER JOIN funcionario ON usuario.id_funcionario_fk = funcionario.id_funcionario
                 INNER JOIN rol ON usuario.id_rol_fk = rol.id_rol
-                WHERE usuario.nick=:user';
+                WHERE usuario.nick=:username';
         $usuario = $this->getConnection()->prepare($sql);
-        $usuario->bindParam(':user', $user);
+        $usuario->bindParam(':username', $username);
         $usuario->execute();
 
         foreach ($usuario as $currentUser) {
@@ -85,8 +85,6 @@ class User extends Connection
         if ($funcionario_estructura->rowCount() > 0) {
             $funcionario_estructura = $funcionario_estructura->fetch();
             $this->idFuncionarioEstructura = $funcionario_estructura['id_funcionario_estructura'];
-        } else {
-            $this->idFuncionarioEstructura = 'sdsd';
         }
     }
     public function getImagen()
