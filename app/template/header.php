@@ -4,17 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- CDN: Tailwind solo para programacion  -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 
-    Tailwind para produccion (hay que actualizar)
-    Comando actualizar: npx tailwindcss -i ./public/css/input.css -o ./dist/output.css --watch  
-
-    COMANDOS GITHUB
-    descargar archivos del repositorio: git pull origin master
-    subir cambios al repositorio: git push origin master
-    -->
-
     <link rel="stylesheet" href="../../dist/output.css">
     <link rel="stylesheet" href="../../public/css/style.css">
     <link rel="icon" href="../../public/images/favicon.png">
