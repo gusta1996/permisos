@@ -2,7 +2,7 @@
 class Connection
 {
     public $host = 'localhost';
-    public $dbname = 'permisos';
+    public $dbname = 'permisos2';
     public $port = '5432';
     public $user = 'postgres';
     public $password = 'Gusta_1996';
